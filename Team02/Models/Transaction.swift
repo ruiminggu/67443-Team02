@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Transaction {
+struct Transaction: Identifiable {
+    let id = UUID()
     let payer: User
     let payee: User
     let item: String

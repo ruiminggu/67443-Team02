@@ -1,16 +1,7 @@
-//
-//  Event.swift
-//  Team02
-//
-//  Created by 顾芮名 on 10/28/24.
-//
-
-import Foundation
-
 import Foundation
 
 struct Event: Identifiable {
-    let id = UUID()
+    let id: UUID
     let users: [User]
     let recipes: [Recipe]
     let date: Date
@@ -20,16 +11,31 @@ struct Event: Identifiable {
     let qrCode: String
     let costs: [Transaction]
     var totalCost: Float
-  
-  init(users: [User], recipes: [Recipe], date: Date, time: Date, location: String, eventName: String, qrCode: String, costs: [Transaction], totalCost: Float) {
-    self.users = users
-    self.recipes = recipes
-    self.date = date
-    self.time = time
-    self.location = location
-    self.eventName = eventName
-    self.qrCode = qrCode
-    self.costs = costs
-    self.totalCost = totalCost
-  }
+    var assignedIngredientsList: [Ingredient] // Make this mutable to allow toggling
+
+    init(
+        id: UUID = UUID(),
+        users: [User],
+        recipes: [Recipe],
+        date: Date,
+        time: Date,
+        location: String,
+        eventName: String,
+        qrCode: String,
+        costs: [Transaction],
+        totalCost: Float,
+        assignedIngredientsList: [Ingredient]
+    ) {
+        self.id = id
+        self.users = users
+        self.recipes = recipes
+        self.date = date
+        self.time = time
+        self.location = location
+        self.eventName = eventName
+        self.qrCode = qrCode
+        self.costs = costs
+        self.totalCost = totalCost
+        self.assignedIngredientsList = assignedIngredientsList
+    }
 }
