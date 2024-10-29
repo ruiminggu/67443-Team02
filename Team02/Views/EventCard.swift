@@ -37,11 +37,10 @@ struct EventCard: View {
                 Text("TO-DO:")
                     .font(.subheadline)
                     .foregroundColor(.white)
-                
-                // Display items in two columns using a grid-like structure
+
                 let filteredIngredients = event.assignedIngredientsList.filter { $0.userID == userID }
                 ForEach(0..<filteredIngredients.count, id: \.self) { index in
-                    if index % 2 == 0 { // Start new HStack every two items
+                    if index % 2 == 0 {
                         HStack(spacing: 16) {
                             Toggle(isOn: $event.assignedIngredientsList[index].isChecked) {
                                 Text(event.assignedIngredientsList[index].name)

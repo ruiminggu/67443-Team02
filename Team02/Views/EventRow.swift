@@ -3,7 +3,6 @@ import SwiftUI
 struct EventRow: View {
     let event: Event
     
-    // Static Date Formatter to display dates in short style
     static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium

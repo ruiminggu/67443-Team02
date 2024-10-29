@@ -11,7 +11,7 @@ struct Event: Identifiable {
     let qrCode: String
     let costs: [Transaction]
     var totalCost: Float
-    var assignedIngredientsList: [Ingredient] // Make this mutable to allow toggling
+    var assignedIngredientsList: [Ingredient]
 
     init(
         id: UUID = UUID(),

@@ -44,7 +44,7 @@ struct ContentView: View {
                     password: "password",
                     events: [
                         Event(
-                            users: [], // Assuming no other users for now
+                            users: [],
                             recipes: [],
                             date: Date().addingTimeInterval(86400), // Tomorrow
                             time: Date(),
@@ -60,7 +60,7 @@ struct ContentView: View {
                             ]
                         ),
                         Event(
-                            users: [], // Assuming no other users for now
+                            users: [],
                             recipes: [],
                             date: Date().addingTimeInterval(172800), // Day after tomorrow
                             time: Date(),
@@ -127,7 +127,7 @@ struct ContentView: View {
                     Text("Profile")
                 }
         }
-        .accentColor(.orange) // Set the selected tab color
+        .accentColor(.orange)
     }
 }
 
