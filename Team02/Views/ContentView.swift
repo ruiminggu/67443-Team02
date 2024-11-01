@@ -7,12 +7,6 @@ struct EventView: View {
     }
 }
 
-struct CreateEventView: View {
-    var body: some View {
-        Text("Create Event Screen")
-            .font(.title)
-    }
-}
 
 struct CostView: View {
     var body: some View {
@@ -44,7 +38,7 @@ struct ContentView: View {
                     password: "password",
                     events: [
                         Event(
-                            users: [],
+                            invitedFriends: [],
                             recipes: [],
                             date: Date().addingTimeInterval(86400), // Tomorrow
                             time: Date(),
@@ -60,7 +54,7 @@ struct ContentView: View {
                             ]
                         ),
                         Event(
-                            users: [],
+                            invitedFriends: [],
                             recipes: [],
                             date: Date().addingTimeInterval(172800), // Day after tomorrow
                             time: Date(),
@@ -102,7 +96,7 @@ struct ContentView: View {
                 }
             
             // Create Event Tab
-            CreateEventView()
+            DateSelectionView(viewModel: EventViewModel())
                 .tabItem {
                     ZStack {
                         Circle()
