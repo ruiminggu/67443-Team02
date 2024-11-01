@@ -2,7 +2,7 @@ import Foundation
 
 struct Event: Identifiable {
     let id: UUID
-    let users: [User]
+    let invitedFriends: [User]
     let recipes: [Recipe]
     let date: Date
     let time: Date
@@ -15,7 +15,7 @@ struct Event: Identifiable {
 
     init(
         id: UUID = UUID(),
-        users: [User],
+        invitedFriends: [User],
         recipes: [Recipe],
         date: Date,
         time: Date,
@@ -27,7 +27,7 @@ struct Event: Identifiable {
         assignedIngredientsList: [Ingredient]
     ) {
         self.id = id
-        self.users = users
+        self.invitedFriends = invitedFriends
         self.recipes = recipes
         self.date = date
         self.time = time
