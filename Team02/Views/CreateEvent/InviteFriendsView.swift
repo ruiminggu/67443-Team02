@@ -99,6 +99,16 @@ struct InviteFriendsView: View {
                                 .stroke(Color.orange, lineWidth: 2)
                         )
                 }
+                Button(action: {viewModel.saveEvent()}) {
+                    Text("Save Event")
+                       .foregroundColor(.white)
+                       .frame(maxWidth: .infinity)
+                       .padding()
+                       .background(Color.orange)
+                       .cornerRadius(10)
+                    }
+                  
+                Spacer()
             }
             .padding(.horizontal)
             .padding(.top)

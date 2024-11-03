@@ -7,7 +7,6 @@ struct EventView: View {
     }
 }
 
-
 struct CostView: View {
     var body: some View {
         Text("Costs Screen")
@@ -22,53 +21,20 @@ struct ProfileView: View {
     }
 }
 
-
 struct ContentView: View {
-    let sampleUserID = UUID()
+    @StateObject private var eventViewModel = EventViewModel() // Create an instance of EventViewModel
+
     var body: some View {
         TabView {
-            
             // Home Tab
             HomeView(viewModel: HomePageViewModel(
                 user: User(
-                    id: sampleUserID, // New unique ID for the user
+                    id: UUID(), // Replace with actual user ID if needed
                     fullName: "Cindy Doe",
                     image: "profile_pic",
                     email: "cindy.d@gmail.com",
                     password: "password",
-                    events: [
-                        Event(
-                            invitedFriends: [],
-                            recipes: [],
-                            date: Date().addingTimeInterval(86400), // Tomorrow
-                            time: Date(),
-                            location: "Home",
-                            eventName: "Grad Dinner",
-                            qrCode: "",
-                            costs: [],
-                            totalCost: 0.0,
-                            assignedIngredientsList: [
-                                Ingredient(name: "Water", unit: 1.0, isChecked: false, userID: sampleUserID),
-                                Ingredient(name: "Milk", unit: 2.0, isChecked: false, userID: sampleUserID),
-                                Ingredient(name: "Cheese", unit: 1.0, isChecked: true, userID: sampleUserID)
-                            ]
-                        ),
-                        Event(
-                            invitedFriends: [],
-                            recipes: [],
-                            date: Date().addingTimeInterval(172800), // Day after tomorrow
-                            time: Date(),
-                            location: "Cafe",
-                            eventName: "Coffee Meetup",
-                            qrCode: "",
-                            costs: [],
-                            totalCost: 0.0,
-                            assignedIngredientsList: [
-                                Ingredient(name: "Coffee Beans", unit: 0.5, isChecked: false, userID: sampleUserID),
-                                Ingredient(name: "Milk", unit: 1.0, isChecked: true, userID: sampleUserID)
-                            ]
-                        )
-                    ]
+                    events: eventViewModel.events // Use events from EventViewModel
                 ),
                 menuDatabase: MenuDatabase(
                     recipes: [],
@@ -87,16 +53,19 @@ struct ContentView: View {
                 Image(systemName: "house.fill")
                 Text("Home")
             }
-            
+            .onAppear {
+                eventViewModel.fetchEvents() // Fetch events when HomeView appears
+            }
+
             // Events Tab
             EventView()
                 .tabItem {
                     Image(systemName: "calendar")
                     Text("Events")
                 }
-            
+
             // Create Event Tab
-            DateSelectionView(viewModel: EventViewModel())
+            DateSelectionView(viewModel: eventViewModel) // Pass the eventViewModel
                 .tabItem {
                     ZStack {
                         Circle()
@@ -106,14 +75,14 @@ struct ContentView: View {
                             .foregroundColor(.orange)
                     }
                 }
-            
+
             // Costs Tab
             CostView()
                 .tabItem {
                     Image(systemName: "creditcard")
                     Text("Costs")
                 }
-            
+
             // Profile Tab
             ProfileView()
                 .tabItem {

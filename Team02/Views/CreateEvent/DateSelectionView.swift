@@ -2,8 +2,6 @@ import SwiftUI
 
 struct DateSelectionView: View {
     @ObservedObject var viewModel: EventViewModel
-    @State private var selectedDate = Date()
-    @State private var selectedTime = Date()
 
     var body: some View {
         NavigationStack {
@@ -13,20 +11,20 @@ struct DateSelectionView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.orange)
                     .padding(.top)
-              
+
                 Spacer()
-                
+
                 // Date Picker for Calendar Style
-                DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: .date)
                     .datePickerStyle(GraphicalDatePickerStyle()) // This gives it a calendar appearance
                     .accentColor(.orange)
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(30)
                     .shadow(radius: 1)
-                
+
                 Spacer()
-                
+
                 // Button for navigation to the next screen
                 NavigationLink(destination: TimeSelectionView(viewModel: viewModel)) {
                     Text("Next")
@@ -38,8 +36,8 @@ struct DateSelectionView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
-              
-              Spacer()
+
+                Spacer()
             }
             .navigationBarTitleDisplayMode(.inline) // Inline if you want a subtle title area
         }

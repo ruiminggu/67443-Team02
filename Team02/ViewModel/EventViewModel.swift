@@ -1,30 +1,66 @@
 import Foundation
 import SwiftUI
+import FirebaseDatabase
 
 class EventViewModel: ObservableObject {
     @Published var eventName = ""
     @Published var selectedDate = Date()
-    @Published var selectedTime = Date()
-    
-    // Dictionary to store invitation status with UUID as key and Bool as value.
+    @Published var selectedStartTime = Date()
+    @Published var selectedEndTime = Date()
     @Published var invitedFriends: [UUID: Bool] = [:]
-    
-    // Toggle invitation status of a friend by their ID.
-    func toggleFriendInvitation(friendID: UUID) {
-        if invitedFriends[friendID] == true {
-            invitedFriends[friendID] = false
-        } else {
-            invitedFriends[friendID] = true
+    @Published var events: [Event] = []
+
+    private var databaseRef: DatabaseReference = Database.database().reference()
+
+    init() {
+        fetchEvents()
+    }
+
+    // Fetch events from the database
+    func fetchEvents() {
+        databaseRef.child("events").observeSingleEvent(of: .value) { snapshot in
+            var fetchedEvents: [Event] = []
+
+            // Ensure snapshot has children and iterate over them
+            for child in snapshot.children.allObjects as? [DataSnapshot] ?? [] {
+                if let eventData = child.value as? [String: Any],
+                   let event = Event(dictionary: eventData) {
+                    fetchedEvents.append(event)
+                }
+            }
+
+            DispatchQueue.main.async {
+                self.events = fetchedEvents
+            }
         }
     }
-    
-    // Optional functions for adding and removing friends in a different context
-    func addFriend(_ friend: User) {
-        invitedFriends[friend.id] = true
+
+    func saveEvent() {
+        let newEvent = Event(
+            invitedFriends: [],
+            recipes: [],
+            date: selectedDate,
+            startTime: selectedStartTime,
+            endTime: selectedEndTime,
+            location: "Location placeholder",
+            eventName: eventName,
+            qrCode: "",
+            costs: [],
+            totalCost: 0.0,
+            assignedIngredientsList: []
+        )
+
+        let eventID = newEvent.id.uuidString
+        databaseRef.child("events").child(eventID).setValue(newEvent.toDictionary()) { error, _ in
+            if let error = error {
+                print("Error saving event: \(error.localizedDescription)")
+            } else {
+                print("Event saved successfully!")
+            }
+        }
     }
-    
-    func removeFriend(_ friend: User) {
-        invitedFriends[friend.id] = false
+
+    func toggleFriendInvitation(friendID: UUID) {
+        invitedFriends[friendID] = !(invitedFriends[friendID] ?? false)
     }
-  
 }
