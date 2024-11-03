@@ -1,6 +1,6 @@
 import Foundation
 
-struct Event: Identifiable {
+struct Event: Identifiable, Equatable {
     let id: UUID
     let invitedFriends: [User]
     let recipes: [Recipe]
@@ -78,5 +78,9 @@ struct Event: Identifiable {
             "qrCode": qrCode,
             "totalCost": totalCost
         ]
+    }
+  
+    static func ==(lhs: Event, rhs: Event) -> Bool {
+          return lhs.id == rhs.id
     }
 }

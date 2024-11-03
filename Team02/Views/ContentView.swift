@@ -22,39 +22,37 @@ struct ProfileView: View {
 }
 
 struct ContentView: View {
-    @StateObject private var eventViewModel = EventViewModel() // Create an instance of EventViewModel
+    @StateObject private var homePageViewModel = HomePageViewModel(menuDatabase: MenuDatabase(
+        recipes: [],
+        recommendedRecipes: [
+            Recipe(
+                title: "Grilled Cheese Sandwich",
+                description: "A delicious grilled cheese.",
+                image: "grilled_cheese",
+                instruction: "Cook on medium heat...",
+                ingredients: []
+            )
+        ]
+    ))
 
     var body: some View {
         TabView {
             // Home Tab
-            HomeView(viewModel: HomePageViewModel(
-                user: User(
-                    id: UUID(), // Replace with actual user ID if needed
-                    fullName: "Cindy Doe",
-                    image: "profile_pic",
-                    email: "cindy.d@gmail.com",
-                    password: "password",
-                    events: eventViewModel.events // Use events from EventViewModel
-                ),
-                menuDatabase: MenuDatabase(
-                    recipes: [],
-                    recommendedRecipes: [
-                        Recipe(
-                            title: "Grilled Cheese Sandwich",
-                            description: "A delicious grilled cheese.",
-                            image: "grilled_cheese",
-                            instruction: "Cook on medium heat...",
-                            ingredients: []
-                        )
-                    ]
-                )
-            ))
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text("Home")
-            }
-            .onAppear {
-                eventViewModel.fetchEvents() // Fetch events when HomeView appears
+            if let user = homePageViewModel.user {
+                HomeView(viewModel: homePageViewModel)
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
+                    .onAppear {
+                        homePageViewModel.fetchUser(userID: user.id.uuidString) // Replace with your logic for fetching the user ID
+                    }
+            } else {
+                Text("Loading...")
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
             }
 
             // Events Tab
@@ -65,7 +63,7 @@ struct ContentView: View {
                 }
 
             // Create Event Tab
-            DateSelectionView(viewModel: eventViewModel) // Pass the eventViewModel
+            DateSelectionView(viewModel: EventViewModel())
                 .tabItem {
                     ZStack {
                         Circle()
@@ -91,6 +89,9 @@ struct ContentView: View {
                 }
         }
         .accentColor(.orange)
+        .onAppear {
+            homePageViewModel.fetchUser(userID: "your-user-id-here") // Replace with your logic for user ID retrieval
+        }
     }
 }
 

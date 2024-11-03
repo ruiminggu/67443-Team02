@@ -34,7 +34,6 @@
 		76FAC5432CD7479C00FE1DA7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 76FAC5422CD7479C00FE1DA7 /* FirebaseFirestore */; };
 		76FAC5452CD75AFD00FE1DA7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */; };
 		76FAC5472CD75CA900FE1DA7 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 76FAC5462CD75CA900FE1DA7 /* FirebaseDatabase */; };
-		76FAC5492CD75EB900FE1DA7 /* DatabaseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FAC5482CD75EB900FE1DA7 /* DatabaseViewModel.swift */; };
 		76FAC54D2CD776BE00FE1DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */; };
 		76FAC54F2CD776FA00FE1DA7 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FAC54E2CD776FA00FE1DA7 /* FirebaseManager.swift */; };
 /* End PBXBuildFile section */
@@ -64,7 +63,6 @@
 		76EBA4692CD08DF2002C9836 /* EventRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRow.swift; sourceTree = "<group>"; };
 		76EBA46C2CD08FA3002C9836 /* profile_pic.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profile_pic.jpeg; sourceTree = "<group>"; };
 		76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		76FAC5482CD75EB900FE1DA7 /* DatabaseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseViewModel.swift; sourceTree = "<group>"; };
 		76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		76FAC54E2CD776FA00FE1DA7 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -176,7 +174,6 @@
 			children = (
 				76EBA45D2CD08B0B002C9836 /* HomePageViewModel.swift */,
 				760E6FA72CD337CA007FD962 /* EventViewModel.swift */,
-				76FAC5482CD75EB900FE1DA7 /* DatabaseViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -275,7 +272,6 @@
 				76EBA4642CD08B85002C9836 /* RecipeCard.swift in Sources */,
 				760E6FB02CD33823007FD962 /* QRCodeView.swift in Sources */,
 				765C491F2CC203DF003A9D8C /* ContentView.swift in Sources */,
-				76FAC5492CD75EB900FE1DA7 /* DatabaseViewModel.swift in Sources */,
 				76EBA4592CD07D45002C9836 /* Ingredient.swift in Sources */,
 				760E6FAE2CD33807007FD962 /* InviteFriendsView.swift in Sources */,
 				76EBA45B2CD07D5D002C9836 /* Recipe.swift in Sources */,
