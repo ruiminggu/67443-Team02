@@ -12,7 +12,6 @@ struct RecipeSearchView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            // Custom Navigation Bar
             VStack(alignment: .leading, spacing: 16) {
                 Text("Find Dishes")
                     .font(.title)
@@ -20,7 +19,6 @@ struct RecipeSearchView: View {
                     .foregroundColor(.orange)
                 
                 HStack {
-                    // Search Bar
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
@@ -50,39 +48,65 @@ struct RecipeSearchView: View {
             }
             .padding()
             .background(Color.white)
+            .zIndex(1)
             
-            if viewModel.isLoading {
-                ProgressView()
-                    .padding()
-            } else {
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        if !viewModel.searchText.isEmpty {
-                            if viewModel.recipes.isEmpty {
-                                Text("No recipes found")
-                                    .foregroundColor(.gray)
-                                    .padding()
-                            } else {
-                                ForEach(viewModel.recipes) { recipe in
-                                    RecipeSearchCard(recipe: recipe)
+            ZStack {
+                if viewModel.isLoading {
+                    // Loading indicator
+                    ProgressView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color(.systemBackground))
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: 16) {
+                            if !viewModel.searchText.isEmpty {
+                                if viewModel.recipes.isEmpty {
+                                    VStack(spacing: 10) {
+                                        Text("No recipes found")
+                                            .foregroundColor(.gray)
+                                            .padding()
+                                        Text("Try different keywords")
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.top, 40)
+                                } else {
+                                    ForEach(viewModel.recipes) { recipe in
+                                        RecipeSearchCard(recipe: recipe)
+                                    }
                                 }
+                            } else {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    Text("Recent")
+                                        .font(.headline)
+                                        .foregroundColor(.gray)
+                                        .padding(.horizontal)
+                                    
+                                    Text("No recent searches")
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                }
+                                .padding(.top, 0)
                             }
-                        } else {
-                            // You might want to show recent searches or featured recipes here
-                            Text("Start searching for recipes!")
-                                .foregroundColor(.gray)
-                                .padding()
                         }
+                        .padding()
                     }
-                    .padding()
+                }
+                
+                // Error message overlay
+                if let error = viewModel.error {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .padding()
+                        .background(Color.white.opacity(0.9))
+                        .cornerRadius(10)
+                        .shadow(radius: 2)
                 }
             }
-            
-            if let error = viewModel.error {
-                Text(error)
-                    .foregroundColor(.red)
-                    .padding()
-            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
