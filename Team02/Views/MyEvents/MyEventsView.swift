@@ -12,56 +12,61 @@ struct MyEventCard: View {
   let date: String
   let attendeeCount: Int
   let isUpcoming: Bool
-
   let lightGreen = Color(red: 164/255, green: 221/255, blue: 176/255)
-    
+  
   var body: some View {
-      HStack {
-          VStack(alignment: .leading, spacing: 45) {
-              Text(date)
-                  .font(.system(size: 16, weight: .medium))
-                  .foregroundColor(isUpcoming ? .white : Color.orange)
-              
-              Text(eventName)
-                  .font(.system(size: 28, weight: .bold))
-                  .foregroundColor(isUpcoming ? .white : Color.orange)
-          }
-          .padding(.leading, 20)
-          
-          Spacer()
-          
-          HStack(spacing: -20) {
-            ForEach(0...(min(3, attendeeCount) - 1), id: \.self) { _ in
-                  Circle()
-                      .fill(Color.white.opacity(1))
-                      .frame(width: 45, height: 45)
-                      .overlay(
-                          Image(systemName: "person.fill")
-                              .foregroundColor(.gray)
-                      )
+      NavigationLink(destination: EventDetailView(
+          eventName: eventName,
+          date: date,
+          attendeeCount: attendeeCount
+      )) {
+          HStack {
+              VStack(alignment: .leading, spacing: 45) {
+                  Text(date)
+                      .font(.system(size: 16, weight: .medium))
+                      .foregroundColor(isUpcoming ? .white : Color.orange)
+                  
+                  Text(eventName)
+                      .font(.system(size: 28, weight: .bold))
+                      .foregroundColor(isUpcoming ? .white : Color.orange)
               }
+              .padding(.leading, 20)
               
-              if attendeeCount > 0 {
-                  ZStack {
+              Spacer()
+              
+              HStack(spacing: -20) {
+                  ForEach(0...(min(3, attendeeCount) - 1), id: \.self) { _ in
                       Circle()
-                          .fill(lightGreen.opacity(1))
+                          .fill(Color.white.opacity(1))
                           .frame(width: 45, height: 45)
-                      Text("+\(attendeeCount)")
-                          .font(.system(size: 15, weight: .semibold))
-                          .foregroundColor(.orange)
+                          .overlay(
+                              Image(systemName: "person.fill")
+                                  .foregroundColor(.gray)
+                          )
+                  }
+                  
+                  if attendeeCount > 0 {
+                      ZStack {
+                          Circle()
+                              .fill(lightGreen.opacity(1))
+                              .frame(width: 45, height: 45)
+                          Text("+\(attendeeCount)")
+                              .font(.system(size: 15, weight: .semibold))
+                              .foregroundColor(.orange)
+                      }
                   }
               }
+              .padding(.trailing, 20)
+              .padding(.bottom, -50)
           }
-          .padding(.trailing, 20)
-          .padding(.bottom, -50)
+          .frame(maxWidth: .infinity)
+          .frame(height: 140)
+          .background(
+              RoundedRectangle(cornerRadius: 20)
+                  .fill(isUpcoming ? Color.orange : Color.orange.opacity(0.1))
+          )
+          .padding(.horizontal)
       }
-      .frame(maxWidth: .infinity)
-      .frame(height: 140)
-      .background(
-          RoundedRectangle(cornerRadius: 20)
-              .fill(isUpcoming ? Color.orange : Color.orange.opacity(0.1))
-      )
-      .padding(.horizontal)
   }
 }
 
@@ -107,13 +112,13 @@ struct MyEventsView: View {
                       attendeeCount: 2,
                       isUpcoming: false
                   )
-                
+                  
                   MyEventCard(
-                    eventName: "Haloween Dinner",
-                    date: "Tuesday, 16 January",
-                    attendeeCount: 7,
-                    isUpcoming: false
-                )
+                      eventName: "Haloween Dinner",
+                      date: "Tuesday, 16 January",
+                      attendeeCount: 7,
+                      isUpcoming: false
+                  )
               }
           }
       }
@@ -121,5 +126,5 @@ struct MyEventsView: View {
 }
 
 #Preview {
-  MyEventsView()
+    MyEventsView()
 }
