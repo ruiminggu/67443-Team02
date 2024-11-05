@@ -12,11 +12,8 @@ struct DateSelectionView: View {
                     .foregroundColor(.orange)
                     .padding(.top)
 
-                Spacer()
-
-                // Date Picker for Calendar Style
                 DatePicker("Select Date", selection: $viewModel.selectedDate, displayedComponents: .date)
-                    .datePickerStyle(GraphicalDatePickerStyle()) // This gives it a calendar appearance
+                    .datePickerStyle(GraphicalDatePickerStyle())
                     .accentColor(.orange)
                     .padding()
                     .background(Color(.systemGray6))
@@ -25,7 +22,6 @@ struct DateSelectionView: View {
 
                 Spacer()
 
-                // Button for navigation to the next screen
                 NavigationLink(destination: TimeSelectionView(viewModel: viewModel)) {
                     Text("Next")
                         .foregroundColor(.white)
@@ -36,13 +32,12 @@ struct DateSelectionView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
-
-                Spacer()
             }
-            .navigationBarTitleDisplayMode(.inline) // Inline if you want a subtle title area
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
+
 
 struct DateSelectionView_Previews: PreviewProvider {
     static var previews: some View {

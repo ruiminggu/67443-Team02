@@ -3,8 +3,7 @@ import SwiftUI
 struct TimeSelectionView: View {
     @ObservedObject var viewModel: EventViewModel
     @State private var selectedTimes: (start: String, end: String)? = nil
-    
-    // Define your time slots with both start and end times
+
     let timeSlots = [
         ("9:00 AM", "11:00 AM"),
         ("11:00 AM", "1:00 PM"),
@@ -12,7 +11,7 @@ struct TimeSelectionView: View {
         ("3:00 PM", "5:00 PM"),
         ("5:00 PM", "7:00 PM")
     ]
-    
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Find a time!")
@@ -23,41 +22,29 @@ struct TimeSelectionView: View {
             
             ForEach(timeSlots, id: \.0) { (start, end) in
                 Button(action: {
-                    if selectedTimes?.start == start && selectedTimes?.end == end {
-                        selectedTimes = nil
-                    } else {
-                        selectedTimes = (start, end)
-                    }
-                    // Convert selected strings to actual Date objects in `viewModel`
+                    selectedTimes = (start, end)
                     viewModel.selectedStartTime = convertTimeStringToDate(start)
                     viewModel.selectedEndTime = convertTimeStringToDate(end)
                 }) {
                     HStack {
-                        Image(systemName: selectedTimes?.start == start && selectedTimes?.end == end ? "checkmark.circle.fill" : "circle")
+                        Image(systemName: selectedTimes?.start == start ? "checkmark.circle.fill" : "circle")
                             .foregroundColor(.orange)
-                            .font(.title2)
                         Text("\(start) - \(end)")
-                            .font(.headline)
-                            .foregroundColor(selectedTimes?.start == start && selectedTimes?.end == end ? .white : .orange)
+                            .foregroundColor(selectedTimes?.start == start ? .white : .orange)
                         Spacer()
                     }
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(selectedTimes?.start == start && selectedTimes?.end == end ? Color.orange : Color.clear)
+                    .background(selectedTimes?.start == start ? Color.orange : Color.clear)
                     .cornerRadius(10)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.orange, lineWidth: 2)
-                    )
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.orange, lineWidth: 2))
                 }
                 .padding(.horizontal)
             }
-            
+
             NavigationLink(destination: InviteFriendsView(viewModel: viewModel)) {
                 Text("Next")
                     .foregroundColor(.white)
                     .padding()
-                    .frame(maxWidth: .infinity)
                     .background(Color.orange)
                     .cornerRadius(10)
             }
@@ -71,10 +58,10 @@ struct TimeSelectionView: View {
     func convertTimeStringToDate(_ timeString: String) -> Date {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"
-        formatter.timeZone = TimeZone.current
         return formatter.date(from: timeString) ?? Date()
     }
 }
+
 
 
 struct TimeSelectionView_Previews: PreviewProvider {

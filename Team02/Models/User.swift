@@ -36,4 +36,16 @@ struct User: Identifiable {
         self.password = password
         self.events = events
     }
+  
+  func toDictionary() -> [String: Any] {
+          return [
+              "id": id.uuidString,
+              "fullName": fullName,
+              "image": image,
+              "email": email,
+              "password": password,
+              // Convert events to dictionary if needed
+              "events": events.map { $0.toDictionary() }
+          ]
+      }
 }
