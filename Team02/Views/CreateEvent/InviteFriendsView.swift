@@ -20,14 +20,14 @@ struct InviteFriendsView: View {
     }
     
     var body: some View {
-      VStack(spacing: 20) {
+        VStack(spacing: 20) {
             // Event Name Section
             VStack(spacing: 20) {
-              Text("Event Name")
-                  .font(.title)
-                  .fontWeight(.bold)
-                  .foregroundColor(.orange)
-                  .padding(.top)
+                Text("Event Name")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.orange)
+                    .padding(.top)
                 
                 TextField("Enter event name", text: $viewModel.eventName)
                     .padding(10)
@@ -39,10 +39,10 @@ struct InviteFriendsView: View {
             
             // Invite Friends Section
             Text("Invite friends!")
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundColor(.orange)
-            .padding(.top)
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.orange)
+                .padding(.top)
             
             // Search Bar
             TextField("Search by names or contact", text: $searchText)
@@ -57,7 +57,7 @@ struct InviteFriendsView: View {
                     VStack(alignment: .leading) {
                         Text(friend.fullName)
                             .font(.headline)
-                        Text(friend.email) // Assuming email as the secondary detail
+                        Text(friend.email)
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -77,7 +77,7 @@ struct InviteFriendsView: View {
             // Invite and Create QR Code Buttons
             VStack(spacing: 8) {
                 Button(action: {
-                    // Action for inviting friends
+                    // Action for inviting friends (if needed)
                 }) {
                     Text("Invite")
                         .foregroundColor(.white)
@@ -99,15 +99,19 @@ struct InviteFriendsView: View {
                                 .stroke(Color.orange, lineWidth: 2)
                         )
                 }
-                Button(action: {viewModel.saveEvent()}) {
+                
+                // Save Event Button - triggers saving to the database
+                Button(action: {
+                    viewModel.saveEvent() // Save the event to the database
+                }) {
                     Text("Save Event")
-                       .foregroundColor(.white)
-                       .frame(maxWidth: .infinity)
-                       .padding()
-                       .background(Color.orange)
-                       .cornerRadius(10)
-                    }
-                  
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.orange)
+                        .cornerRadius(10)
+                }
+                
                 Spacer()
             }
             .padding(.horizontal)
