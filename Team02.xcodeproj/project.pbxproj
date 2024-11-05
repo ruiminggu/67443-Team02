@@ -13,6 +13,9 @@
 		46970CED2CD995990057E4D3 /* IngredientsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CEC2CD995990057E4D3 /* IngredientsSectionView.swift */; };
 		46970CFC2CD9AC410057E4D3 /* AddIngredientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CFB2CD9AC410057E4D3 /* AddIngredientsView.swift */; };
 		46970CFF2CD9AE590057E4D3 /* MyEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE32CD97C2C0057E4D3 /* MyEventsView.swift */; };
+		46970D012CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970D002CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift */; };
+		46970D042CD9BC830057E4D3 /* RecipeSearchCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970D032CD9BC830057E4D3 /* RecipeSearchCard.swift */; };
+		46970D062CD9BE160057E4D3 /* RecipeSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970D052CD9BE160057E4D3 /* RecipeSearchView.swift */; };
 		760E6FA82CD337CA007FD962 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760E6FA72CD337CA007FD962 /* EventViewModel.swift */; };
 		760E6FAA2CD337DF007FD962 /* DateSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760E6FA92CD337DF007FD962 /* DateSelectionView.swift */; };
 		760E6FAC2CD337F5007FD962 /* TimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760E6FAB2CD337F5007FD962 /* TimeSelectionView.swift */; };
@@ -44,6 +47,9 @@
 		46970CEA2CD995830057E4D3 /* MenuSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSectionView.swift; sourceTree = "<group>"; };
 		46970CEC2CD995990057E4D3 /* IngredientsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsSectionView.swift; sourceTree = "<group>"; };
 		46970CFB2CD9AC410057E4D3 /* AddIngredientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientsView.swift; sourceTree = "<group>"; };
+		46970D002CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchViewModel.swift; sourceTree = "<group>"; };
+		46970D032CD9BC830057E4D3 /* RecipeSearchCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchCard.swift; sourceTree = "<group>"; };
+		46970D052CD9BE160057E4D3 /* RecipeSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeSearchView.swift; sourceTree = "<group>"; };
 		760E6FA72CD337CA007FD962 /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		760E6FA92CD337DF007FD962 /* DateSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateSelectionView.swift; sourceTree = "<group>"; };
 		760E6FAB2CD337F5007FD962 /* TimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelectionView.swift; sourceTree = "<group>"; };
@@ -105,6 +111,15 @@
 				46970CFB2CD9AC410057E4D3 /* AddIngredientsView.swift */,
 			);
 			path = AddIngredients;
+			sourceTree = "<group>";
+		};
+		46970D022CD9BC490057E4D3 /* RecipeSearch */ = {
+			isa = PBXGroup;
+			children = (
+				46970D032CD9BC830057E4D3 /* RecipeSearchCard.swift */,
+				46970D052CD9BE160057E4D3 /* RecipeSearchView.swift */,
+			);
+			path = RecipeSearch;
 			sourceTree = "<group>";
 		};
 		760E6FA52CD33763007FD962 /* Home */ = {
@@ -184,6 +199,7 @@
 		76EBA44F2CD07BA2002C9836 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				46970D022CD9BC490057E4D3 /* RecipeSearch */,
 				46970CE52CD9953C0057E4D3 /* EventDetails */,
 				46970CF02CD9A6E10057E4D3 /* AddIngredients */,
 				46970CE22CD97C0D0057E4D3 /* MyEvents */,
@@ -199,6 +215,7 @@
 			children = (
 				76EBA45D2CD08B0B002C9836 /* HomePageViewModel.swift */,
 				760E6FA72CD337CA007FD962 /* EventViewModel.swift */,
+				46970D002CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -285,6 +302,7 @@
 				760E6FAC2CD337F5007FD962 /* TimeSelectionView.swift in Sources */,
 				76EBA4602CD08B36002C9836 /* HomeView.swift in Sources */,
 				76EBA4552CD07D0C002C9836 /* MenuDatabase.swift in Sources */,
+				46970D042CD9BC830057E4D3 /* RecipeSearchCard.swift in Sources */,
 				76EBA4642CD08B85002C9836 /* RecipeCard.swift in Sources */,
 				760E6FB02CD33823007FD962 /* QRCodeView.swift in Sources */,
 				46970CED2CD995990057E4D3 /* IngredientsSectionView.swift in Sources */,
@@ -294,10 +312,12 @@
 				76EBA45B2CD07D5D002C9836 /* Recipe.swift in Sources */,
 				765C491D2CC203DF003A9D8C /* Team02App.swift in Sources */,
 				76EBA46A2CD08DF2002C9836 /* EventRow.swift in Sources */,
+				46970D012CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift in Sources */,
 				76EBA4532CD07CE8002C9836 /* Event.swift in Sources */,
 				760E6FA82CD337CA007FD962 /* EventViewModel.swift in Sources */,
 				76EBA4662CD08D7C002C9836 /* EventCard.swift in Sources */,
 				46970CE92CD9956C0057E4D3 /* EventHeaderView.swift in Sources */,
+				46970D062CD9BE160057E4D3 /* RecipeSearchView.swift in Sources */,
 				46970CE72CD9954F0057E4D3 /* EventDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
