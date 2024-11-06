@@ -38,11 +38,11 @@ struct DateSelectionView: View {
     }
 }
 
-
-struct DateSelectionView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            DateSelectionView(viewModel: EventViewModel())
-        }
-    }
-}
+//
+//struct DateSelectionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NavigationStack {
+//            DateSelectionView(viewModel: EventViewModel())
+//        }
+//    }
+//}

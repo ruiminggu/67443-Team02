@@ -93,9 +93,9 @@ struct InviteFriendsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-
-struct InviteFriendsView_Previews: PreviewProvider {
-    static var previews: some View {
-        InviteFriendsView(viewModel: EventViewModel())
-    }
-}
+//
+//struct InviteFriendsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        InviteFriendsView(viewModel: EventViewModel(), userViewModel: UserViewModel())
+//    }
+//}
