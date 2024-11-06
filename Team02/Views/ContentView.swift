@@ -45,7 +45,7 @@ struct ContentView: View {
                         Text("Home")
                     }
                     .onAppear {
-                        homePageViewModel.fetchUser(userID: user.id.uuidString) // Replace with your logic for fetching the user ID
+                        homePageViewModel.fetchUser(userID: "8E23D734-2FBE-4D1E-99F7-00279E19585B") // Replace with your logic for fetching the user ID
                     }
             } else {
                 Text("Loading...")
@@ -90,7 +90,7 @@ struct ContentView: View {
         }
         .accentColor(.orange)
         .onAppear {
-            homePageViewModel.fetchUser(userID: "your-user-id-here") // Replace with your logic for user ID retrieval
+            homePageViewModel.fetchUser(userID: "8E23D734-2FBE-4D1E-99F7-00279E19585B") // Replace with your logic for user ID retrieval
         }
     }
 }

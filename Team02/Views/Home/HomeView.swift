@@ -9,19 +9,23 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     
                     HStack {
-                        Image(viewModel.user?.image ?? "profile_pic")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                        
-                        VStack(alignment: .leading) {
-                            Text("Hello, \(viewModel.user?.fullName ?? "Guest")")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Text("Welcome back!")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        if let user = viewModel.user {
+                            Image(user.image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                            
+                            VStack(alignment: .leading) {
+                                Text("Hello, \(user.fullName)")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                Text("Welcome back!")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                        } else {
+                            Text("Loading user data...")
                         }
                         
                         Spacer()
@@ -45,22 +49,26 @@ struct HomeView: View {
                             .font(.headline)
                             .padding(.horizontal)
                       
-                      ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(viewModel.upcomingEvents, id: \.id) { event in
-                                if let userID = viewModel.user?.id {
-                                    EventCard(
-                                        event: event,
-                                        backgroundColor: viewModel.upcomingEvents.firstIndex(of: event)?.isMultiple(of: 2) ?? false ? Color.orange : Color.orange.opacity(0.3),
-                                        userID: userID // Pass the current user's ID
-                                    )
-                                    .frame(width: 300)
-                                } else {
-                                    Text("User ID not available")
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 16) {
+                                ForEach(viewModel.upcomingEvents, id: \.id) { event in
+                                    EmptyView().onAppear {
+                                                  print("Displaying event: \(event.eventName)")
+                                              }
+                                  
+                                    if let userID = viewModel.user?.id {
+                                        EventCard(
+                                            event: event,
+                                            backgroundColor: viewModel.upcomingEvents.firstIndex(of: event)?.isMultiple(of: 2) ?? false ? Color.orange : Color.orange.opacity(0.3),
+                                            userID: userID // Pass the current user's ID
+                                        )
+                                        .frame(width: 300)
+                                    } else {
+                                        Text("User ID not available")
+                                    }
                                 }
                             }
                         }
-                      }
                     }
                     
                     // Categories Section
@@ -95,6 +103,9 @@ struct HomeView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            // Additional onAppear code can be added here if needed
         }
     }
 }

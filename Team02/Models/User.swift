@@ -6,9 +6,9 @@ struct User: Identifiable {
     let image: String
     let email: String
     let password: String
-    let events: [Event]
+    let events: [String] // Change this to be an array of event IDs (String)
 
-    init(id: UUID, fullName: String, image: String, email: String, password: String, events: [Event]) {
+    init(id: UUID, fullName: String, image: String, email: String, password: String, events: [String]) {
         self.id = id
         self.fullName = fullName
         self.image = image
@@ -23,18 +23,17 @@ struct User: Identifiable {
               let fullName = dictionary["fullName"] as? String,
               let image = dictionary["image"] as? String,
               let email = dictionary["email"] as? String,
-              let password = dictionary["password"] as? String else { return nil }
-
-        // Parsing events if present
-        let eventsData = dictionary["events"] as? [[String: Any]] ?? []
-        let events = eventsData.compactMap { Event(dictionary: $0) }
+              let password = dictionary["password"] as? String,
+              let eventsArray = dictionary["events"] as? [String] else { // Parse events as [String]
+            return nil
+        }
 
         self.id = id
         self.fullName = fullName
         self.image = image
         self.email = email
         self.password = password
-        self.events = events
+        self.events = eventsArray // Assign the parsed event IDs
     }
   
   func toDictionary() -> [String: Any] {
@@ -45,7 +44,7 @@ struct User: Identifiable {
               "email": email,
               "password": password,
               // Convert events to dictionary if needed
-              "events": events.map { $0.toDictionary() }
+              "events": events
           ]
       }
 }
