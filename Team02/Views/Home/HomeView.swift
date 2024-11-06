@@ -1,10 +1,3 @@
-//
-//  HomeView.swift
-//  Team02
-//
-//  Created by 顾芮名 on 10/28/24.
-//
-
 import SwiftUI
 
 struct HomeView: View {
@@ -16,19 +9,23 @@ struct HomeView: View {
                 VStack(alignment: .leading, spacing: 20) {
                     
                     HStack {
-                        Image(viewModel.user.image)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 50, height: 50)
-                            .clipShape(Circle())
-                        
-                        VStack(alignment: .leading) {
-                            Text("Hello, \(viewModel.user.fullName)")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                            Text("Welcome back!")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                        if let user = viewModel.user {
+                            Image(user.image)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 50, height: 50)
+                                .clipShape(Circle())
+                            
+                            VStack(alignment: .leading) {
+                                Text("Hello, \(user.fullName)")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                Text("Welcome back!")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                        } else {
+                            Text("Loading user data...")
                         }
                         
                         Spacer()
@@ -54,16 +51,23 @@ struct HomeView: View {
                       
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                ForEach($viewModel.user.events.indices, id: \.self) { index in
-                                    EventCard(
-                                        event: $viewModel.user.events[index],
-                                        backgroundColor: index.isMultiple(of: 2) ? Color.orange : Color.orange.opacity(0.3),
-                                        userID: viewModel.user.id // Pass the current user's ID
-                                    )
-                                    .frame(width: 300)
+                                ForEach(viewModel.upcomingEvents, id: \.id) { event in
+                                    EmptyView().onAppear {
+                                                  print("Displaying event: \(event.eventName)")
+                                              }
+                                  
+                                    if let userID = viewModel.user?.id {
+                                        EventCard(
+                                            event: event,
+                                            backgroundColor: viewModel.upcomingEvents.firstIndex(of: event)?.isMultiple(of: 2) ?? false ? Color.orange : Color.orange.opacity(0.3),
+                                            userID: userID // Pass the current user's ID
+                                        )
+                                        .frame(width: 300)
+                                    } else {
+                                        Text("User ID not available")
+                                    }
                                 }
                             }
-                            .padding(.horizontal)
                         }
                     }
                     
@@ -72,17 +76,16 @@ struct HomeView: View {
                         .font(.headline)
                         .padding(.horizontal)
                     
-                  LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 20) {
-                      CategoryIcon(name: "Breakfast", systemImage: "sunrise.fill")
-                      CategoryIcon(name: "Lunch", systemImage: "takeoutbag.and.cup.and.straw")
-                      CategoryIcon(name: "Dinner", systemImage: "fork.knife")
-                      CategoryIcon(name: "Dessert", systemImage: "birthday.cake")
-                      CategoryIcon(name: "Western", systemImage: "globe.americas")
-                      CategoryIcon(name: "Asian", systemImage: "globe.asia.australia")
-                      CategoryIcon(name: "Drinks", systemImage: "wineglass")
-                      CategoryIcon(name: "Meat", systemImage: "flame")
-                  }
-
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 20) {
+                        CategoryIcon(name: "Breakfast", systemImage: "sunrise.fill")
+                        CategoryIcon(name: "Lunch", systemImage: "takeoutbag.and.cup.and.straw")
+                        CategoryIcon(name: "Dinner", systemImage: "fork.knife")
+                        CategoryIcon(name: "Dessert", systemImage: "birthday.cake")
+                        CategoryIcon(name: "Western", systemImage: "globe.americas")
+                        CategoryIcon(name: "Asian", systemImage: "globe.asia.australia")
+                        CategoryIcon(name: "Drinks", systemImage: "wineglass")
+                        CategoryIcon(name: "Meat", systemImage: "flame")
+                    }
                     .padding(.horizontal)
                     
                     // Recommended Recipes Section
@@ -100,6 +103,9 @@ struct HomeView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            // Additional onAppear code can be added here if needed
         }
     }
 }

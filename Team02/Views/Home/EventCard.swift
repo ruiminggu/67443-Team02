@@ -14,7 +14,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 }
 
 struct EventCard: View {
-    @Binding var event: Event
+    var event: Event // Change @Binding var to var
     var backgroundColor: Color
     let userID: UUID
 
@@ -42,16 +42,15 @@ struct EventCard: View {
                 ForEach(0..<filteredIngredients.count, id: \.self) { index in
                     if index % 2 == 0 {
                         HStack(spacing: 16) {
-                            Toggle(isOn: $event.assignedIngredientsList[index].isChecked) {
-                                Text(event.assignedIngredientsList[index].name)
+                            Toggle(isOn: .constant(filteredIngredients[index].isChecked)) {
+                                Text(filteredIngredients[index].name)
                                     .foregroundColor(.white)
                             }
                             .toggleStyle(CheckboxToggleStyle())
                             
-                            // Check if next item exists, to add it in the same row
                             if index + 1 < filteredIngredients.count {
-                                Toggle(isOn: $event.assignedIngredientsList[index + 1].isChecked) {
-                                    Text(event.assignedIngredientsList[index + 1].name)
+                                Toggle(isOn: .constant(filteredIngredients[index + 1].isChecked)) {
+                                    Text(filteredIngredients[index + 1].name)
                                         .foregroundColor(.white)
                                 }
                                 .toggleStyle(CheckboxToggleStyle())

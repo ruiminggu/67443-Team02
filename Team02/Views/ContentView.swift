@@ -7,7 +7,6 @@ struct EventView: View {
     }
 }
 
-
 struct CostView: View {
     var body: some View {
         Text("Costs Screen")
@@ -22,73 +21,47 @@ struct ProfileView: View {
     }
 }
 
-
 struct ContentView: View {
-    let sampleUserID = UUID()
+    @StateObject private var homePageViewModel = HomePageViewModel(menuDatabase: MenuDatabase(
+        recipes: [],
+        recommendedRecipes: [
+            Recipe(
+                title: "Grilled Cheese Sandwich",
+                description: "A delicious grilled cheese.",
+                image: "grilled_cheese",
+                instruction: "Cook on medium heat...",
+                ingredients: []
+            )
+        ]
+    ))
+
     var body: some View {
         TabView {
-            
             // Home Tab
-            HomeView(viewModel: HomePageViewModel(
-                user: User(
-                    id: sampleUserID, // New unique ID for the user
-                    fullName: "Cindy Doe",
-                    image: "profile_pic",
-                    email: "cindy.d@gmail.com",
-                    password: "password",
-                    events: [
-                        Event(
-                            invitedFriends: [],
-                            recipes: [],
-                            date: Date().addingTimeInterval(86400), // Tomorrow
-                            time: Date(),
-                            location: "Home",
-                            eventName: "Grad Dinner",
-                            qrCode: "",
-                            costs: [],
-                            totalCost: 0.0,
-                            assignedIngredientsList: [
-                                Ingredient(name: "Water", unit: 1.0, isChecked: false, userID: sampleUserID),
-                                Ingredient(name: "Milk", unit: 2.0, isChecked: false, userID: sampleUserID),
-                                Ingredient(name: "Cheese", unit: 1.0, isChecked: true, userID: sampleUserID)
-                            ]
-                        ),
-                        Event(
-                            invitedFriends: [],
-                            recipes: [],
-                            date: Date().addingTimeInterval(172800), // Day after tomorrow
-                            time: Date(),
-                            location: "Cafe",
-                            eventName: "Coffee Meetup",
-                            qrCode: "",
-                            costs: [],
-                            totalCost: 0.0,
-                            assignedIngredientsList: [
-                                Ingredient(name: "Coffee Beans", unit: 0.5, isChecked: false, userID: sampleUserID),
-                                Ingredient(name: "Milk", unit: 1.0, isChecked: true, userID: sampleUserID)
-                            ]
-                        )
-                    ]
-                ),
-                menuDatabase: MenuDatabase(
-                    recipes: [],
-                    recommendedRecipes: [
-                        Recipe(
-                            title: "Grilled Cheese Sandwich",
-                            description: "A delicious grilled cheese.",
-                            image: "grilled_cheese",
-                            instruction: "Cook on medium heat...",
-                            ingredients: []
-                        )
-                    ]
-                )
-            ))
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text("Home")
+            if let user = homePageViewModel.user {
+                HomeView(viewModel: homePageViewModel)
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
+                    .onAppear {
+                        homePageViewModel.fetchUser(userID: "8E23D734-2FBE-4D1E-99F7-00279E19585B") // Replace with your logic for fetching the user ID
+                    }
+            } else {
+                Text("Loading...")
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
             }
-            
+
             // Events Tab
+           EventView()
+                .tabItem {
+                    Image(systemName: "calendar")
+                    Text("Events")
+                }
+
           NavigationView {
               ScrollView {
                   VStack(alignment: .leading, spacing: 20) {
@@ -155,14 +128,14 @@ struct ContentView: View {
                             .foregroundColor(.orange)
                     }
                 }
-            
+
             // Costs Tab
             CostView()
                 .tabItem {
                     Image(systemName: "creditcard")
                     Text("Costs")
                 }
-            
+
             // Profile Tab
             ProfileView()
                 .tabItem {
@@ -171,11 +144,14 @@ struct ContentView: View {
                 }
         }
         .accentColor(.orange)
+        .onAppear {
+            homePageViewModel.fetchUser(userID: "8E23D734-2FBE-4D1E-99F7-00279E19585B") // Replace with your logic for user ID retrieval
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

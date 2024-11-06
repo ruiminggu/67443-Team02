@@ -1,10 +1,3 @@
-//
-//  User.swift
-//  Team02
-//
-//  Created by 顾芮名 on 10/28/24.
-//
-
 import Foundation
 
 struct User: Identifiable {
@@ -13,16 +6,45 @@ struct User: Identifiable {
     let image: String
     let email: String
     let password: String
-    var events: [Event] = []
-  
-  init(id: UUID, fullName: String, image: String, email: String, password: String, events: [Event]) {
-    self.id = id
-    self.fullName = fullName
-    self.image = image
-    self.email = email
-    self.password = password
-    self.events = events
-  }
-  
-}
+    let events: [String] // Change this to be an array of event IDs (String)
 
+    init(id: UUID, fullName: String, image: String, email: String, password: String, events: [String]) {
+        self.id = id
+        self.fullName = fullName
+        self.image = image
+        self.email = email
+        self.password = password
+        self.events = events
+    }
+
+    init?(dictionary: [String: Any]) {
+        guard let idString = dictionary["id"] as? String,
+              let id = UUID(uuidString: idString),
+              let fullName = dictionary["fullName"] as? String,
+              let image = dictionary["image"] as? String,
+              let email = dictionary["email"] as? String,
+              let password = dictionary["password"] as? String,
+              let eventsArray = dictionary["events"] as? [String] else { // Parse events as [String]
+            return nil
+        }
+
+        self.id = id
+        self.fullName = fullName
+        self.image = image
+        self.email = email
+        self.password = password
+        self.events = eventsArray // Assign the parsed event IDs
+    }
+  
+  func toDictionary() -> [String: Any] {
+          return [
+              "id": id.uuidString,
+              "fullName": fullName,
+              "image": image,
+              "email": email,
+              "password": password,
+              // Convert events to dictionary if needed
+              "events": events
+          ]
+      }
+}
