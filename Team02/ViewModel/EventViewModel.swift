@@ -9,6 +9,8 @@ class EventViewModel: ObservableObject {
     @Published var selectedEndTime = Date()
     @Published var invitedFriends: [UUID: Bool] = [:]
     @Published var events: [Event] = []
+    @Published var eventLocation = ""
+    @Published var currentEventID: UUID?
 
     private var databaseRef: DatabaseReference = Database.database().reference()
 
@@ -35,30 +37,37 @@ class EventViewModel: ObservableObject {
         }
     }
 
-    func saveEvent() {
-        let newEvent = Event(
-            invitedFriends: [],
-            recipes: [],
-            date: selectedDate,
-            startTime: selectedStartTime,
-            endTime: selectedEndTime,
-            location: "Location placeholder",
-            eventName: eventName,
-            qrCode: "",
-            costs: [],
-            totalCost: 0.0,
-            assignedIngredientsList: []
-        )
+  func saveEvent() {
+      // Convert `invitedFriends` dictionary to an array of invited friend IDs
+      let invitedFriendIDs = invitedFriends.compactMap { (friendID, isInvited) in
+          isInvited ? friendID.uuidString : nil
+      }
 
-        let eventID = newEvent.id.uuidString
-        databaseRef.child("events").child(eventID).setValue(newEvent.toDictionary()) { error, _ in
-            if let error = error {
-                print("Error saving event: \(error.localizedDescription)")
-            } else {
-                print("Event saved successfully!")
-            }
-        }
-    }
+      let newEvent = Event(
+          invitedFriends: invitedFriendIDs, // Pass the invited friend IDs here
+          recipes: [],
+          date: selectedDate,
+          startTime: selectedStartTime,
+          endTime: selectedEndTime,
+          location: eventLocation,
+          eventName: eventName,
+          qrCode: "",
+          costs: [],
+          totalCost: 0.0,
+          assignedIngredientsList: []
+      )
+
+      // Convert the event to a dictionary and save it to Firebase
+      let eventID = newEvent.id.uuidString
+      databaseRef.child("events").child(eventID).setValue(newEvent.toDictionary()) { error, _ in
+          if let error = error {
+              print("Error saving event: \(error.localizedDescription)")
+          } else {
+              print("Event saved successfully with invited friends!")
+          }
+      }
+  }
+
 
     func toggleFriendInvitation(friendID: UUID) {
         invitedFriends[friendID] = !(invitedFriends[friendID] ?? false)

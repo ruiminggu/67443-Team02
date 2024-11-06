@@ -2,7 +2,7 @@ import Foundation
 
 struct Event: Identifiable, Equatable {
     let id: UUID
-    let invitedFriends: [User]
+    var invitedFriends: [String]
     let recipes: [Recipe]
     let date: Date
     let startTime: Date
@@ -16,7 +16,7 @@ struct Event: Identifiable, Equatable {
 
     init(
         id: UUID = UUID(),
-        invitedFriends: [User],
+        invitedFriends: [String] = [],
         recipes: [Recipe],
         date: Date,
         startTime: Date,
@@ -76,7 +76,8 @@ struct Event: Identifiable, Equatable {
             "endTime": endTime.timeIntervalSince1970,
             "location": location,
             "qrCode": qrCode,
-            "totalCost": totalCost
+            "totalCost": totalCost,
+            "invitedFriends": invitedFriends,
         ]
     }
   

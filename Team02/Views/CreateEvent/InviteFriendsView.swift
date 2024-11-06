@@ -2,40 +2,20 @@ import SwiftUI
 
 struct InviteFriendsView: View {
     @ObservedObject var viewModel: EventViewModel
+    @ObservedObject var userViewModel = UserViewModel() // Add UserViewModel to fetch users
     @State private var searchText = ""
     
-    // Hardcoded list of friends for testing
-    let friends = [
-        User(id: UUID(), fullName: "Kevin", image: "kevin_image", email: "kevin@example.com", password: "password", events: []),
-        User(id: UUID(), fullName: "Amy", image: "amy_image", email: "amy@example.com", password: "password", events: []),
-        User(id: UUID(), fullName: "Betty", image: "betty_image", email: "betty@example.com", password: "password", events: [])
-    ]
-    
+    // Filtered list of friends based on search text
     var filteredFriends: [User] {
         if searchText.isEmpty {
-            return friends
+            return userViewModel.users // Use fetched users from UserViewModel
         } else {
-            return friends.filter { $0.fullName.lowercased().contains(searchText.lowercased()) }
+            return userViewModel.users.filter { $0.fullName.lowercased().contains(searchText.lowercased()) }
         }
     }
     
     var body: some View {
         VStack(spacing: 20) {
-            // Event Name Section
-            VStack(spacing: 20) {
-                Text("Event Name")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.orange)
-                    .padding(.top)
-                
-                TextField("Enter event name", text: $viewModel.eventName)
-                    .padding(10)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-            }
-            .padding(.top)
             
             // Invite Friends Section
             Text("Invite friends!")
@@ -75,17 +55,7 @@ struct InviteFriendsView: View {
             .listStyle(PlainListStyle())
             
             // Invite and Create QR Code Buttons
-            VStack(spacing: 8) {
-                Button(action: {
-                    // Action for inviting friends (if needed)
-                }) {
-                    Text("Invite")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.orange)
-                        .cornerRadius(10)
-                }
+            VStack(spacing: 15) {
                 
                 NavigationLink(destination: QRCodeView(viewModel: viewModel)) {
                     Text("Create QR Code")
@@ -111,13 +81,14 @@ struct InviteFriendsView: View {
                         .background(Color.orange)
                         .cornerRadius(10)
                 }
-                
-                Spacer()
+              
             }
             .padding(.horizontal)
-            .padding(.top)
-            
+
             Spacer()
+        }
+        .onAppear {
+            userViewModel.fetchUsers() // Fetch users when view appears
         }
         .navigationBarTitleDisplayMode(.inline)
     }

@@ -9,38 +9,76 @@ struct TimeSelectionView: View {
         ("11:00 AM", "1:00 PM"),
         ("1:00 PM", "3:00 PM"),
         ("3:00 PM", "5:00 PM"),
-        ("5:00 PM", "7:00 PM")
+        ("5:00 PM", "7:00 PM"),
+        ("7:00 PM", "9:00 PM"),
+        ("9:00 PM", "11:00 PM")
     ]
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 15) {
+          // Event Name Section
+          VStack(spacing: 10) {
+              Text("Event Name")
+                  .font(.title)
+                  .fontWeight(.bold)
+                  .foregroundColor(.orange)
+                  .padding(.top)
+              
+              TextField("Enter event name", text: $viewModel.eventName)
+                  .padding(10)
+                  .background(Color(.systemGray6))
+                  .cornerRadius(8)
+                  .padding(.horizontal)
+          }
+          .padding(.top)
+          
+          VStack(spacing: 10) {
+              Text("Event Location")
+                  .font(.title)
+                  .fontWeight(.bold)
+                  .foregroundColor(.orange)
+              
+              TextField("Enter event location", text: $viewModel.eventLocation)
+                  .padding(10)
+                  .background(Color(.systemGray6))
+                  .cornerRadius(8)
+                  .padding(.horizontal)
+          }
+
+          
             Text("Find a time!")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.orange)
                 .padding(.top)
             
-            ForEach(timeSlots, id: \.0) { (start, end) in
+          ScrollView {
+            VStack(spacing: 10) {
+              
+              ForEach(timeSlots, id: \.0) { (start, end) in
                 Button(action: {
-                    selectedTimes = (start, end)
-                    viewModel.selectedStartTime = convertTimeStringToDate(start)
-                    viewModel.selectedEndTime = convertTimeStringToDate(end)
+                  selectedTimes = (start, end)
+                  viewModel.selectedStartTime = convertTimeStringToDate(start)
+                  viewModel.selectedEndTime = convertTimeStringToDate(end)
                 }) {
-                    HStack {
-                        Image(systemName: selectedTimes?.start == start ? "checkmark.circle.fill" : "circle")
-                            .foregroundColor(.orange)
-                        Text("\(start) - \(end)")
-                            .foregroundColor(selectedTimes?.start == start ? .white : .orange)
-                        Spacer()
-                    }
-                    .padding()
-                    .background(selectedTimes?.start == start ? Color.orange : Color.clear)
-                    .cornerRadius(10)
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.orange, lineWidth: 2))
+                  HStack {
+                    Image(systemName: selectedTimes?.start == start ? "checkmark.circle.fill" : "circle")
+                      .foregroundColor(.orange)
+                    Text("\(start) - \(end)")
+                      .foregroundColor(selectedTimes?.start == start ? .white : .orange)
+                    Spacer()
+                  }
+                  .padding()
+                  .background(selectedTimes?.start == start ? Color.orange : Color.clear)
+                  .cornerRadius(10)
+                  .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.orange, lineWidth: 2))
                 }
                 .padding(.horizontal)
+              }
             }
-
+          }.frame(maxHeight: 250)
+          
+          
             NavigationLink(destination: InviteFriendsView(viewModel: viewModel)) {
                 Text("Next")
                     .foregroundColor(.white)
