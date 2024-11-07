@@ -43,4 +43,18 @@ class IngredientTests: XCTestCase {
         // Act & Assert
         XCTAssertNotEqual(ingredient1, ingredient2, "Ingredients with different properties should not be equal")
     }
+  
+  func testIngredientCategoryTitle() {
+          // Arrange & Act
+          let vegetablesAndGreensTitle = IngredientCategory.vegetablesAndGreens.title
+          let meatsTitle = IngredientCategory.meats.title
+          let dairyAndEggsTitle = IngredientCategory.dairyAndEggs.title
+          let ricesGrainsAndBeansTitle = IngredientCategory.ricesGrainsAndBeans.title
+          
+          // Assert
+          XCTAssertEqual(vegetablesAndGreensTitle, "Vegetables & Greens")
+          XCTAssertEqual(meatsTitle, "Meats")
+          XCTAssertEqual(dairyAndEggsTitle, "Dairy & Eggs")
+          XCTAssertEqual(ricesGrainsAndBeansTitle, "Rices, Grains & Beans")
+      }
 }

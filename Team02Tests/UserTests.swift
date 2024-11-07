@@ -33,4 +33,26 @@ final class UserTests: XCTestCase {
         
         XCTAssertNil(user)
     }
+  
+  func testToDictionary() {
+      // Arrange
+      let userID = UUID()
+      let fullName = "John Doe"
+      let image = "profile_pic"
+      let email = "john@example.com"
+      let password = "password123"
+      let events = ["event1", "event2"]
+      
+      let user = User(id: userID, fullName: fullName, image: image, email: email, password: password, events: events)
+      
+      // Act
+      let dictionary = user.toDictionary()
+      
+      // Assert
+      XCTAssertEqual(dictionary["fullName"] as? String, fullName)
+      XCTAssertEqual(dictionary["image"] as? String, image)
+      XCTAssertEqual(dictionary["email"] as? String, email)
+      XCTAssertEqual(dictionary["password"] as? String, password)
+      XCTAssertEqual(dictionary["events"] as? [String], events)
+  }
 }
