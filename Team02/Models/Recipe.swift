@@ -1,6 +1,6 @@
 import Foundation
 
-struct Recipe: Identifiable {
+struct Recipe: Identifiable, Equatable {
     let id: UUID
     let title: String
     let description: String
@@ -33,6 +33,17 @@ struct Recipe: Identifiable {
         self.readyInMinutes = readyInMinutes
         self.servings = servings
     }
+  
+    static func ==(lhs: Recipe, rhs: Recipe) -> Bool {
+          return lhs.title == rhs.title &&
+                 lhs.description == rhs.description &&
+                 lhs.image == rhs.image &&
+                 lhs.instruction == rhs.instruction &&
+                 lhs.ingredients == rhs.ingredients &&
+                 lhs.readyInMinutes == rhs.readyInMinutes &&
+                 lhs.servings == rhs.servings
+      }
+  
 }
 
 // API Response Models
@@ -51,10 +62,3 @@ struct APIRecipe: Codable, Identifiable {
     let readyInMinutes: Int?
     let servings: Int?
 }
-
-//struct Ingredient: Identifiable {
-//    let id = UUID()
-//    let name: String
-//    let amount: Double
-//    let unit: String
-//}

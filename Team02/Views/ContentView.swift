@@ -55,13 +55,6 @@ struct ContentView: View {
                     }
             }
 
-            // Events Tab
-           EventView()
-                .tabItem {
-                    Image(systemName: "calendar")
-                    Text("Events")
-                }
-
           NavigationView {
               ScrollView {
                   VStack(alignment: .leading, spacing: 20) {

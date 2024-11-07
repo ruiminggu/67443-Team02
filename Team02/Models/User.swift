@@ -1,6 +1,6 @@
 import Foundation
 
-struct User: Identifiable {
+struct User: Identifiable, Equatable {
     let id: UUID
     let fullName: String
     let image: String
@@ -35,6 +35,16 @@ struct User: Identifiable {
         self.password = password
         self.events = eventsArray // Assign the parsed event IDs
     }
+  
+  static func == (lhs: User, rhs: User) -> Bool {
+        return lhs.id == rhs.id &&
+            lhs.fullName == rhs.fullName &&
+            lhs.image == rhs.image &&
+            lhs.email == rhs.email &&
+            lhs.password == rhs.password &&
+            lhs.events == rhs.events
+    }
+    
   
   func toDictionary() -> [String: Any] {
           return [
