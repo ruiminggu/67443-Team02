@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ingredient: Identifiable {
+struct Ingredient: Identifiable, Equatable {
     let id = UUID()
     let name: String
     let unit: Float
@@ -20,6 +20,14 @@ struct Ingredient: Identifiable {
         self.isChecked = isChecked
         self.userID = userID
     }
+  
+    static func ==(lhs: Ingredient, rhs: Ingredient) -> Bool {
+          return lhs.id == rhs.id &&
+                 lhs.name == rhs.name &&
+                 lhs.unit == rhs.unit &&
+                 lhs.isChecked == rhs.isChecked &&
+                 lhs.userID == rhs.userID
+      }
 }
 
 enum IngredientCategory: String, CaseIterable {
