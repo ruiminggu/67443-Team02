@@ -11,8 +11,8 @@ struct Ingredient: Identifiable, Equatable {
     let id = UUID()
     let name: String
     let unit: Float
-    var isChecked: Bool // Track if the item is checked
-    let userID: UUID // ID of the user this ingredient is assigned to
+    var isChecked: Bool
+    let userID: UUID
   
     init(name: String, unit: Float, isChecked: Bool, userID: UUID) {
         self.name = name
@@ -22,13 +22,13 @@ struct Ingredient: Identifiable, Equatable {
     }
   
     static func ==(lhs: Ingredient, rhs: Ingredient) -> Bool {
-          return lhs.id == rhs.id &&
-                 lhs.name == rhs.name &&
-                 lhs.unit == rhs.unit &&
-                 lhs.isChecked == rhs.isChecked &&
-                 lhs.userID == rhs.userID
-      }
+        return lhs.name == rhs.name &&
+               lhs.unit == rhs.unit &&
+               lhs.isChecked == rhs.isChecked &&
+               lhs.userID == rhs.userID
+    }
 }
+
 
 enum IngredientCategory: String, CaseIterable {
     case vegetablesAndGreens = "Vegetables & Greens"

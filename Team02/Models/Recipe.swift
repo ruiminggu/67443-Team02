@@ -35,8 +35,7 @@ struct Recipe: Identifiable, Equatable {
     }
   
     static func ==(lhs: Recipe, rhs: Recipe) -> Bool {
-          return lhs.id == rhs.id &&
-                 lhs.title == rhs.title &&
+          return lhs.title == rhs.title &&
                  lhs.description == rhs.description &&
                  lhs.image == rhs.image &&
                  lhs.instruction == rhs.instruction &&

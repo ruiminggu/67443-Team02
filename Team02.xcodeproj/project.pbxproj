@@ -50,6 +50,7 @@
 		76FAC5472CD75CA900FE1DA7 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 76FAC5462CD75CA900FE1DA7 /* FirebaseDatabase */; };
 		76FAC54D2CD776BE00FE1DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */; };
 		76FAC54F2CD776FA00FE1DA7 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FAC54E2CD776FA00FE1DA7 /* FirebaseManager.swift */; };
+		76FD3BA22CDC7D3B002FDF77 /* IngredientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		76FAC54E2CD776FA00FE1DA7 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IngredientTests.swift; path = Team02Tests/IngredientTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 		765C49102CC203DF003A9D8C = {
 			isa = PBXGroup;
 			children = (
+				76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */,
 				76C678A62CDC7ACE0093A25C /* TransactionTests.swift */,
 				765C491B2CC203DF003A9D8C /* Team02 */,
 				76C6789A2CDC71A90093A25C /* Team02Tests */,
@@ -428,6 +431,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76FD3BA22CDC7D3B002FDF77 /* IngredientTests.swift in Sources */,
 				76C678A32CDC71CB0093A25C /* UserTests.swift in Sources */,
 				76C678A52CDC76A90093A25C /* EventTests.swift in Sources */,
 				76C678A72CDC7ACE0093A25C /* TransactionTests.swift in Sources */,
