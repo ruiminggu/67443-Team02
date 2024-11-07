@@ -75,41 +75,41 @@ struct MyEventsView: View {
     var body: some View {
         TabView {
           // Home Tab
-          HomeView(viewModel: HomePageViewModel(
-              user: User(
-                  id: UUID(),
-                  fullName: "Cindy Doe",
-                  image: "profile_pic",
-                  email: "cindy.d@gmail.com",
-                  password: "password",
-                  events: [ //will need to retrieve events based on firebase
-                    Event(
-                        invitedFriends: [],
-                        recipes: [],
-                        date: Date().addingTimeInterval(86400), // Tomorrow
-                        time: Date(),
-                        location: "Home",
-                        eventName: "Grad Dinner",
-                        qrCode: "",
-                        costs: [],
-                        totalCost: 0.0,
-                        assignedIngredientsList: [
-                            Ingredient(name: "Water", unit: 1.0, isChecked: false, userID: sampleUserID),
-                            Ingredient(name: "Milk", unit: 2.0, isChecked: false, userID: sampleUserID),
-                            Ingredient(name: "Cheese", unit: 1.0, isChecked: true, userID: sampleUserID)
-                        ]
-                    )
-                  ]
-              ),
-              menuDatabase: MenuDatabase(
-                  recipes: [],
-                  recommendedRecipes: []
-              )
-          ))
-          .tabItem {
-              Image(systemName: "house.fill")
-              Text("Home")
-          }
+//          HomeView(viewModel: HomePageViewModel(
+//              user: User(
+//                  id: UUID(),
+//                  fullName: "Cindy Doe",
+//                  image: "profile_pic",
+//                  email: "cindy.d@gmail.com",
+//                  password: "password",
+//                  events: [ //will need to retrieve events based on firebase
+//                    Event(
+//                        invitedFriends: [],
+//                        recipes: [],
+//                        date: Date().addingTimeInterval(86400), // Tomorrow
+//                        time: Date(),
+//                        location: "Home",
+//                        eventName: "Grad Dinner",
+//                        qrCode: "",
+//                        costs: [],
+//                        totalCost: 0.0,
+//                        assignedIngredientsList: [
+//                            Ingredient(name: "Water", unit: 1.0, isChecked: false, userID: sampleUserID),
+//                            Ingredient(name: "Milk", unit: 2.0, isChecked: false, userID: sampleUserID),
+//                            Ingredient(name: "Cheese", unit: 1.0, isChecked: true, userID: sampleUserID)
+//                        ]
+//                    )
+//                  ]
+//              ),
+//              menuDatabase: MenuDatabase(
+//                  recipes: [],
+//                  recommendedRecipes: []
+//              )
+//          ))
+//          .tabItem {
+//              Image(systemName: "house.fill")
+//              Text("Home")
+//          }
           
             // Events View Content
             NavigationView {
