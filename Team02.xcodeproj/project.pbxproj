@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2EBE66052CDDA93F001BC111 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */; };
 		46970CE72CD9954F0057E4D3 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE62CD9954F0057E4D3 /* EventDetailView.swift */; };
 		46970CE92CD9956C0057E4D3 /* EventHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */; };
 		46970CEB2CD995830057E4D3 /* MenuSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CEA2CD995830057E4D3 /* MenuSectionView.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		46970CE32CD97C2C0057E4D3 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
 		46970CE62CD9954F0057E4D3 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderView.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				76EBA4652CD08D7C002C9836 /* EventCard.swift */,
 				76EBA4672CD08D98002C9836 /* CategoryIcon.swift */,
 				76EBA4632CD08B85002C9836 /* RecipeCard.swift */,
+				2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */,
 				76EBA45F2CD08B36002C9836 /* HomeView.swift */,
 			);
 			path = Home;
@@ -422,6 +425,7 @@
 				76EBA4662CD08D7C002C9836 /* EventCard.swift in Sources */,
 				46970CE92CD9956C0057E4D3 /* EventHeaderView.swift in Sources */,
 				46970D062CD9BE160057E4D3 /* RecipeSearchView.swift in Sources */,
+				2EBE66052CDDA93F001BC111 /* RecipeDetailView.swift in Sources */,
 				46970CE72CD9954F0057E4D3 /* EventDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -577,7 +581,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = PXC7N5QS4B;
+				DEVELOPMENT_TEAM = HMZSC3HX6Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -606,7 +610,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = PXC7N5QS4B;
+				DEVELOPMENT_TEAM = HMZSC3HX6Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
