@@ -69,7 +69,7 @@ struct HomeView: View {
                                 }
                             }
                         }
-                    }
+                    }.padding(.horizontal)
                     
                     // Categories Section
                     Text("Categories")
@@ -93,10 +93,13 @@ struct HomeView: View {
                         .font(.headline)
                         .padding(.horizontal)
                     
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 20) {
-                            ForEach(viewModel.recommendedRecipes) { recipe in
-                                RecipeCard(recipe: recipe)
+                  ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 20) {
+                      ForEach(viewModel.recommendedRecipes, id: \.self) { recipe in
+                        NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                          RecipeCard(recipe: recipe)
+                              }
+                    
                             }
                         }
                         .padding(.horizontal)

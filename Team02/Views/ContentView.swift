@@ -28,10 +28,32 @@ struct ContentView: View {
             Recipe(
                 title: "Grilled Cheese Sandwich",
                 description: "A delicious grilled cheese.",
-                image: "grilled_cheese",
+                image: "grilledcheese",
+                instruction: "Cook on medium heat...",
+                ingredients: []
+            ),
+            Recipe(
+                title: "Sausage Fried Rice",
+                description: "How to make sausgae fried rice",
+                image: "sausage",
+                instruction: "Cook on medium heat...",
+                ingredients: []
+            ),
+            Recipe(
+                title: "French Toast",
+                description: "How to make french toast",
+                image: "frenchtoast",
+                instruction: "Cook on medium heat...",
+                ingredients: []
+            ),
+            Recipe(
+                title: "Mac & Cheese",
+                description: "How to make Mac & Cheese",
+                image: "maccheese",
                 instruction: "Cook on medium heat...",
                 ingredients: []
             )
+            
         ]
     ))
 

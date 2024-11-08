@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ingredient: Identifiable, Equatable {
+struct Ingredient: Identifiable, Hashable, Equatable {
     let id = UUID()
     let name: String
     let unit: Float
