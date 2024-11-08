@@ -9,17 +9,9 @@ import SwiftUI
 
 struct AddIngredientsView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var ingredientName: String = ""
-    @State private var amount: String = ""
-    @State private var selectedCategory: String?
-    
-    let categories = [
-        "Vegetables & Greens",
-        "Meats",
-        "Dairy & Eggs",
-        "Rices, Grains & Beans",
-        "Drinks & Snacks"
-    ]
+    @StateObject private var viewModel = AddIngredientsViewModel()
+    let eventID: String
+    let userID: UUID
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -45,7 +37,7 @@ struct AddIngredientsView: View {
                     Text("Name")
                         .foregroundColor(.black)
                     
-                    TextField("", text: $ingredientName)
+                    TextField("Enter ingredient name", text: $viewModel.ingredientName)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
@@ -56,37 +48,11 @@ struct AddIngredientsView: View {
                     Text("Amount")
                         .foregroundColor(.black)
                     
-                    TextField("Ex:50", text: $amount)
+                    TextField("Ex:50", text: $viewModel.amount)
+                        .keyboardType(.decimalPad)
                         .padding()
                         .background(Color(.systemGray6))
                         .cornerRadius(10)
-                }
-                
-                // Category Selection
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Category")
-                        .foregroundColor(.black)
-                    
-                    FlowLayout(spacing: 10) {
-                        ForEach(categories, id: \.self) { category in
-                            Button(action: {
-                                selectedCategory = category
-                            }) {
-                                Text(category)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .fill(selectedCategory == category ? Color.orange.opacity(0.2) : Color(.systemGray6))
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 20)
-                                                    .stroke(Color.orange, lineWidth: selectedCategory == category ? 1 : 0)
-                                            )
-                                    )
-                                    .foregroundColor(.black)
-                            }
-                        }
-                    }
                 }
             }
             .padding()
@@ -96,16 +62,22 @@ struct AddIngredientsView: View {
             // Action Buttons
             VStack(spacing: 12) {
                 Button(action: {
-                    // Add ingredient logic here
+                    viewModel.addIngredientToEvent(eventID: eventID, userID: userID)
                 }) {
-                    Text("Add")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.orange)
-                        .cornerRadius(25)
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Text("Add")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                    }
                 }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.orange)
+                .cornerRadius(25)
+                .disabled(viewModel.isLoading)
                 
                 Button(action: {
                     dismiss()
@@ -123,6 +95,22 @@ struct AddIngredientsView: View {
                 }
             }
             .padding()
+        }
+        .alert("Error", isPresented: .constant(viewModel.error != nil)) {
+            Button("OK") {
+                viewModel.error = nil
+            }
+        } message: {
+            if let error = viewModel.error {
+                Text(error)
+            }
+        }
+        .alert("Success", isPresented: $viewModel.showSuccessAlert) {
+            Button("OK") {
+                dismiss()
+            }
+        } message: {
+            Text("Ingredient added successfully!")
         }
     }
 }
@@ -184,8 +172,8 @@ struct FlowLayout: Layout {
     }
 }
 
-struct AddIngredientsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddIngredientsView()
-    }
-}
+//struct AddIngredientsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddIngredientsView()
+//    }
+//}

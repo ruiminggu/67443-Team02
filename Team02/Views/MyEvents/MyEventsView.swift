@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import Foundation
+import FirebaseDatabase
+
 
 struct MyEventCard: View {
+  let eventID: String
   let eventName: String
   let date: String
   let attendeeCount: Int
@@ -15,11 +19,7 @@ struct MyEventCard: View {
   let lightGreen = Color(red: 164/255, green: 221/255, blue: 176/255)
   
   var body: some View {
-      NavigationLink(destination: EventDetailView(
-          eventName: eventName,
-          date: date,
-          attendeeCount: attendeeCount
-      )) {
+      NavigationLink(destination: EventDetailView(eventID:  eventID)) {
           HStack {
               VStack(alignment: .leading, spacing: 45) {
                   Text(date)
@@ -35,17 +35,18 @@ struct MyEventCard: View {
               Spacer()
               
               HStack(spacing: -20) {
-                  ForEach(0...(min(3, attendeeCount) - 1), id: \.self) { _ in
-                      Circle()
-                          .fill(Color.white.opacity(1))
-                          .frame(width: 45, height: 45)
-                          .overlay(
-                              Image(systemName: "person.fill")
-                                  .foregroundColor(.gray)
-                          )
-                  }
-                  
+                  // Fix: Check for valid attendee count before creating range
                   if attendeeCount > 0 {
+                      ForEach(0..<min(3, attendeeCount), id: \.self) { _ in
+                          Circle()
+                              .fill(Color.white.opacity(1))
+                              .frame(width: 45, height: 45)
+                              .overlay(
+                                  Image(systemName: "person.fill")
+                                      .foregroundColor(.gray)
+                              )
+                      }
+                      
                       ZStack {
                           Circle()
                               .fill(lightGreen.opacity(1))
@@ -71,136 +72,83 @@ struct MyEventCard: View {
 }
 
 struct MyEventsView: View {
-    let sampleUserID = UUID()
-    var body: some View {
-        TabView {
-          // Home Tab
-//          HomeView(viewModel: HomePageViewModel(
-//              user: User(
-//                  id: UUID(),
-//                  fullName: "Cindy Doe",
-//                  image: "profile_pic",
-//                  email: "cindy.d@gmail.com",
-//                  password: "password",
-//                  events: [ //will need to retrieve events based on firebase
-//                    Event(
-//                        invitedFriends: [],
-//                        recipes: [],
-//                        date: Date().addingTimeInterval(86400), // Tomorrow
-//                        time: Date(),
-//                        location: "Home",
-//                        eventName: "Grad Dinner",
-//                        qrCode: "",
-//                        costs: [],
-//                        totalCost: 0.0,
-//                        assignedIngredientsList: [
-//                            Ingredient(name: "Water", unit: 1.0, isChecked: false, userID: sampleUserID),
-//                            Ingredient(name: "Milk", unit: 2.0, isChecked: false, userID: sampleUserID),
-//                            Ingredient(name: "Cheese", unit: 1.0, isChecked: true, userID: sampleUserID)
-//                        ]
-//                    )
-//                  ]
-//              ),
-//              menuDatabase: MenuDatabase(
-//                  recipes: [],
-//                  recommendedRecipes: []
-//              )
-//          ))
-//          .tabItem {
-//              Image(systemName: "house.fill")
-//              Text("Home")
-//          }
-          
-            // Events View Content
-            NavigationView {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("My Events")
-                            .font(.system(size: 34, weight: .bold))
-                            .foregroundColor(.orange)
-                            .padding(.horizontal)
-                            .padding(.top)
-                        
-                        Text("Upcoming Events")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.orange)
-                            .padding(.horizontal)
-                        
-                        MyEventCard(
-                            eventName: "Grad Dinner",
-                            date: "Friday, 25 November",
-                            attendeeCount: 6,
-                            isUpcoming: true
-                        )
-                        
-                        Text("Past Events")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.orange)
-                            .padding(.horizontal)
-                            .padding(.top)
-                        
-                        MyEventCard(
-                            eventName: "CNY Dinner",
-                            date: "Monday, 24 October",
-                            attendeeCount: 9,
-                            isUpcoming: false
-                        )
-                        
-                        MyEventCard(
-                            eventName: "ABB Brunch",
-                            date: "Sunday, 22 March",
-                            attendeeCount: 2,
-                            isUpcoming: false
-                        )
-                        
-                        MyEventCard(
-                            eventName: "Haloween Dinner",
-                            date: "Tuesday, 16 January",
-                            attendeeCount: 7,
-                            isUpcoming: false
-                        )
-                    }
-                }
-            }
-            .tabItem {
-                Image(systemName: "calendar")
-                Text("Events")
+  let userID = "8E23D734-2FBE-4D1E-99F7-00279E19585B"
+  @StateObject private var viewModel = EventsViewModel()
+  
+  var body: some View {
+    // Events View Content
+    NavigationView {
+      ScrollView {
+        VStack(alignment: .leading, spacing: 20) {
+            Text("My Events")
+              .font(.system(size: 34, weight: .bold))
+              .foregroundColor(.orange)
+              .padding(.horizontal)
+              .padding(.top)
+            
+            // Debug Text to verify data
+            if !viewModel.upcomingEvents.isEmpty {
+              Text("Upcoming Events")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(.orange)
+                .padding(.horizontal)
+              
+              ForEach(viewModel.upcomingEvents) { event in
+                MyEventCard(
+                  eventID: event.id.uuidString,
+                  eventName: event.eventName,
+                  date: formatDate(event.date),
+                  attendeeCount: event.invitedFriends.count,
+                  isUpcoming: true
+                )
+              }
+            } else {
+              Text("No upcoming events")
+                .foregroundColor(.gray)
+                .padding(.horizontal)
             }
             
-            
-            
-            // Create Event Tab
-            DateSelectionView(viewModel: EventViewModel())
-                .tabItem {
-                    ZStack {
-                        Circle()
-                            .fill(Color.orange.opacity(0.4))
-                            .frame(width: 50, height: 50)
-                        Image(systemName: "plus")
-                            .foregroundColor(.orange)
-                    }
-                }
-            
-            // Costs Tab
-            CostView()
-                .tabItem {
-                    Image(systemName: "creditcard")
-                    Text("Costs")
-                }
-            
-            // Profile Tab
-            ProfileView()
-                .tabItem {
-                    Image(systemName: "person.circle")
-                    Text("Profile")
-                }
+            if !viewModel.pastEvents.isEmpty {
+              Text("Past Events")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(.orange)
+                .padding(.horizontal)
+                .padding(.top)
+              
+              ForEach(viewModel.pastEvents) { event in
+                MyEventCard(
+                  eventID: event.id.uuidString,
+                  eventName: event.eventName,
+                  date: formatDate(event.date),
+                  attendeeCount: event.invitedFriends.count,
+                  isUpcoming: false
+                )
+              }
+            } else {
+              Text("No past events")
+                .foregroundColor(.gray)
+                .padding(.horizontal)
+            }
+          }
         }
-        .accentColor(.orange)
+        .onAppear {
+          viewModel.fetchUser(userID: userID)
+        }
+        .refreshable {
+          viewModel.fetchUser(userID: userID)
+        }
+      }
     }
-}
-
-struct MyEventsView_Previews: PreviewProvider {
+    private func formatDate(_ date: Date) -> String {
+      let formatter = DateFormatter()
+      formatter.dateFormat = "EEEE, dd MMMM"
+      return formatter.string(from: date)
+    }
+  }
+  
+  struct MyEventsView_Previews: PreviewProvider {
     static var previews: some View {
-        MyEventsView()
+      MyEventsView()
     }
-}
+  }
+
