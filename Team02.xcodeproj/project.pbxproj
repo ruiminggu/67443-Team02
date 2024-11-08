@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E46EB392CDDF74600447382 /* frenchtoast.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2E46EB372CDDF74600447382 /* frenchtoast.jpeg */; };
+		2E46EB3A2CDDF74600447382 /* maccheese.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E46EB382CDDF74600447382 /* maccheese.png */; };
+		2E78C8732CDDF46A0099231D /* grilledcheese.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E78C8722CDDF46A0099231D /* grilledcheese.png */; };
+		2E78C8752CDDF48D0099231D /* sausage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E78C8742CDDF48D0099231D /* sausage.png */; };
 		2EBE66052CDDA93F001BC111 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */; };
 		46970CE72CD9954F0057E4D3 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE62CD9954F0057E4D3 /* EventDetailView.swift */; };
 		46970CE92CD9956C0057E4D3 /* EventHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */; };
@@ -65,6 +69,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2E46EB372CDDF74600447382 /* frenchtoast.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = frenchtoast.jpeg; sourceTree = "<group>"; };
+		2E46EB382CDDF74600447382 /* maccheese.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maccheese.png; sourceTree = "<group>"; };
+		2E78C8722CDDF46A0099231D /* grilledcheese.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grilledcheese.png; sourceTree = "<group>"; };
+		2E78C8742CDDF48D0099231D /* sausage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sausage.png; sourceTree = "<group>"; };
 		2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
 		46970CE32CD97C2C0057E4D3 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
 		46970CE62CD9954F0057E4D3 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
@@ -223,6 +231,10 @@
 				765C491C2CC203DF003A9D8C /* Team02App.swift */,
 				765C49202CC203E1003A9D8C /* Assets.xcassets */,
 				76EBA46C2CD08FA3002C9836 /* profile_pic.jpeg */,
+				2E46EB372CDDF74600447382 /* frenchtoast.jpeg */,
+				2E46EB382CDDF74600447382 /* maccheese.png */,
+				2E78C8742CDDF48D0099231D /* sausage.png */,
+				2E78C8722CDDF46A0099231D /* grilledcheese.png */,
 				765C49222CC203E1003A9D8C /* Preview Content */,
 				76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */,
 			);
@@ -376,9 +388,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				76EBA46D2CD08FA3002C9836 /* profile_pic.jpeg in Resources */,
+				2E78C8752CDDF48D0099231D /* sausage.png in Resources */,
 				76FAC54D2CD776BE00FE1DA7 /* GoogleService-Info.plist in Resources */,
+				2E78C8732CDDF46A0099231D /* grilledcheese.png in Resources */,
 				765C49242CC203E1003A9D8C /* Preview Assets.xcassets in Resources */,
 				765C49212CC203E1003A9D8C /* Assets.xcassets in Resources */,
+				2E46EB392CDDF74600447382 /* frenchtoast.jpeg in Resources */,
+				2E46EB3A2CDDF74600447382 /* maccheese.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
