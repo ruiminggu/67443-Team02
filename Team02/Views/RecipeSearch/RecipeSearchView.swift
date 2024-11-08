@@ -9,7 +9,9 @@ import SwiftUI
 
 struct RecipeSearchView: View {
     @StateObject private var viewModel = RecipeSearchViewModel()
-    
+    @Environment(\.dismiss) private var dismiss
+    let event: Event
+  
     var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 16) {
@@ -72,10 +74,18 @@ struct RecipeSearchView: View {
                                     .frame(maxWidth: .infinity)
                                     .padding(.top, 40)
                                 } else {
-                                    ForEach(viewModel.recipes) { recipe in
-                                        RecipeSearchCard(recipe: recipe)
-                                    }
-                                }
+                                  ForEach(viewModel.recipes) { recipe in
+                                    RecipeSearchCard(recipe: recipe, event: event)
+                                          .swipeActions(edge: .trailing) {
+                                              Button {
+                                                  viewModel.addRecipeToEvent(recipe: recipe, eventID: event.id.uuidString)
+                                              } label: {
+                                                  Label("Add", systemImage: "plus.circle")
+                                              }
+                                              .tint(.green)
+                                          }
+                                  }
+                              }
                             } else {
                                 VStack(alignment: .leading, spacing: 10) {
                                     Text("Recent")
@@ -106,13 +116,13 @@ struct RecipeSearchView: View {
                         .shadow(radius: 2)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
 
-struct RecipeSearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        RecipeSearchView()
-    }
-}
+//struct RecipeSearchView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        RecipeSearchView()
+//    }
+//}

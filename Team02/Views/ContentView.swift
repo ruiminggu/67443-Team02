@@ -76,73 +76,25 @@ struct ContentView: View {
                         Text("Home")
                     }
             }
-
-          NavigationView {
-              ScrollView {
-                  VStack(alignment: .leading, spacing: 20) {
-                      Text("My Events")
-                          .font(.system(size: 34, weight: .bold))
-                          .foregroundColor(.orange)
-                          .padding(.horizontal)
-                          .padding(.top)
-                      
-                      Text("Upcoming Events")
-                          .font(.system(size: 20, weight: .semibold))
-                          .foregroundColor(.orange)
-                          .padding(.horizontal)
-                      
-                      MyEventCard(
-                          eventName: "Grad Dinner",
-                          date: "Friday, 25 November",
-                          attendeeCount: 6,
-                          isUpcoming: true
-                      )
-                      
-                      Text("Past Events")
-                          .font(.system(size: 20, weight: .semibold))
-                          .foregroundColor(.orange)
-                          .padding(.horizontal)
-                          .padding(.top)
-                      
-                      MyEventCard(
-                          eventName: "CNY Dinner",
-                          date: "Monday, 24 October",
-                          attendeeCount: 9,
-                          isUpcoming: false
-                      )
-                      
-                      MyEventCard(
-                          eventName: "ABB Brunch",
-                          date: "Sunday, 22 March",
-                          attendeeCount: 2,
-                          isUpcoming: false
-                      )
-                      
-                      MyEventCard(
-                          eventName: "Haloween Dinner",
-                          date: "Tuesday, 16 January",
-                          attendeeCount: 7,
-                          isUpcoming: false
-                      )
-                  }
+          
+          // Events Tab
+          MyEventsView()
+              .tabItem {
+                  Image(systemName: "calendar")
+                  Text("Events")
               }
-          }
-          .tabItem {
-              Image(systemName: "calendar")
-              Text("Events")
-          }
             
             // Create Event Tab
             DateSelectionView(viewModel: EventViewModel())
-                .tabItem {
-                    ZStack {
-                        Circle()
-                            .fill(Color.orange.opacity(0.4))
-                            .frame(width: 50, height: 50)
-                        Image(systemName: "plus")
-                            .foregroundColor(.orange)
-                    }
-                }
+              .tabItem {
+                  ZStack {
+                      Circle()
+                          .fill(Color.orange.opacity(0.4))
+                          .frame(width: 50, height: 50)
+                      Image(systemName: "plus")
+                          .foregroundColor(.orange)
+                  }
+              }
 
             // Costs Tab
             CostView()
@@ -165,8 +117,8 @@ struct ContentView: View {
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}

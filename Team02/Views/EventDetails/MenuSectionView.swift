@@ -8,42 +8,60 @@
 import SwiftUI
 
 struct MenuSectionView: View {
-  @State private var showRecipeSearch = false
-  
-  var body: some View {
-      VStack(alignment: .leading, spacing: 20) {
-          Text("Menu")
-              .font(.system(size: 28, weight: .bold))
-              .foregroundColor(.orange)
+    @State private var showRecipeSearch = false
+    let event: Event // Pass the event to access its recipes
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
           
+        Text("Menu")
+            .font(.system(size: 28, weight: .bold))
+            .foregroundColor(.orange)
+        
         HStack {
-          Spacer()
-          Button(action: {
-              showRecipeSearch = true
-          }) {
-              ZStack {
-                  Circle()
-                      .fill(Color.orange.opacity(0.2))
-                      .frame(width: 60, height: 60)
-                  
-                  Image(systemName: "plus")
-                      .font(.system(size: 24, weight: .medium))
-                      .foregroundColor(.orange)
+              Spacer()
+              
+              Button(action: {
+                  showRecipeSearch = true
+              }) {
+                  ZStack {
+                      Circle()
+                          .fill(Color.orange.opacity(0.2))
+                          .frame(width: 60, height: 60)
+                      
+                      Image(systemName: "plus")
+                          .font(.system(size: 24, weight: .medium))
+                          .foregroundColor(.orange)
+                  }
+              }
+            Spacer()
+          }
+          
+          // Display event recipes
+          if event.recipes.isEmpty {
+//                Text("No recipes added yet")
+//                    .foregroundColor(.gray)
+//                    .padding(.vertical)
+          } else {
+              ScrollView(.horizontal, showsIndicators: false) {
+                  LazyHStack(spacing: 16) {
+                      ForEach(event.recipes) { recipe in
+                          RecipeCard(recipe: recipe)
+                      }
+                  }
               }
           }
-          Spacer()
-        }
       }
       .padding(.horizontal)
       .sheet(isPresented: $showRecipeSearch) {
-          RecipeSearchView()
+          RecipeSearchView(event: event)
       }
     }
 }
 
-
-struct MenuSectionView_Previews: PreviewProvider {
-    static var previews: some View {
-      MenuSectionView()
-    }
-}
+//
+//struct MenuSectionView_Previews: PreviewProvider {
+//    static var previews: some View {
+//      MenuSectionView(event: <#T##Event#>)
+//    }
+//}

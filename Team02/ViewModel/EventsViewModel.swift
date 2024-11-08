@@ -1,20 +1,26 @@
+//
+//  EventsViewModel.swift
+//  Team02
+//
+//  Created by Xinyi Chen on 11/7/24.
+//
+
 import Foundation
 import FirebaseDatabase
 
-class HomePageViewModel: ObservableObject {
+class EventsViewModel: ObservableObject {
     @Published var user: User?
     @Published var upcomingEvents: [Event] = []
-    @Published var recommendedRecipes: [Recipe] = []
-
+    @Published var pastEvents: [Event] = []
+    
     private var databaseRef: DatabaseReference = Database.database().reference()
-
-    init(menuDatabase: MenuDatabase) {
-        self.recommendedRecipes = menuDatabase.recommendedRecipes
+    
+    init() {
     }
-
+    
     func fetchUser(userID: String) {
         print("Fetching user with ID: \(userID)")
-
+        
         databaseRef.child("users").child(userID).observeSingleEvent(of: .value) { snapshot, _ in
             if let userData = snapshot.value as? [String: Any],
                let user = User(dictionary: userData) {
@@ -24,7 +30,7 @@ class HomePageViewModel: ObservableObject {
                     // Extract event IDs directly, as `events` is already an array of strings
                     let eventIDs = user.events
                     print("User event IDs: \(eventIDs)")
-
+                    
                     // Fetch full event details for each event ID
                     self.fetchUserEvents(eventIDs: eventIDs)
                 }
@@ -33,8 +39,7 @@ class HomePageViewModel: ObservableObject {
             }
         }
     }
-
-
+    
     private func fetchUserEvents(eventIDs: [String]) {
         var fetchedEvents: [Event] = []
         
@@ -55,11 +60,19 @@ class HomePageViewModel: ObservableObject {
         }
         
         dispatchGroup.notify(queue: .main) {
-            // Filter for upcoming events and assign to upcomingEvents
-            self.upcomingEvents = fetchedEvents.filter { $0.date > Date() }
-            // Log to confirm upcoming events were updated
-          print("Updated upcomingEvents: \(self.upcomingEvents.count); Updated pastEvents: \((fetchedEvents.filter { $0.date <= Date() }).count)")
+            let now = Date()
+            
+            // Sort and categorize events
+            self.upcomingEvents = fetchedEvents
+                .filter { $0.date > now }
+                .sorted { $0.date < $1.date }
+            
+            self.pastEvents = fetchedEvents
+                .filter { $0.date <= now }
+                .sorted { $0.date > $1.date }
+            
+            // Log to confirm events were updated
+            print("Updated events - Upcoming: \(self.upcomingEvents.count), Past: \(self.pastEvents.count)")
         }
     }
-
 }
