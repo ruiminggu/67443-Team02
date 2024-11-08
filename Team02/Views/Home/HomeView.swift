@@ -69,7 +69,7 @@ struct HomeView: View {
                                 }
                             }
                         }
-                    }
+                    }.padding(.horizontal)
                     
                     // Categories Section
                     Text("Categories")
