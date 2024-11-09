@@ -9,7 +9,8 @@ class EventViewModel: ObservableObject {
     @Published var invitedFriends: [UUID: Bool] = [:]
     @Published var events: [Event] = []
     @Published var eventLocation = ""
-    @Published var currentEventID: UUID?
+    @Published var currentEventID: UUID? // Used for navigation to EventDetailView
+    @Published var showSaveSuccessAlert = false // Used to trigger the flash notification
 
     private var databaseRef: DatabaseReference = Database.database().reference()
 
@@ -35,7 +36,7 @@ class EventViewModel: ObservableObject {
         }
     }
 
-    func saveEvent() {
+    func saveEvent(completion: @escaping (String) -> Void) {
         // Create a new event instance
         let newEvent = Event(
             invitedFriends: [],
@@ -59,6 +60,9 @@ class EventViewModel: ObservableObject {
                 print("Error saving event: \(error.localizedDescription)")
             } else {
                 print("Event saved successfully!")
+                print("EventID generated: \(eventID)")
+                self.showSaveSuccessAlert = true // Set to show success alert
+                completion(eventID) // Pass event ID to completion for navigation
 
                 // After saving the event, add the event ID to each invited user's list
                 self.addEventToInvitedUsers(eventID: eventID)

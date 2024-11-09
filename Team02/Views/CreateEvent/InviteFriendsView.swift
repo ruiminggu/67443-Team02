@@ -4,6 +4,7 @@ struct InviteFriendsView: View {
     @ObservedObject var viewModel: EventViewModel
     @ObservedObject var userViewModel = UserViewModel() // Add UserViewModel to fetch users
     @State private var searchText = ""
+    @State private var navigateToEventDetail = false // Track navigation state
     
     // Filtered list of friends based on search text
     var filteredFriends: [User] {
@@ -16,7 +17,6 @@ struct InviteFriendsView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            
             // Invite Friends Section
             Text("Invite friends!")
                 .font(.title)
@@ -71,19 +71,46 @@ struct InviteFriendsView: View {
                 }
                 
                 // Save Event Button - triggers saving to the database
-                Button(action: {
-                    viewModel.saveEvent() // Save the event to the database
-                }) {
-                    Text("Save Event")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.orange)
-                        .cornerRadius(10)
-                }
+              Button(action: {
+                  viewModel.saveEvent { eventID in
+                      if let validEventID = UUID(uuidString: eventID) {
+                          viewModel.currentEventID = validEventID
+                          navigateToEventDetail = true
+                      } else {
+                          print("Invalid event ID received.")
+                          // Handle error (e.g., show an alert) if eventID is invalid
+                      }
+                  }
+              }) {
+                  Text("Save Event")
+                      .foregroundColor(.white)
+                      .frame(maxWidth: .infinity)
+                      .padding()
+                      .background(Color.orange)
+                      .cornerRadius(10)
+              }
+
               
             }
             .padding(.horizontal)
+            .alert(isPresented: $viewModel.showSaveSuccessAlert) {
+                Alert(title: Text("Success"), message: Text("Event saved successfully"), dismissButton: .default(Text("OK")))
+            }
+            
+            // NavigationLink for EventDetailView
+            NavigationLink(
+                destination: Group {
+                    if let validEventID = viewModel.currentEventID?.uuidString {
+                        EventDetailView(eventID: validEventID)
+                    } else {
+                        Text("Invalid event ID").foregroundColor(.red)
+                    }
+                },
+                isActive: $navigateToEventDetail
+            ) {
+                EmptyView()
+            }
+
 
             Spacer()
         }
@@ -93,9 +120,3 @@ struct InviteFriendsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
-//
-//struct InviteFriendsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        InviteFriendsView(viewModel: EventViewModel(), userViewModel: UserViewModel())
-//    }
-//}
