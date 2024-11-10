@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		46110AD32CDDB5CA00FBBC50 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */; };
-		46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */; };
-		46110AD72CDE0E1200FBBC50 /* RecipeMenuCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */; };
-		46110AD92CDE235F00FBBC50 /* AddIngredientsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD82CDE235F00FBBC50 /* AddIngredientsViewModel.swift */; };
 		2E46EB392CDDF74600447382 /* frenchtoast.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2E46EB372CDDF74600447382 /* frenchtoast.jpeg */; };
 		2E46EB3A2CDDF74600447382 /* maccheese.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E46EB382CDDF74600447382 /* maccheese.png */; };
 		2E78C8732CDDF46A0099231D /* grilledcheese.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E78C8722CDDF46A0099231D /* grilledcheese.png */; };
 		2E78C8752CDDF48D0099231D /* sausage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E78C8742CDDF48D0099231D /* sausage.png */; };
 		2EBE66052CDDA93F001BC111 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */; };
+		46110AD32CDDB5CA00FBBC50 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */; };
+		46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */; };
+		46110AD72CDE0E1200FBBC50 /* RecipeMenuCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */; };
+		46110AD92CDE235F00FBBC50 /* AddIngredientsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD82CDE235F00FBBC50 /* AddIngredientsViewModel.swift */; };
 		46970CE72CD9954F0057E4D3 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE62CD9954F0057E4D3 /* EventDetailView.swift */; };
 		46970CE92CD9956C0057E4D3 /* EventHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */; };
 		46970CEB2CD995830057E4D3 /* MenuSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CEA2CD995830057E4D3 /* MenuSectionView.swift */; };
@@ -73,15 +73,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
-		46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewModel.swift; sourceTree = "<group>"; };
-		46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeMenuCard.swift; sourceTree = "<group>"; };
-		46110AD82CDE235F00FBBC50 /* AddIngredientsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientsViewModel.swift; sourceTree = "<group>"; };
 		2E46EB372CDDF74600447382 /* frenchtoast.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = frenchtoast.jpeg; sourceTree = "<group>"; };
 		2E46EB382CDDF74600447382 /* maccheese.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = maccheese.png; sourceTree = "<group>"; };
 		2E78C8722CDDF46A0099231D /* grilledcheese.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grilledcheese.png; sourceTree = "<group>"; };
 		2E78C8742CDDF48D0099231D /* sausage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sausage.png; sourceTree = "<group>"; };
 		2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
+		46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
+		46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewModel.swift; sourceTree = "<group>"; };
+		46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeMenuCard.swift; sourceTree = "<group>"; };
+		46110AD82CDE235F00FBBC50 /* AddIngredientsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientsViewModel.swift; sourceTree = "<group>"; };
 		46970CE32CD97C2C0057E4D3 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
 		46970CE62CD9954F0057E4D3 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderView.swift; sourceTree = "<group>"; };
@@ -613,7 +613,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = PXC7N5QS4B;
+				DEVELOPMENT_TEAM = 4L77PSLYU4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -626,7 +626,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cmuis.Team02;
+				PRODUCT_BUNDLE_IDENTIFIER = "cmuis.Team02-xinyi";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -642,7 +642,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = HMZSC3HX6Q;
+				DEVELOPMENT_TEAM = 4L77PSLYU4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -655,7 +655,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cmuis.Team02;
+				PRODUCT_BUNDLE_IDENTIFIER = "cmuis.Team02-xinyi";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

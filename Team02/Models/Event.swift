@@ -51,7 +51,10 @@ struct Event: Identifiable, Equatable {
               let endTime = dictionary["endTime"] as? TimeInterval,
               let location = dictionary["location"] as? String,
               let qrCode = dictionary["qrCode"] as? String,
-              let totalCost = dictionary["totalCost"] as? Float else { return nil }
+              let totalCost = dictionary["totalCost"] as? Float else {
+            print("❌ Failed to parse event basic data")
+            return nil
+        }
 
         self.id = id
         self.eventName = eventName
@@ -61,10 +64,66 @@ struct Event: Identifiable, Equatable {
         self.location = location
         self.qrCode = qrCode
         self.totalCost = totalCost
-        self.invitedFriends = [] // Placeholder, modify as needed
-        self.recipes = [] // Placeholder, modify as needed
-        self.costs = [] // Placeholder, modify as needed
-        self.assignedIngredientsList = [] // Placeholder, modify as needed
+        
+        // Parse invited friends
+        self.invitedFriends = dictionary["invitedFriends"] as? [String] ?? []
+        
+        // Parse recipes
+        if let recipesData = dictionary["recipes"] as? [[String: Any]] {
+            print("📱 Found \(recipesData.count) recipes in event data")
+            self.recipes = recipesData.compactMap { recipeDict in
+                guard let title = recipeDict["title"] as? String,
+                      let description = recipeDict["description"] as? String,
+                      let image = recipeDict["image"] as? String,
+                      let instruction = recipeDict["instruction"] as? String,
+                      let readyInMinutes = recipeDict["readyInMinutes"] as? Int,
+                      let servings = recipeDict["servings"] as? Int else {
+                    print("❌ Failed to parse recipe: \(recipeDict)")
+                    return nil
+                }
+                
+                return Recipe(
+                    title: title,
+                    description: description,
+                    image: image,
+                    instruction: instruction,
+                    ingredients: [], // You can parse ingredients if needed
+                    readyInMinutes: readyInMinutes,
+                    servings: servings
+                )
+            }
+            print("✅ Successfully parsed \(self.recipes.count) recipes")
+        } else {
+            self.recipes = []
+            print("ℹ️ No recipes found in event data")
+        }
+        
+        // Parse costs (placeholder for now)
+        self.costs = []
+        
+        // Parse assigned ingredients list
+        if let ingredientsData = dictionary["assignedIngredientsList"] as? [[String: Any]] {
+            self.assignedIngredientsList = ingredientsData.compactMap { ingredientDict in
+                guard let name = ingredientDict["name"] as? String,
+                      let amount = ingredientDict["amount"] as? Float,
+                      let unit = ingredientDict["unit"] as? Float,
+                      let isChecked = ingredientDict["isChecked"] as? Bool,
+                      let userIDString = ingredientDict["userID"] as? String,
+                      let userID = UUID(uuidString: userIDString) else {
+                    return nil
+                }
+                
+                return Ingredient(
+                    name: name,
+                    unit: unit,
+                    isChecked: isChecked,
+                    userID: userID,
+                    amount: amount
+                )
+            }
+        } else {
+            self.assignedIngredientsList = []
+        }
     }
 
     func toDictionary() -> [String: Any] {
@@ -78,10 +137,32 @@ struct Event: Identifiable, Equatable {
             "qrCode": qrCode,
             "totalCost": totalCost,
             "invitedFriends": invitedFriends,
+            // Add recipes array
+            "recipes": recipes.map { recipe in
+                [
+                    "title": recipe.title,
+                    "description": recipe.description,
+                    "image": recipe.image,
+                    "instruction": recipe.instruction,
+                    "readyInMinutes": recipe.readyInMinutes,
+                    "servings": recipe.servings,
+                    "ingredients": recipe.ingredients.map { $0.toDictionary() }
+                ]
+            },
+            // Add assigned ingredients list
+            "assignedIngredientsList": assignedIngredientsList.map { ingredient in
+                [
+                    "name": ingredient.name,
+                    "amount": ingredient.amount,
+                    "unit": ingredient.unit,
+                    "isChecked": ingredient.isChecked,
+                    "userID": ingredient.userID.uuidString
+                ]
+            }
         ]
     }
-  
+    
     static func ==(lhs: Event, rhs: Event) -> Bool {
-          return lhs.id == rhs.id
+        return lhs.id == rhs.id
     }
 }

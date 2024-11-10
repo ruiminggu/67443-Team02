@@ -37,25 +37,36 @@ struct MenuSectionView: View {
             Spacer()
           }
           
+//          Text("Debug: \(event.recipes.count) recipes")
+//                          .font(.caption)
+//                          .foregroundColor(.gray)
+          
           // Display event recipes
           if event.recipes.isEmpty {
-//                Text("No recipes added yet")
-//                    .foregroundColor(.gray)
-//                    .padding(.vertical)
-          } else {
-              ScrollView(.horizontal, showsIndicators: false) {
-                  LazyHStack(spacing: 16) {
-                      ForEach(event.recipes) { recipe in
-                          RecipeCard(recipe: recipe)
-                      }
-                  }
-              }
-          }
-      }
-      .padding(.horizontal)
-      .sheet(isPresented: $showRecipeSearch) {
-          RecipeSearchView(event: event)
-      }
+                Text("No recipes added yet")
+                    .foregroundColor(.gray)
+                    .padding(.vertical)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: 16) {
+                        ForEach(event.recipes) { recipe in
+                            RecipeMenuCard(recipe: recipe)
+                        }
+                    }
+                }
+            }
+        }
+        .padding(.horizontal)
+        .sheet(isPresented: $showRecipeSearch) {
+            RecipeSearchView(event: event)
+        }
+        .onAppear {
+            print("📱 MenuSectionView appeared")
+            print("📱 Event has \(event.recipes.count) recipes")
+            event.recipes.forEach { recipe in
+                print("- Recipe: \(recipe.title)")
+            }
+        }
     }
 }
 

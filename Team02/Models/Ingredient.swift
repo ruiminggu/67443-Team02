@@ -30,6 +30,17 @@ struct Ingredient: Identifiable, Hashable, Equatable {
                lhs.userID == rhs.userID &&
                 lhs.amount == rhs.amount
     }
+  
+    func toDictionary() -> [String: Any] {
+            return [
+                "id": id.uuidString,
+                "name": name,
+                "unit": unit,
+                "isChecked": isChecked,
+                "userID": userID.uuidString,
+                "amount": amount
+            ]
+        }
 }
 
 
