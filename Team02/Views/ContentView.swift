@@ -14,13 +14,6 @@ struct CostView: View {
     }
 }
 
-struct ProfileView: View {
-    var body: some View {
-        Text("Profile Screen")
-            .font(.title)
-    }
-}
-
 struct ContentView: View {
     @StateObject private var homePageViewModel = HomePageViewModel(menuDatabase: MenuDatabase(
         recipes: [],

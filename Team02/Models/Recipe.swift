@@ -36,7 +36,6 @@ struct Recipe: Identifiable, Hashable, Equatable {
         self.servings = servings
         self.rating = rating
     }
-  
     static func ==(lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.title == rhs.title &&
                lhs.description == rhs.description &&
