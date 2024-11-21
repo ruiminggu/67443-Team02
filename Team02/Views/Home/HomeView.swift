@@ -52,17 +52,15 @@ struct HomeView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
                                 ForEach(viewModel.upcomingEvents, id: \.id) { event in
-                                    EmptyView().onAppear {
-                                                  print("Displaying event: \(event.eventName)")
-                                              }
-                                  
                                     if let userID = viewModel.user?.id {
-                                        EventCard(
-                                            event: event,
-                                            backgroundColor: viewModel.upcomingEvents.firstIndex(of: event)?.isMultiple(of: 2) ?? false ? Color.orange : Color.orange.opacity(0.3),
-                                            userID: userID // Pass the current user's ID
-                                        )
-                                        .frame(width: 300)
+                                        NavigationLink(destination: EventDetailView(eventID: event.id.uuidString)) {
+                                            EventCard(
+                                                event: event,
+                                                backgroundColor: viewModel.upcomingEvents.firstIndex(of: event)?.isMultiple(of: 2) ?? false ? Color.orange : Color.orange.opacity(0.3),
+                                                userID: userID
+                                            )
+                                            .frame(width: 300)
+                                        }
                                     } else {
                                         Text("User ID not available")
                                     }

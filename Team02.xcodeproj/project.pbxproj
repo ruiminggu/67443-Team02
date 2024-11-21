@@ -105,7 +105,7 @@
 		76C6789B2CDC71A90093A25C /* Team02Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team02Tests.swift; sourceTree = "<group>"; };
 		76C678A22CDC71CB0093A25C /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
 		76C678A42CDC76A90093A25C /* EventTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
-		76C678A62CDC7ACE0093A25C /* TransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TransactionTests.swift; path = Team02Tests/TransactionTests.swift; sourceTree = "<group>"; };
+		76C678A62CDC7ACE0093A25C /* TransactionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTests.swift; sourceTree = "<group>"; };
 		76D0CA3E2CDB184C00982FAA /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		76EBA4502CD07C14002C9836 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		76EBA4522CD07CE8002C9836 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
@@ -122,8 +122,8 @@
 		76EBA46C2CD08FA3002C9836 /* profile_pic.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profile_pic.jpeg; sourceTree = "<group>"; };
 		76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IngredientTests.swift; path = Team02Tests/IngredientTests.swift; sourceTree = "<group>"; };
-		76FD3BA32CDC7E94002FDF77 /* RecipeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecipeTests.swift; path = Team02Tests/RecipeTests.swift; sourceTree = "<group>"; };
+		76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientTests.swift; sourceTree = "<group>"; };
+		76FD3BA32CDC7E94002FDF77 /* RecipeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,9 +212,6 @@
 		765C49102CC203DF003A9D8C = {
 			isa = PBXGroup;
 			children = (
-				76FD3BA32CDC7E94002FDF77 /* RecipeTests.swift */,
-				76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */,
-				76C678A62CDC7ACE0093A25C /* TransactionTests.swift */,
 				765C491B2CC203DF003A9D8C /* Team02 */,
 				76C6789A2CDC71A90093A25C /* Team02Tests */,
 				765C491A2CC203DF003A9D8C /* Products */,
@@ -262,6 +259,9 @@
 			isa = PBXGroup;
 			children = (
 				76C678A42CDC76A90093A25C /* EventTests.swift */,
+				76FD3BA32CDC7E94002FDF77 /* RecipeTests.swift */,
+				76C678A62CDC7ACE0093A25C /* TransactionTests.swift */,
+				76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */,
 				76C678A22CDC71CB0093A25C /* UserTests.swift */,
 				76C6789B2CDC71A90093A25C /* Team02Tests.swift */,
 			);
@@ -613,7 +613,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = 4L77PSLYU4;
+				DEVELOPMENT_TEAM = PXC7N5QS4B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -626,7 +626,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "cmuis.Team02-xinyi";
+				PRODUCT_BUNDLE_IDENTIFIER = cmuis.Team02;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
