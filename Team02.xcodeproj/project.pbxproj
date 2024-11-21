@@ -34,6 +34,8 @@
 		765C491F2CC203DF003A9D8C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C491E2CC203DF003A9D8C /* ContentView.swift */; };
 		765C49212CC203E1003A9D8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 765C49202CC203E1003A9D8C /* Assets.xcassets */; };
 		765C49242CC203E1003A9D8C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 765C49232CC203E1003A9D8C /* Preview Assets.xcassets */; };
+		76771CE42CEF1C1900B26169 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76771CE32CEF1C1900B26169 /* ProfileView.swift */; };
+		76771CE62CEF1CB100B26169 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76771CE52CEF1CB100B26169 /* ProfileViewModel.swift */; };
 		76C6789C2CDC71A90093A25C /* Team02Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C6789B2CDC71A90093A25C /* Team02Tests.swift */; };
 		76C678A32CDC71CB0093A25C /* UserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C678A22CDC71CB0093A25C /* UserTests.swift */; };
 		76C678A52CDC76A90093A25C /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C678A42CDC76A90093A25C /* EventTests.swift */; };
@@ -101,6 +103,8 @@
 		765C491E2CC203DF003A9D8C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		765C49202CC203E1003A9D8C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		765C49232CC203E1003A9D8C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		76771CE32CEF1C1900B26169 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		76771CE52CEF1CB100B26169 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		76C678992CDC71A90093A25C /* Team02Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Team02Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		76C6789B2CDC71A90093A25C /* Team02Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team02Tests.swift; sourceTree = "<group>"; };
 		76C678A22CDC71CB0093A25C /* UserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTests.swift; sourceTree = "<group>"; };
@@ -255,6 +259,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		76771CE22CEF1C0900B26169 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				76771CE32CEF1C1900B26169 /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		76C6789A2CDC71A90093A25C /* Team02Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +296,7 @@
 		76EBA44F2CD07BA2002C9836 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				76771CE22CEF1C0900B26169 /* Profile */,
 				46970D022CD9BC490057E4D3 /* RecipeSearch */,
 				46970CE52CD9953C0057E4D3 /* EventDetails */,
 				46970CF02CD9A6E10057E4D3 /* AddIngredients */,
@@ -305,6 +318,7 @@
 				76D0CA3E2CDB184C00982FAA /* UserViewModel.swift */,
 				46110AD82CDE235F00FBBC50 /* AddIngredientsViewModel.swift */,
 				46970D002CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift */,
+				76771CE52CEF1CB100B26169 /* ProfileViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -450,8 +464,10 @@
 				76EBA45B2CD07D5D002C9836 /* Recipe.swift in Sources */,
 				46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */,
 				765C491D2CC203DF003A9D8C /* Team02App.swift in Sources */,
+				76771CE62CEF1CB100B26169 /* ProfileViewModel.swift in Sources */,
 				76EBA46A2CD08DF2002C9836 /* EventRow.swift in Sources */,
 				46970D012CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift in Sources */,
+				76771CE42CEF1C1900B26169 /* ProfileView.swift in Sources */,
 				76EBA4532CD07CE8002C9836 /* Event.swift in Sources */,
 				760E6FA82CD337CA007FD962 /* EventViewModel.swift in Sources */,
 				76EBA4662CD08D7C002C9836 /* EventCard.swift in Sources */,

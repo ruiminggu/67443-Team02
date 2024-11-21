@@ -42,14 +42,18 @@ class UserViewModel: ObservableObject {
             var fetchedUsers: [User] = []
 
             for case let childSnapshot as DataSnapshot in snapshot.children {
+                print("Snapshot key: \(childSnapshot.key)") // Debugging: Print each user key
                 if let userData = childSnapshot.value as? [String: Any],
                    let user = User(dictionary: userData) {
                     fetchedUsers.append(user)
+                } else {
+                    print("Failed to parse user for snapshot: \(childSnapshot.key)") // Debugging
                 }
             }
 
             DispatchQueue.main.async {
-                self.users = fetchedUsers // Update the published property
+                self.users = fetchedUsers
+                print("Fetched users count: \(self.users.count)") // Debugging: Check user count
             }
         }
     }
