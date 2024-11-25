@@ -8,6 +8,7 @@
 import SwiftUI
 import Foundation
 import Firebase
+import FirebaseAuth
 
 class RecipeSearchViewModel: ObservableObject {
     @Published var recipes: [Recipe] = []
@@ -71,7 +72,47 @@ class RecipeSearchViewModel: ObservableObject {
           }
       }
   
-    func addRecipeToEvent(recipe: Recipe, eventID: String) {
+  func likeRecipe(recipe: Recipe) {
+      guard let userID = Auth.auth().currentUser?.uid else {
+          print("❌ User not logged in")
+          return
+      }
+      
+      // Fetch the user's liked recipes from Firebase
+      databaseRef.child("users").child(userID).child("likedRecipes").observeSingleEvent(of: .value) { [weak self] snapshot, _ in
+          guard let self = self else { return }
+          
+          var likedRecipes = snapshot.value as? [[String: Any]] ?? []
+
+          // Check if recipe is already liked
+          if likedRecipes.contains(where: { $0["id"] as? String == recipe.id.uuidString }) {
+              print("🚫 Recipe already liked")
+              return
+          }
+
+          // Add recipe to likedRecipes
+          let recipeDict: [String: Any] = [
+              "id": recipe.id.uuidString,
+              "title": recipe.title,
+              "image": recipe.image,
+              "readyInMinutes": recipe.readyInMinutes,
+              "servings": recipe.servings
+          ]
+          
+          likedRecipes.append(recipeDict)
+          
+          self.databaseRef.child("users").child(userID).child("likedRecipes").setValue(likedRecipes) { error, _ in
+              if let error = error {
+                  print("❌ Error liking recipe: \(error.localizedDescription)")
+              } else {
+                  print("✅ Recipe liked successfully!")
+              }
+          }
+      }
+  }
+
+  
+  func addRecipeToEvent(recipe: Recipe, eventID: String) {
           print("📱 Adding recipe \(recipe.title) to event \(eventID)")
           isLoading = true
           
