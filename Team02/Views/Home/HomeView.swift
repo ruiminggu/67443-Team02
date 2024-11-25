@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomePageViewModel
+    @State private var showSearchView = false
 
     var body: some View {
         NavigationView {
@@ -35,14 +36,27 @@ struct HomeView: View {
                     }
                     .padding(.horizontal)
                     
-                    // Search Bar
-                    HStack {
-                        TextField("Search dishes or menu", text: .constant(""))
-                            .padding(10)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(8)
-                    }
-                    .padding(.horizontal)
+                  // Search Bar Button
+                  Button(action: {
+                      showSearchView = true
+                  }) {
+                      HStack {
+                          Image(systemName: "magnifyingglass")
+                              .foregroundColor(.gray)
+                          Text("Search dishes or menu")
+                              .foregroundColor(.gray)
+                              .frame(maxWidth: .infinity, alignment: .leading) // Align the text to the left
+                      }
+                      .padding()
+                      .background(Color(.systemGray6))
+                      .cornerRadius(10)
+                      .frame(maxWidth: .infinity) // Make the button span the full width
+                      .padding(.horizontal)
+                  }
+                  .sheet(isPresented: $showSearchView) {
+                      HomeRecipeSearchView()
+                  }
+
                   
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Upcoming Events")

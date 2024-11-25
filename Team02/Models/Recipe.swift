@@ -10,6 +10,7 @@ struct Recipe: Identifiable, Hashable, Equatable {
     let readyInMinutes: Int
     let servings: Int
     let rating: Double
+    var isLiked: Bool = false // Indicates if the recipe is liked by the user
 
     // Initialize from API response
     init(apiRecipe: APIRecipe) {
@@ -22,10 +23,11 @@ struct Recipe: Identifiable, Hashable, Equatable {
         self.readyInMinutes = apiRecipe.readyInMinutes ?? 30
         self.servings = apiRecipe.servings ?? 4
         self.rating = Double.random(in: 4.0...5.0) // Placeholder
+        self.isLiked = false
     }
-    
+
     // Initialize with individual parameters (for local data)
-    init(title: String, description: String, image: String, instruction: String, ingredients: [Ingredient], readyInMinutes: Int = 30, servings: Int = 4, rating: Double = 4.5) {
+    init(title: String, description: String, image: String, instruction: String, ingredients: [Ingredient], readyInMinutes: Int = 30, servings: Int = 4, rating: Double = 4.5, isLiked: Bool = false) {
         self.id = UUID()
         self.title = title
         self.description = description
@@ -35,7 +37,9 @@ struct Recipe: Identifiable, Hashable, Equatable {
         self.readyInMinutes = readyInMinutes
         self.servings = servings
         self.rating = rating
+        self.isLiked = isLiked
     }
+
     static func ==(lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.title == rhs.title &&
                lhs.description == rhs.description &&
@@ -44,9 +48,11 @@ struct Recipe: Identifiable, Hashable, Equatable {
                lhs.ingredients == rhs.ingredients &&
                lhs.readyInMinutes == rhs.readyInMinutes &&
                lhs.servings == rhs.servings &&
-               lhs.rating == rhs.rating
+               lhs.rating == rhs.rating &&
+               lhs.isLiked == rhs.isLiked
     }
 }
+
 
 
 // API Response Models
