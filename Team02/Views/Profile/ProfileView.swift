@@ -12,29 +12,16 @@ struct ProfileView: View {
                 .padding(.top, 20)
 
             // Profile Picture
-            if let imageURL = URL(string: viewModel.user?.image ?? "") {
-                AsyncImage(url: imageURL) { image in
-                    image.resizable()
-                        .scaledToFit()
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .stroke(Color.white, lineWidth: 4)
-                        )
-                        .frame(width: 120, height: 120)
-                        .shadow(radius: 10)
-                } placeholder: {
-                    Circle()
-                        .fill(Color.gray)
-                        .frame(width: 120, height: 120)
-                        .overlay(Text("No Image").foregroundColor(.white))
-                }
-            } else {
-                Circle()
-                    .fill(Color.gray)
-                    .frame(width: 120, height: 120)
-                    .overlay(Text("No Image").foregroundColor(.white))
-            }
+          Image("profile_pic") // Use the exact name of your asset here
+              .resizable()
+              .scaledToFit()
+              .clipShape(Circle())
+              .overlay(
+                  Circle()
+                      .stroke(Color.white, lineWidth: 4)
+              )
+              .frame(width: 120, height: 120)
+              .shadow(radius: 10)
 
             // User Name
             Text(viewModel.user?.fullName ?? "Your Name")
