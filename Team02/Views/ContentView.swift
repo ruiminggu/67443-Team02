@@ -97,7 +97,7 @@ struct ContentView: View {
                 }
 
             // Profile Tab
-            ProfileView()
+            ProfileView(viewModel: homePageViewModel)
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("Profile")
