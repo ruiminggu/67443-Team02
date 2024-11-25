@@ -2,9 +2,10 @@ import Foundation
 import FirebaseDatabase
 
 class HomePageViewModel: ObservableObject {
-    @Published var user: User?
+    @Published var user: User? // Current user
     @Published var upcomingEvents: [Event] = []
     @Published var recommendedRecipes: [Recipe] = []
+    @Published var userEventCount: Int = 0 // New: Event count for the profile page
 
     private var databaseRef: DatabaseReference = Database.database().reference()
 
@@ -20,12 +21,13 @@ class HomePageViewModel: ObservableObject {
                let user = User(dictionary: userData) {
                 DispatchQueue.main.async {
                     self.user = user
+
+                    // Update user event count for the profile page
+                    self.userEventCount = user.events.count
                     
-                    // Extract event IDs directly, as `events` is already an array of strings
+                    // Fetch full event details
                     let eventIDs = user.events
                     print("User event IDs: \(eventIDs)")
-
-                    // Fetch full event details for each event ID
                     self.fetchUserEvents(eventIDs: eventIDs)
                 }
             } else {
@@ -33,7 +35,6 @@ class HomePageViewModel: ObservableObject {
             }
         }
     }
-
 
     private func fetchUserEvents(eventIDs: [String]) {
         var fetchedEvents: [Event] = []
@@ -55,11 +56,9 @@ class HomePageViewModel: ObservableObject {
         }
         
         dispatchGroup.notify(queue: .main) {
-            // Filter for upcoming events and assign to upcomingEvents
+            // Update upcoming events
             self.upcomingEvents = fetchedEvents.filter { $0.date > Date() }
-            // Log to confirm upcoming events were updated
-          print("Updated upcomingEvents: \(self.upcomingEvents.count); Updated pastEvents: \((fetchedEvents.filter { $0.date <= Date() }).count)")
+            print("Updated upcomingEvents: \(self.upcomingEvents.count); Updated pastEvents: \((fetchedEvents.filter { $0.date <= Date() }).count)")
         }
     }
-
 }
