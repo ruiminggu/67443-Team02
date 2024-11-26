@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var viewModel: HomePageViewModel
+    @ObservedObject var viewModel: ProfileViewModel
+    @State private var showLikedRecipes = false
 
     var body: some View {
         VStack(spacing: 20) {
@@ -12,16 +13,16 @@ struct ProfileView: View {
                 .padding(.top, 20)
 
             // Profile Picture
-          Image("profile_pic") // Use the exact name of your asset here
-              .resizable()
-              .scaledToFit()
-              .clipShape(Circle())
-              .overlay(
-                  Circle()
-                      .stroke(Color.white, lineWidth: 4)
-              )
-              .frame(width: 120, height: 120)
-              .shadow(radius: 10)
+            Image("profile_pic")
+                .resizable()
+                .scaledToFit()
+                .clipShape(Circle())
+                .overlay(
+                    Circle()
+                        .stroke(Color.white, lineWidth: 4)
+                )
+                .frame(width: 120, height: 120)
+                .shadow(radius: 10)
 
             // User Name
             Text(viewModel.user?.fullName ?? "Your Name")
@@ -29,27 +30,46 @@ struct ProfileView: View {
                 .fontWeight(.semibold)
 
             // Event Count
-            Text("Hosted \(viewModel.userEventCount) Events")
+            Text("Hosted \(viewModel.user?.events.count ?? 0) Events")
                 .font(.headline)
                 .foregroundColor(.orange)
 
-            // Enlarged Liked Recipes Section
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Liked Recipes")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.orange)
+            // Liked Recipes Section
+          // Liked Recipes Section
+          VStack {
+              Button(action: {
+                  showLikedRecipes = true
+              }) {
+                  HStack {
+                      VStack(alignment: .leading, spacing: 8) {
+                          Text("Liked Recipes")
+                              .font(.title3)
+                              .fontWeight(.semibold)
+                              .foregroundColor(.orange)
 
-                Text("Placeholder for liked recipes... Bacon, Ramen, Cake, and more.")
-                    .font(.body)
-                    .foregroundColor(.primary)
-                    .multilineTextAlignment(.leading)
-            }
-            .padding()
-            .background(Color.orange.opacity(0.1))
-            .cornerRadius(12)
-            .frame(maxWidth: .infinity, minHeight: 120, alignment: .leading)
-            .padding(.horizontal)
+                          Text("View your liked recipes here.")
+                              .font(.body)
+                              .foregroundColor(.primary)
+                              .multilineTextAlignment(.leading)
+                      }
+                      Spacer() // Push the chevron to the right
+                      Image(systemName: "chevron.right")
+                          .font(.title2)
+                          .foregroundColor(.orange)
+                  }
+                  .padding()
+                  .background(
+                      RoundedRectangle(cornerRadius: 15)
+                          .fill(Color.orange.opacity(0.1))
+                  )
+              }
+              .buttonStyle(PlainButtonStyle()) // To remove button styling
+          }
+          .frame(maxWidth: .infinity, minHeight: 160)
+          .padding(.horizontal)
+          .sheet(isPresented: $showLikedRecipes) {
+              LikedRecipesView(recipes: viewModel.likedRecipes)
+          }
 
             Spacer()
         }
@@ -58,10 +78,16 @@ struct ProfileView: View {
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            // Fetch user profile if necessary
             if viewModel.user == nil {
-                viewModel.fetchUser(userID: "your_user_id_here") // Replace with actual user ID
+                let testUserID = "8E23D734-2FBE-4D1E-99F7-00279E19585B" // Replace with actual user ID
+                viewModel.fetchUser(userID: testUserID)
             }
         }
+    }
+}
+
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+      ProfileView(viewModel: ProfileViewModel())
     }
 }

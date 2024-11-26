@@ -23,7 +23,6 @@ struct Recipe: Identifiable, Hashable, Equatable {
         self.readyInMinutes = apiRecipe.readyInMinutes ?? 30
         self.servings = apiRecipe.servings ?? 4
         self.rating = Double.random(in: 4.0...5.0) // Placeholder
-        self.isLiked = false
     }
 
     // Initialize with individual parameters (for local data)
