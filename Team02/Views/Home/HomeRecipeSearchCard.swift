@@ -2,8 +2,10 @@ import SwiftUI
 
 struct HomeRecipeSearchCard: View {
     let recipe: Recipe
+    let userID: String
     @StateObject private var viewModel = RecipeSearchViewModel()
     @State private var showToast = false
+    @State private var isAdding = false // To handle loading state for the like button
 
     var difficultyLevel: String {
         switch recipe.readyInMinutes {
@@ -93,20 +95,23 @@ struct HomeRecipeSearchCard: View {
             
             // Like Button
             Button(action: {
-                viewModel.likeRecipe(recipe: recipe)
+                isAdding = true
+                viewModel.likeRecipe(recipe: recipe, userID: userID)
                 showToast = true
-                // Hide toast after 2 seconds
+                
+                // Simulate loading state and reset after success
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    isAdding = false
                     showToast = false
                 }
             }) {
                 HStack {
-                    if recipe.isLiked {
-                        Image(systemName: "heart.fill")
-                        Text("Liked")
+                    if isAdding {
+                        ProgressView()
+                            .tint(.white)
                     } else {
-                        Image(systemName: "heart")
-                        Text("Like")
+                        Image(systemName: recipe.isLiked ? "heart.fill" : "heart")
+                        Text(recipe.isLiked ? "Liked" : "Like")
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -115,6 +120,7 @@ struct HomeRecipeSearchCard: View {
                 .foregroundColor(.white)
                 .cornerRadius(8)
             }
+            .disabled(isAdding)
         }
         .padding()
         .background(Color.white)

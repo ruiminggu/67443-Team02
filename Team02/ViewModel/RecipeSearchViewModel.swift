@@ -72,44 +72,70 @@ class RecipeSearchViewModel: ObservableObject {
           }
       }
   
-  func likeRecipe(recipe: Recipe) {
-      guard let userID = Auth.auth().currentUser?.uid else {
-          print("❌ User not logged in")
-          return
-      }
-      
-      // Fetch the user's liked recipes from Firebase
-      databaseRef.child("users").child(userID).child("likedRecipes").observeSingleEvent(of: .value) { [weak self] snapshot, _ in
+  
+  func likeRecipe(recipe: Recipe, userID: String) {
+      print("📱 Adding recipe \(recipe.title) to liked recipes for user \(userID)")
+      isLoading = true
+
+      // Reference to the user's likedRecipes node
+      databaseRef.child("users").child(userID).observeSingleEvent(of: .value) { [weak self] snapshot, _ in
           guard let self = self else { return }
-          
-          var likedRecipes = snapshot.value as? [[String: Any]] ?? []
 
-          // Check if recipe is already liked
-          if likedRecipes.contains(where: { $0["id"] as? String == recipe.id.uuidString }) {
-              print("🚫 Recipe already liked")
-              return
-          }
+          if var userData = snapshot.value as? [String: Any] {
+              // Get current liked recipes array
+              var likedRecipes = userData["likedRecipes"] as? [[String: Any]] ?? []
 
-          // Add recipe to likedRecipes
-          let recipeDict: [String: Any] = [
-              "id": recipe.id.uuidString,
-              "title": recipe.title,
-              "image": recipe.image,
-              "readyInMinutes": recipe.readyInMinutes,
-              "servings": recipe.servings
-          ]
-          
-          likedRecipes.append(recipeDict)
-          
-          self.databaseRef.child("users").child(userID).child("likedRecipes").setValue(likedRecipes) { error, _ in
-              if let error = error {
-                  print("❌ Error liking recipe: \(error.localizedDescription)")
-              } else {
-                  print("✅ Recipe liked successfully!")
+              // Check if the recipe is already liked
+              let existingRecipe = likedRecipes.first { recipeDict in
+                  guard let id = recipeDict["id"] as? String else { return false }
+                  return id == recipe.id.uuidString
+              }
+
+              if existingRecipe != nil {
+                  DispatchQueue.main.async {
+                      self.isLoading = false
+                      self.error = "This recipe is already liked"
+                  }
+                  return
+              }
+
+              // Add the new recipe
+              let recipeDict: [String: Any] = [
+                  "id": recipe.id.uuidString,
+                  "title": recipe.title,
+                  "description": recipe.description,
+                  "image": recipe.image,
+                  "instruction": recipe.instruction,
+                  "readyInMinutes": recipe.readyInMinutes,
+                  "servings": recipe.servings
+              ]
+
+              likedRecipes.append(recipeDict)
+              userData["likedRecipes"] = likedRecipes
+
+              // Update Firebase
+              self.databaseRef.child("users").child(userID).updateChildValues(userData) { error, _ in
+                  DispatchQueue.main.async {
+                      self.isLoading = false
+
+                      if let error = error {
+                          print("❌ Error liking recipe: \(error.localizedDescription)")
+                          self.error = "Failed to like recipe: \(error.localizedDescription)"
+                      } else {
+                          print("✅ Recipe liked successfully!")
+                          self.showSuccessAlert = true
+                      }
+                  }
+              }
+          } else {
+              DispatchQueue.main.async {
+                  self.isLoading = false
+                  self.error = "Failed to fetch user data"
               }
           }
       }
   }
+
 
   
   func addRecipeToEvent(recipe: Recipe, eventID: String) {
