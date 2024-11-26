@@ -54,7 +54,11 @@ struct HomeView: View {
                       .padding(.horizontal)
                   }
                   .sheet(isPresented: $showSearchView) {
-                      HomeRecipeSearchView()
+                      if let userID = viewModel.user?.id.uuidString {
+                          HomeRecipeSearchView(userID: userID)
+                      } else {
+                          Text("User ID not available").font(.headline).foregroundColor(.red) // Fallback in case userID is not set
+                      }
                   }
 
                   

@@ -1,8 +1,12 @@
 import SwiftUI
+import FirebaseAuth
 
 struct HomeRecipeSearchView: View {
     @StateObject private var viewModel = RecipeSearchViewModel()
     @Environment(\.dismiss) private var dismiss
+
+    // Optional: If you want to pass a hardcoded userID
+    let userID: String?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,7 +56,7 @@ struct HomeRecipeSearchView: View {
                                         .padding(.top, 40)
                                 } else {
                                     ForEach(viewModel.recipes) { recipe in
-                                        HomeRecipeSearchCard(recipe: recipe)
+                                      HomeRecipeSearchCard(recipe: recipe, userID: resolvedUserID())
                                     }
                                 }
                             } else {
@@ -75,5 +79,22 @@ struct HomeRecipeSearchView: View {
                 }
             }
         }
+    }
+
+    // Helper method to resolve userID
+    private func resolvedUserID() -> String {
+        // If a userID is explicitly passed, use it
+        if let userID = userID {
+            return userID
+        }
+
+        // Otherwise, try to get the current logged-in user from Firebase Auth
+        if let currentUserID = Auth.auth().currentUser?.uid {
+            return currentUserID
+        }
+
+        // If no userID is available, return a fallback (use carefully in production)
+        print("⚠️ No valid userID found. Using fallback.")
+        return "fallback_user_id" // Replace with appropriate fallback if needed
     }
 }
