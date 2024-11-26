@@ -30,6 +30,7 @@
 		760E6FAC2CD337F5007FD962 /* TimeSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760E6FAB2CD337F5007FD962 /* TimeSelectionView.swift */; };
 		760E6FAE2CD33807007FD962 /* InviteFriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760E6FAD2CD33807007FD962 /* InviteFriendsView.swift */; };
 		760E6FB02CD33823007FD962 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 760E6FAF2CD33823007FD962 /* QRCodeView.swift */; };
+		762B0D152CF6563400400BB6 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762B0D142CF6563400400BB6 /* CreateAccountView.swift */; };
 		765C491D2CC203DF003A9D8C /* Team02App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C491C2CC203DF003A9D8C /* Team02App.swift */; };
 		765C491F2CC203DF003A9D8C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765C491E2CC203DF003A9D8C /* ContentView.swift */; };
 		765C49212CC203E1003A9D8C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 765C49202CC203E1003A9D8C /* Assets.xcassets */; };
@@ -102,6 +103,7 @@
 		760E6FAB2CD337F5007FD962 /* TimeSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSelectionView.swift; sourceTree = "<group>"; };
 		760E6FAD2CD33807007FD962 /* InviteFriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteFriendsView.swift; sourceTree = "<group>"; };
 		760E6FAF2CD33823007FD962 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		762B0D142CF6563400400BB6 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
 		765C49192CC203DF003A9D8C /* Team02.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Team02.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		765C491C2CC203DF003A9D8C /* Team02App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team02App.swift; sourceTree = "<group>"; };
 		765C491E2CC203DF003A9D8C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -223,6 +225,14 @@
 			path = CreateEvent;
 			sourceTree = "<group>";
 		};
+		762B0D132CF6562600400BB6 /* CreateAccount */ = {
+			isa = PBXGroup;
+			children = (
+				762B0D142CF6563400400BB6 /* CreateAccountView.swift */,
+			);
+			path = CreateAccount;
+			sourceTree = "<group>";
+		};
 		765C49102CC203DF003A9D8C = {
 			isa = PBXGroup;
 			children = (
@@ -308,6 +318,7 @@
 		76EBA44F2CD07BA2002C9836 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				762B0D132CF6562600400BB6 /* CreateAccount */,
 				76771CE22CEF1C0900B26169 /* Profile */,
 				46970D022CD9BC490057E4D3 /* RecipeSearch */,
 				46970CE52CD9953C0057E4D3 /* EventDetails */,
@@ -474,6 +485,7 @@
 				765C491F2CC203DF003A9D8C /* ContentView.swift in Sources */,
 				76EBA4592CD07D45002C9836 /* Ingredient.swift in Sources */,
 				46110AD72CDE0E1200FBBC50 /* RecipeMenuCard.swift in Sources */,
+				762B0D152CF6563400400BB6 /* CreateAccountView.swift in Sources */,
 				760E6FAE2CD33807007FD962 /* InviteFriendsView.swift in Sources */,
 				76EBA45B2CD07D5D002C9836 /* Recipe.swift in Sources */,
 				46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */,

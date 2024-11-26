@@ -1,11 +1,5 @@
 import SwiftUI
-
-struct EventView: View {
-    var body: some View {
-        Text("Events Screen")
-            .font(.title)
-    }
-}
+import FirebaseAuth
 
 struct CostView: View {
     var body: some View {
@@ -27,7 +21,7 @@ struct ContentView: View {
             ),
             Recipe(
                 title: "Sausage Fried Rice",
-                description: "How to make sausgae fried rice",
+                description: "How to make sausage fried rice",
                 image: "sausage",
                 instruction: "Cook on medium heat...",
                 ingredients: []
@@ -46,68 +40,80 @@ struct ContentView: View {
                 instruction: "Cook on medium heat...",
                 ingredients: []
             )
-            
         ]
     ))
   
-    @StateObject private var profileViewModel = ProfileViewModel()
+      @StateObject private var profileViewModel = ProfileViewModel()
+      @State private var isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn") // Track login state
 
-    var body: some View {
-        TabView {
-            // Home Tab
-            if let user = homePageViewModel.user {
-                HomeView(viewModel: homePageViewModel)
+      var body: some View {
+          if !isLoggedIn {
+              // Show the account creation view
+              CreateAccountView {
+                  isLoggedIn = true
+                  UserDefaults.standard.set(true, forKey: "isLoggedIn")
+              }
+          } else {
+            // Show the main app interface
+            TabView {
+                // Home Tab
+                if let user = homePageViewModel.user {
+                    HomeView(viewModel: homePageViewModel)
+                        .tabItem {
+                            Image(systemName: "house.fill")
+                            Text("Home")
+                        }
+                } else {
+                    Text("Loading...")
+                        .tabItem {
+                            Image(systemName: "house.fill")
+                            Text("Home")
+                        }
+                }
+
+                // Events Tab
+                MyEventsView()
                     .tabItem {
-                        Image(systemName: "house.fill")
-                        Text("Home")
+                        Image(systemName: "calendar")
+                        Text("Events")
                     }
-                    .onAppear {
-                        homePageViewModel.fetchUser(userID: "8E23D734-2FBE-4D1E-99F7-00279E19585B") // Replace with your logic for fetching the user ID
-                    }
-            } else {
-                Text("Loading...")
+
+                // Create Event Tab
+                DateSelectionView(viewModel: EventViewModel())
                     .tabItem {
-                        Image(systemName: "house.fill")
-                        Text("Home")
+                        ZStack {
+                            Circle()
+                                .fill(Color.orange.opacity(0.4))
+                                .frame(width: 50, height: 50)
+                            Image(systemName: "plus")
+                                .foregroundColor(.orange)
+                        }
+                    }
+
+                // Costs Tab
+                CostView()
+                    .tabItem {
+                        Image(systemName: "creditcard")
+                        Text("Costs")
+                    }
+
+                // Profile Tab
+                ProfileView(viewModel: profileViewModel)
+                    .tabItem {
+                        Image(systemName: "person.circle")
+                        Text("Profile")
                     }
             }
-          
-          // Events Tab
-          MyEventsView()
-              .tabItem {
-                  Image(systemName: "calendar")
-                  Text("Events")
-              }
-            
-            // Create Event Tab
-            DateSelectionView(viewModel: EventViewModel())
-              .tabItem {
-                  ZStack {
-                      Circle()
-                          .fill(Color.orange.opacity(0.4))
-                          .frame(width: 50, height: 50)
-                      Image(systemName: "plus")
-                          .foregroundColor(.orange)
-                  }
-              }
-
-            // Costs Tab
-            CostView()
-                .tabItem {
-                    Image(systemName: "creditcard")
-                    Text("Costs")
-                }
-
-            // Profile Tab
-            ProfileView(viewModel: profileViewModel)
-                .tabItem {
-                    Image(systemName: "person.circle")
-                    Text("Profile")
-                }
-        }
-        .accentColor(.orange)
-        .onAppear {
-            homePageViewModel.fetchUser(userID: "8E23D734-2FBE-4D1E-99F7-00279E19585B") // Replace with your logic for user ID retrieval
+            .accentColor(.orange)
+                        .onAppear {
+                            // Use Firebase Auth to fetch the current user's `firebaseUID`
+                            if let currentUser = Auth.auth().currentUser {
+                                homePageViewModel.fetchUser(userID: currentUser.uid) // Pass the Firebase UID
+                            } else {
+                                print("⚠️ No user is logged in")
+                                isLoggedIn = false
+                            }
+                        }
         }
     }
 }
