@@ -105,15 +105,16 @@ struct ContentView: View {
                     }
             }
             .accentColor(.orange)
-                        .onAppear {
-                            // Use Firebase Auth to fetch the current user's `firebaseUID`
-                            if let currentUser = Auth.auth().currentUser {
-                                homePageViewModel.fetchUser(userID: currentUser.uid) // Pass the Firebase UID
-                            } else {
-                                print("⚠️ No user is logged in")
-                                isLoggedIn = false
-                            }
-                        }
+            .onAppear {
+                // Fetch the user's UUID from UserDefaults
+                if let userUUID = UserDefaults.standard.string(forKey: "currentUserUUID") {
+                    print("📱 Using current user's UUID: \(userUUID)")
+                    homePageViewModel.fetchUser() // Fetch user data using UUID
+                } else {
+                    print("⚠️ No UUID found in UserDefaults")
+                    isLoggedIn = false
+                }
+            }
         }
     }
 }

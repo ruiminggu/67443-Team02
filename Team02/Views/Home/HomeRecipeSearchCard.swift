@@ -93,34 +93,36 @@ struct HomeRecipeSearchCard: View {
                 }
             }
             
-            // Like Button
-            Button(action: {
-                isAdding = true
-                viewModel.likeRecipe(recipe: recipe, userID: userID)
-                showToast = true
-                
-                // Simulate loading state and reset after success
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    isAdding = false
-                    showToast = false
-                }
-            }) {
-                HStack {
-                    if isAdding {
-                        ProgressView()
-                            .tint(.white)
-                    } else {
-                        Image(systemName: recipe.isLiked ? "heart.fill" : "heart")
-                        Text(recipe.isLiked ? "Liked" : "Like")
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 8)
-                .background(recipe.isLiked ? Color.red : Color.orange)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-            }
-            .disabled(isAdding)
+          // Like Button
+          Button(action: {
+              guard !recipe.isLiked else { return } // Prevent duplicate likes
+              isAdding = true
+              viewModel.likeRecipe(recipe: recipe, userID: userID)
+              showToast = true
+
+              // Update local UI state after liking
+              DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                  isAdding = false
+                  showToast = false
+              }
+          }) {
+              HStack {
+                  if isAdding {
+                      ProgressView()
+                          .tint(.white)
+                  } else {
+                      Image(systemName: recipe.isLiked ? "heart.fill" : "heart")
+                      Text(recipe.isLiked ? "Liked" : "Like")
+                  }
+              }
+              .frame(maxWidth: .infinity)
+              .padding(.vertical, 8)
+              .background(recipe.isLiked ? Color.red : Color.orange)
+              .foregroundColor(.white)
+              .cornerRadius(8)
+          }
+          .disabled(isAdding || recipe.isLiked) // Prevent multiple clicks
+
         }
         .padding()
         .background(Color.white)
