@@ -49,6 +49,8 @@ struct ContentView: View {
             
         ]
     ))
+  
+    @StateObject private var profileViewModel = ProfileViewModel()
 
     var body: some View {
         TabView {
@@ -97,7 +99,7 @@ struct ContentView: View {
                 }
 
             // Profile Tab
-            ProfileView(viewModel: homePageViewModel)
+            ProfileView(viewModel: profileViewModel)
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("Profile")
