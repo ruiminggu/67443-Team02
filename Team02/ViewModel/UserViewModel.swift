@@ -7,7 +7,7 @@ class UserViewModel: ObservableObject {
 
     init() {
         if !UserDefaults.standard.bool(forKey: "sampleUsersAddedSuccessfully") {
-            addSampleUsers() // Only add sample users if they haven’t been added before
+//            addSampleUsers() // Only add sample users if they haven’t been added before
             UserDefaults.standard.set(true, forKey: "sampleUsersAddedSuccessfully")
         }
         fetchUsers() // Fetch users from the database
@@ -24,18 +24,18 @@ class UserViewModel: ObservableObject {
         }
     }
 
-    // Method to add hardcoded sample users
-    func addSampleUsers() {
-        let sampleUsers = [
-            User(id: UUID(), fullName: "Alice Johnson", image: "profile_pic_1", email: "alice@example.com", password: "password123", events: []),
-            User(id: UUID(), fullName: "Bob Smith", image: "profile_pic_2", email: "bob@example.com", password: "password456", events: []),
-            User(id: UUID(), fullName: "Charlie Brown", image: "profile_pic_3", email: "charlie@example.com", password: "password789", events: [])
-        ]
-        
-        for user in sampleUsers {
-            saveUser(user: user)
-        }
-    }
+//    // Method to add hardcoded sample users
+//    func addSampleUsers() {
+//        let sampleUsers = [
+//            User(id: UUID(), fullName: "Alice Johnson", image: "profile_pic_1", email: "alice@example.com", password: "password123", events: []),
+//            User(id: UUID(), fullName: "Bob Smith", image: "profile_pic_2", email: "bob@example.com", password: "password456", events: []),
+//            User(id: UUID(), fullName: "Charlie Brown", image: "profile_pic_3", email: "charlie@example.com", password: "password789", events: [])
+//        ]
+//        
+//        for user in sampleUsers {
+//            saveUser(user: user)
+//        }
+//    }
 
     func fetchUsers() {
         databaseRef.child("users").observe(.value) { snapshot in

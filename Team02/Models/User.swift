@@ -38,7 +38,7 @@ struct User: Identifiable, Equatable {
 
         self.id = id
         self.fullName = fullName
-        self.image = dictionary["image"] as? String ?? "default_profile_pic"
+        self.image = dictionary["image"] as? String ?? "profile_pic"
         self.email = email
         self.password = dictionary["password"] as? String ?? ""
         self.events = dictionary["events"] as? [String] ?? []

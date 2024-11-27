@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseAuth
 
 struct ProfileView: View {
     @ObservedObject var viewModel: ProfileViewModel
@@ -13,7 +14,7 @@ struct ProfileView: View {
                 .padding(.top, 20)
 
             // Profile Picture
-            Image("profile_pic")
+            Image(viewModel.user?.image ?? "profile_pic") // Use the user's profile image
                 .resizable()
                 .scaledToFit()
                 .clipShape(Circle())
@@ -35,41 +36,40 @@ struct ProfileView: View {
                 .foregroundColor(.orange)
 
             // Liked Recipes Section
-          // Liked Recipes Section
-          VStack {
-              Button(action: {
-                  showLikedRecipes = true
-              }) {
-                  HStack {
-                      VStack(alignment: .leading, spacing: 8) {
-                          Text("Liked Recipes")
-                              .font(.title3)
-                              .fontWeight(.semibold)
-                              .foregroundColor(.orange)
+            VStack {
+                Button(action: {
+                    showLikedRecipes = true
+                }) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Liked Recipes")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.orange)
 
-                          Text("View your liked recipes here.")
-                              .font(.body)
-                              .foregroundColor(.primary)
-                              .multilineTextAlignment(.leading)
-                      }
-                      Spacer() // Push the chevron to the right
-                      Image(systemName: "chevron.right")
-                          .font(.title2)
-                          .foregroundColor(.orange)
-                  }
-                  .padding()
-                  .background(
-                      RoundedRectangle(cornerRadius: 15)
-                          .fill(Color.orange.opacity(0.1))
-                  )
-              }
-              .buttonStyle(PlainButtonStyle()) // To remove button styling
-          }
-          .frame(maxWidth: .infinity, minHeight: 160)
-          .padding(.horizontal)
-          .sheet(isPresented: $showLikedRecipes) {
-              LikedRecipesView(recipes: viewModel.likedRecipes)
-          }
+                            Text("View your liked recipes here.")
+                                .font(.body)
+                                .foregroundColor(.primary)
+                                .multilineTextAlignment(.leading)
+                        }
+                        Spacer() // Push the chevron to the right
+                        Image(systemName: "chevron.right")
+                            .font(.title2)
+                            .foregroundColor(.orange)
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(Color.orange.opacity(0.1))
+                    )
+                }
+                .buttonStyle(PlainButtonStyle()) // To remove button styling
+            }
+            .frame(maxWidth: .infinity, minHeight: 160)
+            .padding(.horizontal)
+            .sheet(isPresented: $showLikedRecipes) {
+                LikedRecipesView(recipes: viewModel.likedRecipes) // Pass the updated recipes array
+            }
 
             Spacer()
         }
@@ -79,8 +79,12 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if viewModel.user == nil {
-                let testUserID = "8E23D734-2FBE-4D1E-99F7-00279E19585B" // Replace with actual user ID
-                viewModel.fetchUser(userID: testUserID)
+                // Fetch the user's UUID from UserDefaults
+                if let userUUID = UserDefaults.standard.string(forKey: "currentUserUUID") {
+                    viewModel.fetchUser(userID: userUUID) // Fetch user data using the UUID
+                } else {
+                    print("⚠️ No UUID found in UserDefaults")
+                }
             }
         }
     }
@@ -88,6 +92,6 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-      ProfileView(viewModel: ProfileViewModel())
+        ProfileView(viewModel: ProfileViewModel())
     }
 }
