@@ -68,7 +68,7 @@ struct ProfileView: View {
             .frame(maxWidth: .infinity, minHeight: 160)
             .padding(.horizontal)
             .sheet(isPresented: $showLikedRecipes) {
-                LikedRecipesView(recipes: viewModel.likedRecipes)
+                LikedRecipesView(recipes: viewModel.likedRecipes) // Pass the updated recipes array
             }
 
             Spacer()
@@ -79,11 +79,11 @@ struct ProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             if viewModel.user == nil {
-                // Use Firebase Auth to get the current user's ID
-                if let currentUser = Auth.auth().currentUser {
-                    viewModel.fetchUser(userID: currentUser.uid)
+                // Fetch the user's UUID from UserDefaults
+                if let userUUID = UserDefaults.standard.string(forKey: "currentUserUUID") {
+                    viewModel.fetchUser(userID: userUUID) // Fetch user data using the UUID
                 } else {
-                    print("⚠️ No user is logged in")
+                    print("⚠️ No UUID found in UserDefaults")
                 }
             }
         }
