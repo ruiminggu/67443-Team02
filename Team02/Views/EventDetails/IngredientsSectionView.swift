@@ -17,24 +17,6 @@ struct IngredientsSectionView: View {
         Text("Ingredients")
             .font(.system(size: 28, weight: .bold))
             .foregroundColor(.orange)
-          HStack {
-              Spacer()
-              
-              Button(action: {
-                  showAddIngredients = true
-              }) {
-                  ZStack {
-                    Circle()
-                        .fill(Color.orange.opacity(0.2))
-                        .frame(width: 60, height: 60)
-                    
-                    Image(systemName: "plus")
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundColor(.orange)
-                }
-              }
-            Spacer()
-          }
             
             // Ingredients List
             if event.assignedIngredientsList.isEmpty {
@@ -54,7 +36,24 @@ struct IngredientsSectionView: View {
                 userID: UUID() // Replace with actual current user ID if needed
             )
         }
-      
+      HStack {
+          Spacer()
+          
+          Button(action: {
+              showAddIngredients = true
+          }) {
+              ZStack {
+                Circle()
+                    .fill(Color.orange.opacity(0.2))
+                    .frame(width: 60, height: 60)
+                
+                Image(systemName: "plus")
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundColor(.orange)
+            }
+          }
+        Spacer()
+      }
     }
 }
 
