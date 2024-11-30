@@ -17,28 +17,36 @@ struct ContentView: View {
                 description: "A delicious grilled cheese.",
                 image: "grilledcheese",
                 instruction: "Cook on medium heat...",
-                ingredients: []
+                ingredients: [],
+                readyInMinutes: 20,
+                servings: 2
             ),
             Recipe(
                 title: "Sausage Fried Rice",
                 description: "How to make sausage fried rice",
                 image: "sausage",
                 instruction: "Cook on medium heat...",
-                ingredients: []
+                ingredients: [],
+                readyInMinutes: 20,
+                servings: 3
             ),
             Recipe(
                 title: "French Toast",
                 description: "How to make french toast",
                 image: "frenchtoast",
                 instruction: "Cook on medium heat...",
-                ingredients: []
+                ingredients: [],
+                readyInMinutes: 15,
+                servings: 2
             ),
             Recipe(
                 title: "Mac & Cheese",
                 description: "How to make Mac & Cheese",
                 image: "maccheese",
                 instruction: "Cook on medium heat...",
-                ingredients: []
+                ingredients: [],
+                readyInMinutes: 25,
+                servings: 4
             )
         ]
     ))

@@ -105,21 +105,24 @@ struct Event: Identifiable, Equatable {
         if let ingredientsData = dictionary["assignedIngredientsList"] as? [[String: Any]] {
             self.assignedIngredientsList = ingredientsData.compactMap { ingredientDict in
                 guard let name = ingredientDict["name"] as? String,
-                      let amount = ingredientDict["amount"] as? Float,
-                      let unit = ingredientDict["unit"] as? Float,
+                      let amount = ingredientDict["amount"] as? String,
                       let isChecked = ingredientDict["isChecked"] as? Bool,
                       let userIDString = ingredientDict["userID"] as? String,
                       let userID = UUID(uuidString: userIDString) else {
-                    return nil
-                }
+                        return Ingredient(
+                            name: "Unknown",
+                            isChecked: false,
+                            userID: UUID(),
+                            amount: "0"
+                        )
+                      }
                 
-                return Ingredient(
-                    name: name,
-                    unit: unit,
-                    isChecked: isChecked,
-                    userID: userID,
-                    amount: amount
-                )
+              return Ingredient(
+                  name: name,
+                  isChecked: isChecked,
+                  userID: userID,
+                  amount: amount
+              )
             }
         } else {
             self.assignedIngredientsList = []
@@ -154,7 +157,6 @@ struct Event: Identifiable, Equatable {
                 [
                     "name": ingredient.name,
                     "amount": ingredient.amount,
-                    "unit": ingredient.unit,
                     "isChecked": ingredient.isChecked,
                     "userID": ingredient.userID.uuidString
                 ]

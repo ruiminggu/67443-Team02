@@ -17,25 +17,6 @@ struct MenuSectionView: View {
         Text("Menu")
             .font(.system(size: 28, weight: .bold))
             .foregroundColor(.orange)
-        
-        HStack {
-              Spacer()
-              
-              Button(action: {
-                  showRecipeSearch = true
-              }) {
-                  ZStack {
-                      Circle()
-                          .fill(Color.orange.opacity(0.2))
-                          .frame(width: 60, height: 60)
-                      
-                      Image(systemName: "plus")
-                          .font(.system(size: 24, weight: .medium))
-                          .foregroundColor(.orange)
-                  }
-              }
-            Spacer()
-          }
           
 //          Text("Debug: \(event.recipes.count) recipes")
 //                          .font(.caption)
@@ -67,6 +48,26 @@ struct MenuSectionView: View {
                 print("- Recipe: \(recipe.title)")
             }
         }
+      
+      HStack {
+            Spacer()
+            
+            Button(action: {
+                showRecipeSearch = true
+            }) {
+                ZStack {
+                    Circle()
+                        .fill(Color.orange.opacity(0.2))
+                        .frame(width: 60, height: 60)
+                    
+                    Image(systemName: "plus")
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.orange)
+                }
+            }
+          Spacer()
+        }
+      
     }
 }
 

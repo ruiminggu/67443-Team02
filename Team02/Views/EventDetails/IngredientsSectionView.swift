@@ -17,24 +17,6 @@ struct IngredientsSectionView: View {
         Text("Ingredients")
             .font(.system(size: 28, weight: .bold))
             .foregroundColor(.orange)
-          HStack {
-              Spacer()
-              
-              Button(action: {
-                  showAddIngredients = true
-              }) {
-                  ZStack {
-                    Circle()
-                        .fill(Color.orange.opacity(0.2))
-                        .frame(width: 60, height: 60)
-                    
-                    Image(systemName: "plus")
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundColor(.orange)
-                }
-              }
-            Spacer()
-          }
             
             // Ingredients List
             if event.assignedIngredientsList.isEmpty {
@@ -54,7 +36,24 @@ struct IngredientsSectionView: View {
                 userID: UUID() // Replace with actual current user ID if needed
             )
         }
-      
+      HStack {
+          Spacer()
+          
+          Button(action: {
+              showAddIngredients = true
+          }) {
+              ZStack {
+                Circle()
+                    .fill(Color.orange.opacity(0.2))
+                    .frame(width: 60, height: 60)
+                
+                Image(systemName: "plus")
+                    .font(.system(size: 24, weight: .medium))
+                    .foregroundColor(.orange)
+            }
+          }
+        Spacer()
+      }
     }
 }
 
@@ -68,7 +67,7 @@ struct IngredientRow: View {
                 Text(ingredient.name)
                     .font(.system(size: 16, weight: .medium))
                 
-                Text("\(String(format: "%.1f", ingredient.amount))")
+                Text(ingredient.amount)
                     .font(.system(size: 14))
                     .foregroundColor(.gray)
             }
@@ -90,17 +89,15 @@ struct IngredientsSectionView_Previews: PreviewProvider {
     static var sampleIngredients = [
         Ingredient(
             name: "Tomatoes",
-            unit: 1.0,
             isChecked: false,
             userID: UUID(),
-            amount: 5.0
+            amount: "5.0"
         ),
         Ingredient(
             name: "Onions",
-            unit: 1.0,
             isChecked: true,
             userID: UUID(),
-            amount: 2.0
+            amount: "2.0"
         )
     ]
     
