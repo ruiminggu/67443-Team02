@@ -15,6 +15,7 @@ class EventDetailViewModel: ObservableObject {
     @Published var error: String?
     
     private var databaseRef: DatabaseReference = Database.database().reference()
+    private var eventListener: DatabaseHandle?
       
     init() {
             NotificationCenter.default.addObserver(
@@ -29,60 +30,43 @@ class EventDetailViewModel: ObservableObject {
           if let currentEvent = event {
               fetchEventDetails(eventID: currentEvent.id.uuidString)
           }
-      }
+    }
   
-//    func fetchEventDetails(eventID: String) {
-//        print("📱 Starting to fetch event details for ID: \(eventID)")
-//        isLoading = true
-//        
-//        // Use observeSingleEvent instead of observe to prevent multiple callbacks
-//        databaseRef.child("events").child(eventID).observeSingleEvent(of: .value) { [weak self] snapshot, _ in
-//            guard let self = self else { return }
-//            
-//            DispatchQueue.main.async {
-//                self.isLoading = false
-//                
-//                guard let eventData = snapshot.value as? [String: Any] else {
-//                    print("❌ No event data found for ID: \(eventID)")
-//                    self.error = "Failed to load event data"
-//                    return
-//                }
-//                
-//                guard let event = Event(dictionary: eventData) else {
-//                    print("❌ Failed to parse event data")
-//                    self.error = "Failed to parse event data"
-//                    return
-//                }
-//                
-//                print("✅ Successfully fetched event: \(event.eventName)")
-//                print("📱 Event details:")
-//                print("- Date: \(event.date)")
-//                print("- Location: \(event.location)")
-//                print("- Recipes count: \(event.recipes.count)")
-//                print("- Invited friends count: \(event.invitedFriends.count)")
-//                
-//                self.event = event
-//                self.fetchAttendees(invitedFriends: event.invitedFriends)
-//            }
-//        }
-//    }
     func fetchEventDetails(eventID: String) {
             isLoading = true
-            databaseRef.child("events").child(eventID).observe(.value) { [weak self] snapshot in
-                guard let self = self,
-                      let eventData = snapshot.value as? [String: Any],
-                      let event = Event(dictionary: eventData) else {
-                    self?.error = "Failed to fetch event details"
-                    self?.isLoading = false
-                    return
-                }
-                
-                DispatchQueue.main.async {
-                    self.event = event
-                    self.isLoading = false
-                }
+      
+            if let handle = eventListener {
+                databaseRef.child("events").child(eventID).removeObserver(withHandle: handle)
             }
-        }
+//            databaseRef.child("events").child(eventID).observe(.value) { [weak self] snapshot in
+//                guard let self = self,
+//                      let eventData = snapshot.value as? [String: Any],
+//                      let event = Event(dictionary: eventData) else {
+//                    self?.error = "Failed to fetch event details"
+//                    self?.isLoading = false
+//                    return
+//                }
+//                
+//                DispatchQueue.main.async {
+//                    self.event = event
+//                    self.isLoading = false
+//                }
+//            }
+            eventListener = databaseRef.child("events").child(eventID).observe(.value) { [weak self] snapshot in
+                  guard let self = self,
+                        let eventData = snapshot.value as? [String: Any],
+                        let event = Event(dictionary: eventData) else {
+                      self?.error = "Failed to fetch event details"
+                      self?.isLoading = false
+                      return
+                  }
+                  
+                  DispatchQueue.main.async {
+                      self.event = event
+                      self.isLoading = false
+                  }
+              }
+    }
 
     private func fetchAttendees(invitedFriends: [String]) {
         guard !invitedFriends.isEmpty else {
@@ -118,6 +102,10 @@ class EventDetailViewModel: ObservableObject {
     }
   
     deinit {
-          NotificationCenter.default.removeObserver(self)
+//          NotificationCenter.default.removeObserver(self)
+            if let eventID = event?.id.uuidString,
+                 let handle = eventListener {
+                  databaseRef.child("events").child(eventID).removeObserver(withHandle: handle)
+            }
     }
 }

@@ -76,14 +76,14 @@ struct RecipeSearchView: View {
                                 } else {
                                   ForEach(viewModel.recipes) { recipe in
                                     RecipeSearchCard(recipe: recipe, event: event)
-                                          .swipeActions(edge: .trailing) {
-                                              Button {
-                                                  viewModel.addRecipeToEvent(recipe: recipe, eventID: event.id.uuidString)
-                                              } label: {
-                                                  Label("Add", systemImage: "plus.circle")
-                                              }
-                                              .tint(.green)
-                                          }
+//                                          .swipeActions(edge: .trailing) {
+//                                              Button {
+//                                                  viewModel.addRecipeToEvent(recipe: recipe, eventID: event.id.uuidString)
+//                                              } label: {
+//                                                  Label("Add", systemImage: "plus.circle")
+//                                              }
+//                                              .tint(.green)
+//                                          }
                                   }
                               }
                             } else {

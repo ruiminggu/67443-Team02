@@ -10,14 +10,12 @@ import Foundation
 struct Ingredient: Identifiable, Hashable, Equatable {
     let id = UUID()
     let name: String
-    let unit: Float
+    let amount: String
     var isChecked: Bool
     let userID: UUID
-    let amount: Float
   
-    init(name: String, unit: Float, isChecked: Bool, userID: UUID, amount: Float) {
+    init(name: String, isChecked: Bool, userID: UUID, amount: String) {
         self.name = name
-        self.unit = unit
         self.isChecked = isChecked
         self.userID = userID
         self.amount = amount
@@ -25,17 +23,15 @@ struct Ingredient: Identifiable, Hashable, Equatable {
   
     static func ==(lhs: Ingredient, rhs: Ingredient) -> Bool {
         return lhs.name == rhs.name &&
-               lhs.unit == rhs.unit &&
                lhs.isChecked == rhs.isChecked &&
                lhs.userID == rhs.userID &&
-                lhs.amount == rhs.amount
+               lhs.amount == rhs.amount
     }
   
     func toDictionary() -> [String: Any] {
             return [
                 "id": id.uuidString,
                 "name": name,
-                "unit": unit,
                 "isChecked": isChecked,
                 "userID": userID.uuidString,
                 "amount": amount

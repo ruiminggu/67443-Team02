@@ -24,27 +24,20 @@ class AddIngredientsViewModel: ObservableObject {
             return
         }
         
-        guard let amountFloat = Float(amount) else {
-            error = "Please enter a valid amount"
-            return
-        }
-        
         isLoading = true
         
         // Create new ingredient
         let ingredient = Ingredient(
             name: ingredientName,
-            unit: 1.0, // Default unit
             isChecked: false,
             userID: userID,
-            amount: amountFloat
+            amount: amount
         )
         
         // Convert to dictionary for Firebase
         let ingredientDict: [String: Any] = [
             "id": ingredient.id.uuidString,
             "name": ingredient.name,
-            "unit": ingredient.unit,
             "isChecked": ingredient.isChecked,
             "userID": ingredient.userID.uuidString,
             "amount": ingredient.amount

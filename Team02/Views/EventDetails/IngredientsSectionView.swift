@@ -67,7 +67,7 @@ struct IngredientRow: View {
                 Text(ingredient.name)
                     .font(.system(size: 16, weight: .medium))
                 
-                Text("\(String(format: "%.1f", ingredient.amount))")
+                Text(ingredient.amount)
                     .font(.system(size: 14))
                     .foregroundColor(.gray)
             }
@@ -89,17 +89,15 @@ struct IngredientsSectionView_Previews: PreviewProvider {
     static var sampleIngredients = [
         Ingredient(
             name: "Tomatoes",
-            unit: 1.0,
             isChecked: false,
             userID: UUID(),
-            amount: 5.0
+            amount: "5.0"
         ),
         Ingredient(
             name: "Onions",
-            unit: 1.0,
             isChecked: true,
             userID: UUID(),
-            amount: 2.0
+            amount: "2.0"
         )
     ]
     
