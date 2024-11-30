@@ -12,6 +12,8 @@ class EventsViewModel: ObservableObject {
     @Published var user: User?
     @Published var upcomingEvents: [Event] = []
     @Published var pastEvents: [Event] = []
+    @Published var isLoading = false
+    @Published var error: String?
     
     private var databaseRef: DatabaseReference = Database.database().reference()
     
@@ -19,25 +21,38 @@ class EventsViewModel: ObservableObject {
     }
     
     func fetchUser(userID: String) {
+        isLoading = true
+      
         print("Fetching user with ID: \(userID)")
         
-        databaseRef.child("users").child(userID).observeSingleEvent(of: .value) { snapshot, _ in
-            if let userData = snapshot.value as? [String: Any],
-               let user = User(dictionary: userData) {
-                DispatchQueue.main.async {
-                    self.user = user
-                    
-                    // Extract event IDs directly, as `events` is already an array of strings
-                    let eventIDs = user.events
-                    print("User event IDs: \(eventIDs)")
-                    
-                    // Fetch full event details for each event ID
-                    self.fetchUserEvents(eventIDs: eventIDs)
-                }
-            } else {
-                print("Failed to fetch user data from Firebase")
-            }
-        }
+      databaseRef.child("users").child(userID).child("events").observeSingleEvent(of: .value) { [weak self] snapshot, _ in
+                  guard let self = self,
+                        let eventIDs = snapshot.value as? [String] else {
+                      self?.isLoading = false
+                      return
+                  }
+                  
+                  let dispatchGroup = DispatchGroup()
+                  var fetchedEvents: [Event] = []
+                  
+                  for eventID in eventIDs {
+                      dispatchGroup.enter()
+                      self.databaseRef.child("events").child(eventID).observeSingleEvent(of: .value) { snapshot in
+                          if let eventData = snapshot.value as? [String: Any],
+                             let event = Event(dictionary: eventData) {
+                              fetchedEvents.append(event)
+                          }
+                          dispatchGroup.leave()
+                      }
+                  }
+                  
+                  dispatchGroup.notify(queue: .main) {
+                      let now = Date()
+                      self.upcomingEvents = fetchedEvents.filter { $0.date > now }
+                      self.pastEvents = fetchedEvents.filter { $0.date <= now }
+                      self.isLoading = false
+                  }
+              }
     }
     
     private func fetchUserEvents(eventIDs: [String]) {

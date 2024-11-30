@@ -10,6 +10,7 @@ import FirebaseDatabase
 
 class EventDetailViewModel: ObservableObject {
     @Published var event: Event?
+    @Published var events: [Event] = []
     @Published var attendees: [User] = []
     @Published var isLoading = false
     @Published var error: String?
@@ -33,25 +34,16 @@ class EventDetailViewModel: ObservableObject {
     }
   
     func fetchEventDetails(eventID: String) {
+            guard let currentUserID = UserDefaults.standard.string(forKey: "currentUserUUID") else {
+                self.error = "User not logged in"
+                return
+            }
+    
             isLoading = true
       
             if let handle = eventListener {
                 databaseRef.child("events").child(eventID).removeObserver(withHandle: handle)
             }
-//            databaseRef.child("events").child(eventID).observe(.value) { [weak self] snapshot in
-//                guard let self = self,
-//                      let eventData = snapshot.value as? [String: Any],
-//                      let event = Event(dictionary: eventData) else {
-//                    self?.error = "Failed to fetch event details"
-//                    self?.isLoading = false
-//                    return
-//                }
-//                
-//                DispatchQueue.main.async {
-//                    self.event = event
-//                    self.isLoading = false
-//                }
-//            }
             eventListener = databaseRef.child("events").child(eventID).observe(.value) { [weak self] snapshot in
                   guard let self = self,
                         let eventData = snapshot.value as? [String: Any],
@@ -100,6 +92,43 @@ class EventDetailViewModel: ObservableObject {
             print("✅ Finished fetching all attendees. Count: \(fetchedAttendees.count)")
         }
     }
+  
+    func fetchUserEvents() {
+          guard let userID = UserDefaults.standard.string(forKey: "currentUserUUID") else {
+              self.error = "User not logged in"
+              return
+          }
+          
+          isLoading = true
+          
+          databaseRef.child("users").child(userID).child("events").observeSingleEvent(of: .value) { [weak self] snapshot, _ in
+              guard let self = self,
+                    let eventIDs = snapshot.value as? [String] else {
+                  self?.isLoading = false
+                  return
+              }
+              
+              // Fetch each event's details
+              let dispatchGroup = DispatchGroup()
+              var fetchedEvents: [Event] = []
+              
+              for eventID in eventIDs {
+                  dispatchGroup.enter()
+                  self.databaseRef.child("events").child(eventID).observeSingleEvent(of: .value) { snapshot in
+                      if let eventData = snapshot.value as? [String: Any],
+                         let event = Event(dictionary: eventData) {
+                          fetchedEvents.append(event)
+                      }
+                      dispatchGroup.leave()
+                  }
+              }
+              
+              dispatchGroup.notify(queue: .main) {
+                  self.events = fetchedEvents
+                  self.isLoading = false
+              }
+          }
+      }
   
     deinit {
 //          NotificationCenter.default.removeObserver(self)

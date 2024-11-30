@@ -72,7 +72,7 @@ struct MyEventCard: View {
 }
 
 struct MyEventsView: View {
-  let userID = "8E23D734-2FBE-4D1E-99F7-00279E19585B"
+  let userID = UserDefaults.standard.string(forKey: "currentUserUUID") ?? ""
   @StateObject private var viewModel = EventsViewModel()
   
   var body: some View {
