@@ -1,6 +1,6 @@
 import Foundation
 
-struct Transaction: Identifiable, Equatable {
+struct Transaction: Identifiable, Equatable,Hashable {
     let id: UUID
     let payer: User
     let payee: User

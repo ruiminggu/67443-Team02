@@ -1,221 +1,183 @@
-//
-//  CostSplitView.swift
-//  Team02
-//
-//  Created by Leila
-//
-
 import SwiftUI
 
 struct CostSplitView: View {
-    @State private var transactions: [Transaction] = [
-        Transaction(
-            payer: User(
-                id: UUID(),
-                fullName: "Kevin",
-                image: "kevin.png",
-                email: "kevin@example.com",
-                password: "password123",
-                events: []
-            ),
-            payee: User(
-                id: UUID(),
-                fullName: "Leila",
-                image: "leila.png",
-                email: "leila@example.com",
-                password: "password456",
-                events: []
-            ),
-            item: "Dinner",
-            amount: 500,
-            event: Event(
-                id: UUID(),
-                invitedFriends: [
-                    User(
-                        id: UUID(),
-                        fullName: "Kevin",
-                        image: "kevin.png",
-                        email: "kevin@example.com",
-                        password: "password123",
-                        events: []
-                    )
-                ],
-                recipes: [],
-                date: Date(),
-                time: Date(),
-                location: "123 Party St.",
-                eventName: "CNY Dinner",
-                qrCode: "qr123",
-                costs: [],
-                totalCost: 500,
-                assignedIngredientsList: []
-            )
-        ),
-        Transaction(
-            payer: User(
-                id: UUID(),
-                fullName: "Leila",
-                image: "leila.png",
-                email: "leila@example.com",
-                password: "password456",
-                events: []
-            ),
-            payee: User(
-                id: UUID(),
-                fullName: "Amy",
-                image: "amy.png",
-                email: "amy@example.com",
-                password: "password789",
-                events: []
-            ),
-            item: "Lunch",
-            amount: 500,
-            event: Event(
-                id: UUID(),
-                invitedFriends: [
-                    User(
-                        id: UUID(),
-                        fullName: "Amy",
-                        image: "amy.png",
-                        email: "amy@example.com",
-                        password: "password789",
-                        events: []
-                    )
-                ],
-                recipes: [],
-                date: Date(),
-                time: Date(),
-                location: "456 Lunch Ave.",
-                eventName: "ABB Dinner",
-                qrCode: "qr456",
-                costs: [],
-                totalCost: 500,
-                assignedIngredientsList: []
-            )
-        ),
-        Transaction(
-            payer: User(
-                id: UUID(),
-                fullName: "Betty",
-                image: "betty.png",
-                email: "betty@example.com",
-                password: "password321",
-                events: []
-            ),
-            payee: User(
-                id: UUID(),
-                fullName: "Leila",
-                image: "leila.png",
-                email: "leila@example.com",
-                password: "password456",
-                events: []
-            ),
-            item: "Groceries",
-            amount: 500,
-            event: Event(
-                id: UUID(),
-                invitedFriends: [
-                    User(
-                        id: UUID(),
-                        fullName: "Betty",
-                        image: "betty.png",
-                        email: "betty@example.com",
-                        password: "password321",
-                        events: []
-                    )
-                ],
-                recipes: [],
-                date: Date(),
-                time: Date(),
-                location: "789 Grocery Ln.",
-                eventName: "CNY Dinner",
-                qrCode: "qr789",
-                costs: [],
-                totalCost: 500,
-                assignedIngredientsList: []
-            )
-        )
-    ]
-    
+    @StateObject private var viewModel = CostSplitViewModel()
     @State private var selectedTab: String = "Friends" // "Friends" or "Events"
-    
+    @State private var showAddCostView = false
+
     var body: some View {
-        VStack {
-            // Top Summary Section
-            HStack(spacing: 20) {
-                SummaryCard(title: "You are owed", amount: totalOwedToYou())
-                SummaryCard(title: "You owe", amount: totalYouOwe())
-                SummaryCard(title: "Total Balance", amount: totalBalance())
+        VStack(spacing: 16) {
+            headerSection
+            summarySection
+            toggleSection
+            costsListSection
+        }
+        .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+        .sheet(isPresented: $showAddCostView) {
+            AddCostView() 
+        }
+        .onAppear {
+            viewModel.fetchTransactions()
+            viewModel.fetchUsers()
+            viewModel.fetchEvents()
+        }
+    }
+
+    // MARK: Header Section
+    private var headerSection: some View {
+        HStack {
+            Text("Settle the costs!")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.orange)
+            Spacer()
+            Button(action: {
+                showAddCostView = true
+            }) {
+                Text("Add Cost")
+                    .font(.callout)
+                    .fontWeight(.medium)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.orange)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
             }
-            .padding()
-            
-            // Tab Selector
-            HStack {
-                Button("Friends") {
-                    selectedTab = "Friends"
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(selectedTab == "Friends" ? Color.orange.opacity(0.2) : Color.clear)
-                .cornerRadius(8)
-                
-                Button("Events") {
-                    selectedTab = "Events"
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(selectedTab == "Events" ? Color.orange.opacity(0.2) : Color.clear)
-                .cornerRadius(8)
+        }
+        .padding(.horizontal)
+        .padding(.top, 8)
+    }
+
+    // MARK: Summary Section
+    private var summarySection: some View {
+        HStack(spacing: 16) {
+            SummaryCard(title: "You are owed", amount: totalOwedToYou())
+            SummaryCard(title: "You owe", amount: totalYouOwe())
+            SummaryCard(title: "Total Balance", amount: totalBalance())
+        }
+        .padding(.horizontal)
+    }
+
+    // MARK: Toggle Section
+    private var toggleSection: some View {
+        HStack {
+            Button(action: {
+                selectedTab = "Friends"
+            }) {
+                Text("Friends")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(selectedTab == "Friends" ? Color.orange.opacity(0.2) : Color.clear)
+                    .foregroundColor(selectedTab == "Friends" ? .orange : .gray)
+                    .cornerRadius(8)
             }
-            .padding()
-            
-            // List of Transactions
-            List {
+
+            Button(action: {
+                selectedTab = "Events"
+            }) {
+                Text("Events")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(selectedTab == "Events" ? Color.orange.opacity(0.2) : Color.clear)
+                    .foregroundColor(selectedTab == "Events" ? .orange : .gray)
+                    .cornerRadius(8)
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    // MARK: Costs List Section
+    private var costsListSection: some View {
+        ScrollView {
+            VStack(spacing: 16) {
                 if selectedTab == "Friends" {
                     ForEach(groupedByFriends().keys.sorted(), id: \.self) { friend in
-                        Section(header: Text(friend)) {
+                        Section(header: friendHeaderView(for: friend)) {
                             ForEach(groupedByFriends()[friend] ?? []) { transaction in
                                 TransactionRow(transaction: transaction)
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 8)
+                                    .background(Color.white)
+                                    .cornerRadius(8)
+                                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
                             }
                         }
                     }
                 } else {
                     ForEach(groupedByEvents().keys.sorted(), id: \.self) { event in
-                        Section(header: Text(event)) {
+                        Section(header: eventHeaderView(for: event)) {
                             ForEach(groupedByEvents()[event] ?? []) { transaction in
                                 TransactionRow(transaction: transaction)
+                                    .padding(.horizontal)
+                                    .padding(.vertical, 8)
+                                    .background(Color.white)
+                                    .cornerRadius(8)
+                                    .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
                             }
                         }
                     }
                 }
             }
-            .listStyle(InsetGroupedListStyle())
+            .padding(.horizontal)
         }
     }
-    
+
     // MARK: Helper Methods
-    
     private func groupedByFriends() -> [String: [Transaction]] {
-        Dictionary(grouping: transactions, by: { $0.payee.fullName })
+        Dictionary(grouping: viewModel.transactions, by: { $0.payee.fullName })
     }
-    
+
     private func groupedByEvents() -> [String: [Transaction]] {
-        Dictionary(grouping: transactions, by: { $0.event.eventName })
+        Dictionary(grouping: viewModel.transactions, by: { $0.event.eventName })
     }
-    
+
     private func totalOwedToYou() -> Float {
-        transactions
+        viewModel.transactions
             .filter { $0.payee.fullName == "Leila" }
             .reduce(0) { $0 + $1.amount }
     }
-    
+
     private func totalYouOwe() -> Float {
-        transactions
+        viewModel.transactions
             .filter { $0.payer.fullName == "Leila" }
             .reduce(0) { $0 + $1.amount }
     }
-    
+
     private func totalBalance() -> Float {
         totalOwedToYou() - totalYouOwe()
+    }
+
+    private func friendHeaderView(for friend: String) -> some View {
+        HStack {
+            Image(systemName: "person.circle.fill")
+                .foregroundColor(.orange)
+                .font(.title2)
+            Text(friend)
+                .font(.headline)
+                .foregroundColor(.black)
+            Spacer()
+        }
+        .padding(.vertical, 8)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(8)
+    }
+
+    private func eventHeaderView(for event: String) -> some View {
+        HStack {
+            Image(systemName: "calendar.circle.fill")
+                .foregroundColor(.orange)
+                .font(.title2)
+            Text(event)
+                .font(.headline)
+                .foregroundColor(.black)
+            Spacer()
+        }
+        .padding(.vertical, 8)
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(8)
     }
 }

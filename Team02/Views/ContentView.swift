@@ -52,6 +52,7 @@ struct ContentView: View {
     ))
   
       @StateObject private var profileViewModel = ProfileViewModel()
+      @StateObject private var costSplitViewModel = CostSplitViewModel()
       @State private var isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn") // Track login state
 
       var body: some View {
@@ -99,11 +100,12 @@ struct ContentView: View {
                     }
 
                 // Costs Tab
-                CostView()
-                    .tabItem {
-                        Image(systemName: "creditcard")
-                        Text("Costs")
-                    }
+              CostSplitView()
+                                 .environmentObject(costSplitViewModel) 
+                                 .tabItem {
+                                     Image(systemName: "creditcard")
+                                     Text("Costs")
+                                 }
 
                 // Profile Tab
                 ProfileView(viewModel: profileViewModel)
