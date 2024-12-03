@@ -1,58 +1,183 @@
 import XCTest
-@testable import Team02
+@testable import Team02 // Replace with your module name
 
-final class UserTests: XCTestCase {
-    
-    func testUserInitializationFromValidDictionary() {
-        let validUserData: [String: Any] = [
-            "id": "8E23D734-2FBE-4D1E-99F7-00279E19585B",
-            "fullName": "Charlie Brown",
-            "image": "profile_pic",
-            "email": "charlie@example.com",
-            "password": "password789",
-            "events": ["eventID1", "eventID2"]
+class UserTests: XCTestCase {
+
+    func testUserInitialization() {
+        // Arrange
+        let userID = UUID()
+        let fullName = "John Doe"
+        let image = "profile_pic"
+        let email = "john.doe@example.com"
+        let password = "securepassword"
+        let events = ["event1", "event2"]
+        let likedRecipes: [Recipe] = [
+            Recipe(
+                title: "Pasta",
+                description: "Delicious pasta recipe",
+                image: "pasta.jpg",
+                instruction: "Cook pasta and mix sauce",
+                ingredients: [],
+                readyInMinutes: 30,
+                servings: 4
+            )
         ]
-        
-        let user = User(dictionary: validUserData)
-        
-        XCTAssertNotNil(user)
-        XCTAssertEqual(user?.id.uuidString, "8E23D734-2FBE-4D1E-99F7-00279E19585B")
-        XCTAssertEqual(user?.fullName, "Charlie Brown")
-        XCTAssertEqual(user?.email, "charlie@example.com")
-        XCTAssertEqual(user?.events, ["eventID1", "eventID2"])
+
+        // Act
+        let user = User(
+            id: userID,
+            fullName: fullName,
+            image: image,
+            email: email,
+            password: password,
+            events: events,
+            likedRecipes: likedRecipes
+        )
+
+        // Assert
+        XCTAssertEqual(user.id, userID)
+        XCTAssertEqual(user.fullName, fullName)
+        XCTAssertEqual(user.image, image)
+        XCTAssertEqual(user.email, email)
+        XCTAssertEqual(user.password, password)
+        XCTAssertEqual(user.events, events)
+        XCTAssertEqual(user.likedRecipes, likedRecipes)
     }
-    
-    func testUserInitializationFromInvalidDictionary() {
-        let invalidUserData: [String: Any] = [
-            "id": "InvalidUUID",
-            "fullName": "Charlie Brown"
-            // Missing other required fields
+
+    func testUserEquality() {
+        // Arrange
+        let userID = UUID()
+        let user1 = User(
+            id: userID,
+            fullName: "John Doe",
+            image: "profile_pic",
+            email: "john.doe@example.com",
+            password: "password",
+            events: [],
+            likedRecipes: []
+        )
+        let user2 = User(
+            id: userID, // Same ID for equality
+            fullName: "John Doe",
+            image: "profile_pic",
+            email: "john.doe@example.com",
+            password: "password",
+            events: [],
+            likedRecipes: []
+        )
+
+        // Act & Assert
+        XCTAssertEqual(user1, user2)
+    }
+
+    func testUserInequality() {
+        // Arrange
+        let user1 = User(
+            id: UUID(),
+            fullName: "John Doe",
+            image: "profile_pic",
+            email: "john.doe@example.com",
+            password: "password",
+            events: [],
+            likedRecipes: []
+        )
+        let user2 = User(
+            id: UUID(), // Different ID
+            fullName: "Jane Doe",
+            image: "profile_pic",
+            email: "jane.doe@example.com",
+            password: "password123",
+            events: [],
+            likedRecipes: []
+        )
+
+        // Act & Assert
+        XCTAssertNotEqual(user1, user2)
+    }
+
+    func testUserSerialization() {
+        // Arrange
+        let userID = UUID()
+        let fullName = "John Doe"
+        let image = "profile_pic"
+        let email = "john.doe@example.com"
+        let password = "securepassword"
+        let events = ["event1", "event2"]
+        let likedRecipes: [Recipe] = [
+            Recipe(
+                title: "Pasta",
+                description: "Delicious pasta recipe",
+                image: "pasta.jpg",
+                instruction: "Cook pasta and mix sauce",
+                ingredients: [],
+                readyInMinutes: 30,
+                servings: 4
+            )
         ]
-        
-        let user = User(dictionary: invalidUserData)
-        
+
+        let user = User(
+            id: userID,
+            fullName: fullName,
+            image: image,
+            email: email,
+            password: password,
+            events: events,
+            likedRecipes: likedRecipes
+        )
+
+        // Act
+        let userDictionary = user.toDictionary()
+        let recreatedUser = User(dictionary: userDictionary)
+
+        // Assert
+        XCTAssertNotNil(recreatedUser)
+        XCTAssertEqual(user, recreatedUser)
+    }
+
+    func testUserInitializationFromInvalidDictionary() {
+        // Arrange
+        let invalidDictionary: [String: Any] = [
+            "id": "invalid-uuid", // Invalid UUID format
+            "fullName": "John Doe",
+            "email": "john.doe@example.com"
+        ]
+
+        // Act
+        let user = User(dictionary: invalidDictionary)
+
+        // Assert
         XCTAssertNil(user)
     }
-  
-  func testToDictionary() {
-      // Arrange
-      let userID = UUID()
-      let fullName = "John Doe"
-      let image = "profile_pic"
-      let email = "john@example.com"
-      let password = "password123"
-      let events = ["event1", "event2"]
-      
-      let user = User(id: userID, fullName: fullName, image: image, email: email, password: password, events: events)
-      
-      // Act
-      let dictionary = user.toDictionary()
-      
-      // Assert
-      XCTAssertEqual(dictionary["fullName"] as? String, fullName)
-      XCTAssertEqual(dictionary["image"] as? String, image)
-      XCTAssertEqual(dictionary["email"] as? String, email)
-      XCTAssertEqual(dictionary["password"] as? String, password)
-      XCTAssertEqual(dictionary["events"] as? [String], events)
-  }
+
+    func testUserInitializationFromValidDictionary() {
+        // Arrange
+        let validDictionary: [String: Any] = [
+            "id": UUID().uuidString,
+            "fullName": "John Doe",
+            "email": "john.doe@example.com",
+            "image": "profile_pic",
+            "password": "securepassword",
+            "events": ["event1", "event2"],
+            "likedRecipes": [
+                [
+                    "title": "Pasta",
+                    "description": "Delicious pasta recipe",
+                    "image": "pasta.jpg",
+                    "instruction": "Cook pasta and mix sauce",
+                    "readyInMinutes": 30,
+                    "servings": 4
+                ]
+            ]
+        ]
+
+        // Act
+        let user = User(dictionary: validDictionary)
+
+        // Assert
+        XCTAssertNotNil(user)
+        XCTAssertEqual(user?.fullName, "John Doe")
+        XCTAssertEqual(user?.email, "john.doe@example.com")
+        XCTAssertEqual(user?.likedRecipes.count, 1)
+        XCTAssertEqual(user?.likedRecipes.first?.title, "Pasta")
+    }
 }
