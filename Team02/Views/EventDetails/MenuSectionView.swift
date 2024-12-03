@@ -31,7 +31,7 @@ struct MenuSectionView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 16) {
                         ForEach(event.recipes) { recipe in
-                            RecipeMenuCard(recipe: recipe)
+                          RecipeMenuCard(recipe: recipe, event:event)
                         }
                     }
                 }
