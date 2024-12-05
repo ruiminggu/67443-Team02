@@ -29,6 +29,7 @@ struct ProfileRecipeMenuCard: View {
             Text(recipe.title)
                 .font(.headline)
                 .lineLimit(2)
+                .foregroundColor(.primary)
 
             // Time and Servings
             HStack {
