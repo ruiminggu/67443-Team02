@@ -20,7 +20,8 @@ class CostSplitViewModel: ObservableObject {
         db.collection("transactions").getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching transactions: \(error.localizedDescription)")
-                return
+            }else{
+              self.fetchTransactions()
             }
 
             guard let documents = snapshot?.documents else {
@@ -152,6 +153,7 @@ class CostSplitViewModel: ObservableObject {
 
     // Add a new transaction
     func addTransaction(_ transaction: Transaction) {
+      print("Adding transaction: \(transaction)")
         let data: [String: Any] = [
             "payer": [
                 "id": transaction.payer.id.uuidString,
@@ -177,6 +179,7 @@ class CostSplitViewModel: ObservableObject {
             if let error = error {
                 print("Error adding transaction: \(error.localizedDescription)")
             } else {
+                print("Transaction added successfully!")
                 self.fetchTransactions() // Refresh data
             }
         }

@@ -14,7 +14,7 @@ struct CostSplitView: View {
         }
         .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $showAddCostView) {
-            AddCostView() 
+          AddCostView(eventViewModel: EventViewModel())
         }
         .onAppear {
             viewModel.fetchTransactions()

@@ -7,16 +7,16 @@
 
 
 import SwiftUI
+import FirebaseAuth
 
 struct AddCostView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var viewModel = CostSplitViewModel()
+    @StateObject private var costSplitViewModel = CostSplitViewModel()
+    @ObservedObject var eventViewModel: EventViewModel // Use EventViewModel
 
     @State private var itemName: String = ""
     @State private var costAmount: String = ""
     @State private var selectedEvent: Event?
-    @State private var selectedPayee: User?
-    @State private var selectedPayer: User?
 
     var body: some View {
         NavigationView {
@@ -26,22 +26,6 @@ struct AddCostView: View {
                     .font(.largeTitle)
                     .bold()
                     .padding(.top, 20)
-
-                // Upload Receipt Placeholder
-                Button(action: {
-                    // Handle receipt upload logic
-                }) {
-                    VStack {
-                        Image(systemName: "camera.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                        Text("Upload Receipt Image")
-                            .font(.footnote)
-                            .foregroundColor(.gray)
-                    }
-                }
-                .padding()
 
                 // Input Fields
                 VStack(alignment: .leading, spacing: 10) {
@@ -54,26 +38,10 @@ struct AddCostView: View {
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    // Select Payer
-                    Picker("Payer", selection: $selectedPayer) {
-                        ForEach(viewModel.allUsers, id: \.id) { user in
-                            Text(user.fullName).tag(user)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-
-                    // Select Payee
-                    Picker("Payee", selection: $selectedPayee) {
-                        ForEach(viewModel.allUsers, id: \.id) { user in
-                            Text(user.fullName).tag(user)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-
                     // Select Event
                     Picker("Event", selection: $selectedEvent) {
-                        ForEach(viewModel.allEvents, id: \.id) { event in
-                            Text(event.eventName).tag(event)
+                        ForEach(eventViewModel.events, id: \.id) { event in
+                            Text(event.eventName).tag(event as Event?)
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
@@ -105,27 +73,28 @@ struct AddCostView: View {
 
     // MARK: Helper Methods
     private func saveCost() {
-        guard let payer = selectedPayer,
-              let payee = selectedPayee,
-              let event = selectedEvent,
-              let amount = Float(costAmount) else {
-            // Handle validation errors (e.g., missing fields)
+        print("Event: \(selectedEvent?.eventName ?? "nil")")
+        print("Cost Amount: \(costAmount)")
+        print("Item Name: \(itemName)")
+
+        guard let event = selectedEvent,
+              let amount = Float(costAmount),
+              !itemName.isEmpty else {
+            print("Validation failed: Missing event, costAmount, or itemName")
             return
         }
 
-        // Create a new Transaction
-        let transaction = Transaction(
-            payer: payer,
-            payee: payee,
-            item: itemName,
-            amount: amount,
-            event: event
-        )
+      
+      let transaction = Transaction(
+          payer: User(id: UUID(), fullName: "Self", image: "", email: "", password: "", events: []),
+          payee: User(id: UUID(), fullName: "Shared", image: "", email: "", password: "", events: []),
+          item: itemName,
+          amount: amount,
+          event: event
+      )
 
- 
-        viewModel.addTransaction(transaction)
 
-    
+        costSplitViewModel.addTransaction(transaction)
         presentationMode.wrappedValue.dismiss()
     }
 }
