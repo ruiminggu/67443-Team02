@@ -8,8 +8,8 @@ struct RecipeListView: View {
     var body: some View {
         VStack {
             Text("\(category) Recommendations")
-                .font(.largeTitle)
-                .padding()
+              .font(.title2)
+              .fontWeight(.bold)
 
             if viewModel.isLoading {
                 ProgressView()
