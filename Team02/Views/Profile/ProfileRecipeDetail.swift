@@ -90,25 +90,5 @@ struct ProfileRecipeDetail: View {
                 .padding()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .overlay(
-            VStack {
-                Spacer()
-                Button(action: {
-                    // Add recipe to menu action
-                }) {
-                    HStack {
-                        Image(systemName: "plus")
-                        Text("Add to Menu")
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.orange)
-                    .foregroundColor(.white)
-                    .cornerRadius(25)
-                    .padding()
-                }
-            }
-        )
     }
 }
