@@ -30,11 +30,6 @@ struct HomeRecipeSearchView: View {
                                 }
                             }
                             .padding(.vertical, 8)
-
-                        Button(action: {}) {
-                            Image(systemName: "slider.horizontal.3")
-                                .foregroundColor(.orange)
-                        }
                     }
                     .padding(.horizontal)
                 }

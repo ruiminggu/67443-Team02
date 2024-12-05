@@ -30,9 +30,6 @@ struct HomeView: View {
                         }
                         
                         Spacer()
-                        
-                        Image(systemName: "bell")
-                            .font(.title2)
                     }
                     .padding(.horizontal)
                     

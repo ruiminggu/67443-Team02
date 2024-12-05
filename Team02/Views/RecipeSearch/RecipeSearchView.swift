@@ -36,17 +36,6 @@ struct RecipeSearchView: View {
               .background(Color(.systemGray6))
               .cornerRadius(10)
               
-              // Filter Button
-              Button(action: {}) {
-                Image(systemName: "slider.horizontal.3")
-                  .foregroundColor(.orange)
-              }
-              
-              // Add Button
-              Button(action: {}) {
-                Image(systemName: "plus")
-                  .foregroundColor(.orange)
-              }
             }
           }
           .padding()
