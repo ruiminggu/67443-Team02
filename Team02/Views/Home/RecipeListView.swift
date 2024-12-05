@@ -31,9 +31,9 @@ struct RecipeListView: View {
             }
         }
         .onAppear {
-            viewModel.searchText = category // Set the search query
+            viewModel.searchText = category
             Task {
-                await viewModel.searchRecipes() // Fetch recipes for the category
+                await viewModel.searchRecipes()
             }
         }
     }
