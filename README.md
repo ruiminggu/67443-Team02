@@ -104,6 +104,16 @@ To run unit tests:
 3.  Press `Cmd + U` or go to **Product > Test**.
 
 * * * * *
+🤝 Acknowledgments
+------------------
+
+This project was made possible through the collaborative effort of our amazing team:
+
+-   **Ruiming Gu** (GitHub Profile: [ruiminggu](https://github.com/ruiminggu))
+-   **Leila Lei**
+-   **Erin Chen**
+
+Thank you for your hard work, creativity, and dedication to making this project a success!
 
 📧 Contact
 ----------
