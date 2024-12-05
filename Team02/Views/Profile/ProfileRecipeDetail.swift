@@ -1,10 +1,3 @@
-//
-//  ProfileRecipeDetail.swift
-//  Team02
-//
-//  Created by 顾芮名 on 12/4/24.
-//
-
 import SwiftUI
 
 struct ProfileRecipeDetail: View {
@@ -14,23 +7,24 @@ struct ProfileRecipeDetail: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                // Image Gallery
-                ZStack(alignment: .bottomLeading) {
-                    AsyncImage(url: URL(string: recipe.image)) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 250)
-                                .clipped()
-                        case .failure:
-                            Color.gray
-                        case .empty:
-                            ProgressView()
-                        @unknown default:
-                            Color.gray
-                        }
+                // Recipe Image
+                AsyncImage(url: URL(string: recipe.image)) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 250)
+                            .clipped()
+                    case .failure:
+                        Color.gray
+                            .frame(height: 250)
+                    case .empty:
+                        ProgressView()
+                            .frame(height: 250)
+                    @unknown default:
+                        Color.gray
+                            .frame(height: 250)
                     }
                 }
                 
@@ -49,9 +43,8 @@ struct ProfileRecipeDetail: View {
                         }
                     }
                     
-                    // Date and Time
+                    // Cooking Time
                     HStack {
-                        Spacer()
                         Image(systemName: "clock")
                             .foregroundColor(.gray)
                         Text("\(recipe.readyInMinutes) Minutes")
@@ -64,13 +57,12 @@ struct ProfileRecipeDetail: View {
                             .font(.title2)
                             .fontWeight(.bold)
                         
-                        ForEach(recipe.ingredients.prefix(5)) { ingredient in
+                        ForEach(recipe.ingredients) { ingredient in
                             HStack {
                                 Text(ingredient.name)
-                                    .foregroundColor(.primary)
                                 Spacer()
                                 Text(ingredient.amount)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.gray)
                                     .fontWeight(.medium)
                             }
                             Divider()
@@ -85,10 +77,13 @@ struct ProfileRecipeDetail: View {
                         
                         Text(recipe.instruction)
                             .foregroundColor(.primary)
+                            .padding(.top, 8)
                     }
                 }
                 .padding()
             }
         }
+        .navigationTitle(recipe.title)
+        .navigationBarTitleDisplayMode(.inline) // Inline navigation bar for consistency
     }
 }

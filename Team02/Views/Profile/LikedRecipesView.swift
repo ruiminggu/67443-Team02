@@ -15,9 +15,10 @@ struct LikedRecipesView: View {
                     ScrollView {
                         LazyVStack(spacing: 16) {
                             ForEach(viewModel.likedRecipes) { recipe in
-                              NavigationLink(destination: ProfileRecipeDetail(recipe: recipe)) {
-                                  ProfileRecipeMenuCard(recipe: recipe)
-                              }
+                                NavigationLink(destination: ProfileRecipeDetail(recipe: recipe)) {
+                                    ProfileRecipeMenuCard(recipe: recipe)
+                                }
+                                .buttonStyle(PlainButtonStyle()) // Avoid unwanted styles
                             }
                         }
                         .padding()

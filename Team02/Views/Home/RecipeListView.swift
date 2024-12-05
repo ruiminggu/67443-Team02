@@ -1,10 +1,3 @@
-//
-//  RecipeListView.swift
-//  Team02
-//
-//  Created by 顾芮名 on 12/3/24.
-//
-
 import SwiftUI
 
 struct RecipeListView: View {
@@ -28,8 +21,10 @@ struct RecipeListView: View {
                 ScrollView {
                     LazyVStack(spacing: 16) {
                         ForEach(viewModel.recipes, id: \.id) { recipe in
-                            HomeRecipeSearchCard(recipe: recipe, userID: userID) // Use HomeRecipeSearchCard
-                                .padding(.horizontal)
+                            NavigationLink(destination: ProfileRecipeDetail(recipe: recipe)) {
+                                HomeRecipeSearchCard(recipe: recipe, userID: userID)
+                            }
+                            .buttonStyle(PlainButtonStyle()) // Avoid unwanted styles
                         }
                     }
                 }
