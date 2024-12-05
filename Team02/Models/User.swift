@@ -1,6 +1,6 @@
 import Foundation
 
-struct User: Identifiable, Equatable {
+struct User: Identifiable, Equatable, Hashable {
     let id: UUID
     let fullName: String
     let image: String

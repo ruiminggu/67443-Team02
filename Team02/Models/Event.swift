@@ -1,6 +1,6 @@
 import Foundation
 
-struct Event: Identifiable, Equatable {
+struct Event: Identifiable, Equatable, Hashable {
     let id: UUID
     var invitedFriends: [String]
     let recipes: [Recipe]

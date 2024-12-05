@@ -12,6 +12,11 @@
 		2E78C8732CDDF46A0099231D /* grilledcheese.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E78C8722CDDF46A0099231D /* grilledcheese.png */; };
 		2E78C8752CDDF48D0099231D /* sausage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2E78C8742CDDF48D0099231D /* sausage.png */; };
 		2EBE66052CDDA93F001BC111 /* RecipeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */; };
+		2EDDB9112CFE58090061104B /* CostSplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB90D2CFE58080061104B /* CostSplitView.swift */; };
+		2EDDB9122CFE58090061104B /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB90F2CFE58080061104B /* TransactionRow.swift */; };
+		2EDDB9132CFE58090061104B /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB90E2CFE58080061104B /* SummaryCard.swift */; };
+		2EDDB9152CFE5BFD0061104B /* CostSplitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB9142CFE5BFD0061104B /* CostSplitViewModel.swift */; };
+		2EDDB9172CFE600C0061104B /* AddCostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB9162CFE600C0061104B /* AddCostView.swift */; };
 		46110AD32CDDB5CA00FBBC50 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */; };
 		46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */; };
 		46110AD72CDE0E1200FBBC50 /* RecipeMenuCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */; };
@@ -94,6 +99,11 @@
 		2E78C8722CDDF46A0099231D /* grilledcheese.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grilledcheese.png; sourceTree = "<group>"; };
 		2E78C8742CDDF48D0099231D /* sausage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sausage.png; sourceTree = "<group>"; };
 		2EBE66042CDDA93A001BC111 /* RecipeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailView.swift; sourceTree = "<group>"; };
+		2EDDB90D2CFE58080061104B /* CostSplitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostSplitView.swift; sourceTree = "<group>"; };
+		2EDDB90E2CFE58080061104B /* SummaryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCard.swift; sourceTree = "<group>"; };
+		2EDDB90F2CFE58080061104B /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		2EDDB9142CFE5BFD0061104B /* CostSplitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostSplitViewModel.swift; sourceTree = "<group>"; };
+		2EDDB9162CFE600C0061104B /* AddCostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCostView.swift; sourceTree = "<group>"; };
 		46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
 		46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewModel.swift; sourceTree = "<group>"; };
 		46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeMenuCard.swift; sourceTree = "<group>"; };
@@ -181,6 +191,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2EDDB9102CFE58080061104B /* SplitCost */ = {
+			isa = PBXGroup;
+			children = (
+				2EDDB9162CFE600C0061104B /* AddCostView.swift */,
+				2EDDB90D2CFE58080061104B /* CostSplitView.swift */,
+				2EDDB90E2CFE58080061104B /* SummaryCard.swift */,
+				2EDDB90F2CFE58080061104B /* TransactionRow.swift */,
+			);
+			path = SplitCost;
+			sourceTree = "<group>";
+		};
 		46970CE22CD97C0D0057E4D3 /* MyEvents */ = {
 			isa = PBXGroup;
 			children = (
@@ -342,6 +363,7 @@
 		76EBA44F2CD07BA2002C9836 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2EDDB9102CFE58080061104B /* SplitCost */,
 				762B0D132CF6562600400BB6 /* CreateAccount */,
 				76771CE22CEF1C0900B26169 /* Profile */,
 				46970D022CD9BC490057E4D3 /* RecipeSearch */,
@@ -358,6 +380,7 @@
 		76EBA45C2CD08AFB002C9836 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				2EDDB9142CFE5BFD0061104B /* CostSplitViewModel.swift */,
 				76EBA45D2CD08B0B002C9836 /* HomePageViewModel.swift */,
 				760E6FA72CD337CA007FD962 /* EventViewModel.swift */,
 				46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */,
@@ -497,6 +520,7 @@
 				76D0CA3F2CDB184C00982FAA /* UserViewModel.swift in Sources */,
 				46970CEB2CD995830057E4D3 /* MenuSectionView.swift in Sources */,
 				46110AD92CDE235F00FBBC50 /* AddIngredientsViewModel.swift in Sources */,
+				2EDDB9152CFE5BFD0061104B /* CostSplitViewModel.swift in Sources */,
 				760E6FAA2CD337DF007FD962 /* DateSelectionView.swift in Sources */,
 				46970CFC2CD9AC410057E4D3 /* AddIngredientsView.swift in Sources */,
 				76EBA4572CD07D23002C9836 /* Transaction.swift in Sources */,
@@ -522,6 +546,10 @@
 				46110AD72CDE0E1200FBBC50 /* RecipeMenuCard.swift in Sources */,
 				762B0D152CF6563400400BB6 /* CreateAccountView.swift in Sources */,
 				465CF4E22CFD7914009E32E8 /* CustomRecipeViewModel.swift in Sources */,
+				2EDDB9172CFE600C0061104B /* AddCostView.swift in Sources */,
+				2EDDB9112CFE58090061104B /* CostSplitView.swift in Sources */,
+				2EDDB9122CFE58090061104B /* TransactionRow.swift in Sources */,
+				2EDDB9132CFE58090061104B /* SummaryCard.swift in Sources */,
 				760E6FAE2CD33807007FD962 /* InviteFriendsView.swift in Sources */,
 				76EBA45B2CD07D5D002C9836 /* Recipe.swift in Sources */,
 				46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */,
@@ -722,7 +750,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = R57H6A53SS;
+				DEVELOPMENT_TEAM = HMZSC3HX6Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -735,7 +763,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "cmuis.Team02-xinyi";
+				PRODUCT_BUNDLE_IDENTIFIER = "cmuis.Team02-leila";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
