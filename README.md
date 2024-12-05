@@ -114,6 +114,7 @@ This project was made possible through the collaborative effort of our amazing t
 -   **Erin Chen**
 
 Thank you for your hard work, creativity, and dedication to making this project a success!
+* * * * *
 
 📧 Contact
 ----------
