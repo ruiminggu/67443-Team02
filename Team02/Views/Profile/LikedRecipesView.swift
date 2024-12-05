@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct LikedRecipesView: View {
-    let recipes: [Recipe]
+    @ObservedObject var viewModel: ProfileViewModel // Observe the ProfileViewModel
 
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 20) {
-                if recipes.isEmpty {
+                if viewModel.likedRecipes.isEmpty {
                     Text("You have no liked recipes.")
                         .font(.headline)
                         .foregroundColor(.gray)
@@ -14,7 +14,7 @@ struct LikedRecipesView: View {
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 16) {
-                            ForEach(recipes) { recipe in
+                            ForEach(viewModel.likedRecipes) { recipe in
                                 ProfileRecipeMenuCard(recipe: recipe)
                             }
                         }
@@ -23,6 +23,11 @@ struct LikedRecipesView: View {
                 }
             }
             .navigationBarTitle("Liked Recipes", displayMode: .inline)
+        }
+        .onAppear {
+            if let userID = viewModel.user?.id.uuidString {
+                viewModel.fetchUser(userID: userID) // Fetch updated user data
+            }
         }
     }
 }

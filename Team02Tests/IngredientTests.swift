@@ -1,60 +1,78 @@
-//import XCTest
-//@testable import Team02
-//
-//class IngredientTests: XCTestCase {
-//
-//    func testIngredientInitialization() {
-//        // Arrange
-//        let id = UUID()
-//        let name = "Tomato"
-//        let unit: Float = 1.5
-//        let isChecked = false
-//        let userID = UUID()
-//
-//        // Act
-//        let ingredient = Ingredient(name: name, unit: unit, isChecked: isChecked, userID: userID)
-//
-//        // Assert
-//        XCTAssertEqual(ingredient.name, name, "The ingredient name should be \(name)")
-//        XCTAssertEqual(ingredient.unit, unit, "The ingredient unit should be \(unit)")
-//        XCTAssertEqual(ingredient.isChecked, isChecked, "The ingredient isChecked should be \(isChecked)")
-//        XCTAssertEqual(ingredient.userID, userID, "The ingredient userID should be \(userID)")
-//    }
-//
-//    func testIngredientEquality() {
-//        // Arrange
-//        let id = UUID()
-//        let userID = UUID()
-//        
-//        let ingredient1 = Ingredient(name: "Carrot", unit: 2.0, isChecked: false, userID: userID)
-//        let ingredient2 = Ingredient(name: "Carrot", unit: 2.0, isChecked: false, userID: userID)
-//
-//        // Act & Assert
-//        XCTAssertEqual(ingredient1, ingredient2, "Two ingredients with the same properties should be equal")
-//    }
-//
-//    func testIngredientInequality() {
-//        // Arrange
-//        let userID = UUID()
-//
-//        let ingredient1 = Ingredient(name: "Carrot", unit: 2.0, isChecked: false, userID: userID)
-//        let ingredient2 = Ingredient(name: "Tomato", unit: 1.0, isChecked: true, userID: UUID())
-//
-//        // Act & Assert
-//        XCTAssertNotEqual(ingredient1, ingredient2, "Ingredients with different properties should not be equal")
-//    }
-//  
-//  func testIngredientCategoryTitle() {
-//          // Arrange & Act
-//          let vegetablesAndGreensTitle = IngredientCategory.vegetablesAndGreens.title
-//          let meatsTitle = IngredientCategory.meats.title
-//          let dairyAndEggsTitle = IngredientCategory.dairyAndEggs.title
-//          let ricesGrainsAndBeansTitle = IngredientCategory.ricesGrainsAndBeans.title
-//          
-//          // Assert
-//          XCTAssertEqual(vegetablesAndGreensTitle, "Vegetables & Greens")
-//          XCTAssertEqual(meatsTitle, "Meats")
-//          XCTAssertEqual(dairyAndEggsTitle, "Dairy & Eggs")
-//          XCTAssertEqual(ricesGrainsAndBeansTitle, "Rices, Grains & Beans")
-//      }
-//}
+import XCTest
+@testable import Team02 // Replace with the actual name of your module
+
+class IngredientTests: XCTestCase {
+
+    func testIngredientInitialization() {
+        // Arrange
+        let ingredientName = "Carrot"
+        let ingredientAmount = "2 pieces"
+        let isChecked = false
+        let userID = UUID()
+        
+        // Act
+        let ingredient = Ingredient(name: ingredientName, isChecked: isChecked, userID: userID, amount: ingredientAmount)
+        
+        // Assert
+        XCTAssertEqual(ingredient.name, ingredientName)
+        XCTAssertEqual(ingredient.amount, ingredientAmount)
+        XCTAssertEqual(ingredient.isChecked, isChecked)
+        XCTAssertEqual(ingredient.userID, userID)
+    }
+    
+    func testIngredientEquality() {
+        // Arrange
+        let userID = UUID()
+        let ingredient1 = Ingredient(name: "Carrot", isChecked: false, userID: userID, amount: "2 pieces")
+        let ingredient2 = Ingredient(name: "Carrot", isChecked: false, userID: userID, amount: "2 pieces")
+        
+        // Act & Assert
+        XCTAssertEqual(ingredient1, ingredient2)
+    }
+    
+    func testIngredientInequality() {
+        // Arrange
+        let userID1 = UUID()
+        let userID2 = UUID()
+        let ingredient1 = Ingredient(name: "Carrot", isChecked: false, userID: userID1, amount: "2 pieces")
+        let ingredient2 = Ingredient(name: "Potato", isChecked: true, userID: userID2, amount: "1 kg")
+        
+        // Act & Assert
+        XCTAssertNotEqual(ingredient1, ingredient2)
+    }
+    
+    func testToDictionary() {
+        // Arrange
+        let ingredientName = "Carrot"
+        let ingredientAmount = "2 pieces"
+        let isChecked = true
+        let userID = UUID()
+        let ingredient = Ingredient(name: ingredientName, isChecked: isChecked, userID: userID, amount: ingredientAmount)
+        
+        // Act
+        let ingredientDict = ingredient.toDictionary()
+        
+        // Assert
+        XCTAssertEqual(ingredientDict["name"] as? String, ingredientName)
+        XCTAssertEqual(ingredientDict["amount"] as? String, ingredientAmount)
+        XCTAssertEqual(ingredientDict["isChecked"] as? Bool, isChecked)
+        XCTAssertEqual(ingredientDict["userID"] as? String, userID.uuidString)
+        XCTAssertNotNil(ingredientDict["id"] as? String) // Check that the UUID is set
+    }
+    
+    func testIngredientCategoryTitles() {
+        // Arrange
+        let expectedTitles = [
+            "Vegetables & Greens",
+            "Meats",
+            "Dairy & Eggs",
+            "Rices, Grains & Beans"
+        ]
+        
+        // Act
+        let titles = IngredientCategory.allCases.map { $0.title }
+        
+        // Assert
+        XCTAssertEqual(titles, expectedTitles)
+    }
+}

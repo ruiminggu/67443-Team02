@@ -35,41 +35,42 @@ struct ProfileView: View {
                 .font(.headline)
                 .foregroundColor(.orange)
 
-            // Liked Recipes Section
-            VStack {
-                Button(action: {
-                    showLikedRecipes = true
-                }) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Liked Recipes")
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.orange)
+          // Liked Recipes Section
+          VStack {
+              Button(action: {
+                  showLikedRecipes = true
+              }) {
+                  HStack {
+                      VStack(alignment: .leading, spacing: 8) {
+                          Text("Liked Recipes")
+                              .font(.title3)
+                              .fontWeight(.semibold)
+                              .foregroundColor(.orange)
 
-                            Text("View your liked recipes here.")
-                                .font(.body)
-                                .foregroundColor(.primary)
-                                .multilineTextAlignment(.leading)
-                        }
-                        Spacer() // Push the chevron to the right
-                        Image(systemName: "chevron.right")
-                            .font(.title2)
-                            .foregroundColor(.orange)
-                    }
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(Color.orange.opacity(0.1))
-                    )
-                }
-                .buttonStyle(PlainButtonStyle()) // To remove button styling
-            }
-            .frame(maxWidth: .infinity, minHeight: 160)
-            .padding(.horizontal)
-            .sheet(isPresented: $showLikedRecipes) {
-                LikedRecipesView(recipes: viewModel.likedRecipes) // Pass the updated recipes array
-            }
+                          Text("View your liked recipes here.")
+                              .font(.body)
+                              .foregroundColor(.primary)
+                              .multilineTextAlignment(.leading)
+                      }
+                      Spacer()
+                      Image(systemName: "chevron.right")
+                          .font(.title2)
+                          .foregroundColor(.orange)
+                  }
+                  .padding()
+                  .background(
+                      RoundedRectangle(cornerRadius: 15)
+                          .fill(Color.orange.opacity(0.1))
+                  )
+              }
+              .buttonStyle(PlainButtonStyle())
+          }
+          .frame(maxWidth: .infinity, minHeight: 160)
+          .padding(.horizontal)
+          .sheet(isPresented: $showLikedRecipes) {
+              LikedRecipesView(viewModel: viewModel) // Pass the viewModel
+          }
+
 
             Spacer()
         }

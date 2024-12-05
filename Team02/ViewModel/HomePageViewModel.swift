@@ -21,7 +21,7 @@ class HomePageViewModel: ObservableObject {
 
       print("📱 Fetching user with UUID: \(userUUID)")
 
-      databaseRef.child("users").child(userUUID).observeSingleEvent(of: .value) { snapshot in
+      databaseRef.child("users").child(userUUID).observe(.value) { snapshot in
           if let userData = snapshot.value as? [String: Any],
              let user = User(dictionary: userData) {
               DispatchQueue.main.async {
@@ -37,29 +37,31 @@ class HomePageViewModel: ObservableObject {
   }
 
 
-    private func fetchUserEvents(eventIDs: [String]) {
-        var fetchedEvents: [Event] = []
-        
-        let dispatchGroup = DispatchGroup()
-        
-        for eventID in eventIDs {
-            dispatchGroup.enter()
-            
-            databaseRef.child("events").child(eventID).observeSingleEvent(of: .value) { snapshot, _ in
-                if let eventData = snapshot.value as? [String: Any],
-                   let event = Event(dictionary: eventData) {
-                    DispatchQueue.main.async {
-                        fetchedEvents.append(event)
-                    }
-                }
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            // Update upcoming events
-            self.upcomingEvents = fetchedEvents.filter { $0.date > Date() }
-            print("Updated upcomingEvents: \(self.upcomingEvents.count); Updated pastEvents: \((fetchedEvents.filter { $0.date <= Date() }).count)")
-        }
-    }
+  private func fetchUserEvents(eventIDs: [String]) {
+      var fetchedEvents: [Event] = []
+      let dispatchGroup = DispatchGroup()
+      
+      for eventID in eventIDs {
+          dispatchGroup.enter()
+          
+          databaseRef.child("events").child(eventID).observe(.value) { snapshot in
+              if let eventData = snapshot.value as? [String: Any],
+                 let event = Event(dictionary: eventData) {
+                  DispatchQueue.main.async {
+                      if !fetchedEvents.contains(where: { $0.id == event.id }) {
+                          fetchedEvents.append(event)
+                      }
+                  }
+              }
+              dispatchGroup.leave()
+          }
+      }
+      
+      dispatchGroup.notify(queue: .main) {
+          // Filter and update upcoming events dynamically
+          self.upcomingEvents = fetchedEvents.filter { $0.date > Date() }
+          print("Updated upcomingEvents: \(self.upcomingEvents.count); Updated pastEvents: \((fetchedEvents.filter { $0.date <= Date() }).count)")
+      }
+  }
+
 }
