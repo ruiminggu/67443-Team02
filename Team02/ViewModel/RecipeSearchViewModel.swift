@@ -81,9 +81,10 @@ class RecipeSearchViewModel: ObservableObject {
               
               let ingredients = recipeDetail.extendedIngredients.map { ingredient in
                 Ingredient(
+                  id: UUID().uuidString,
                   name: ingredient.name,
                   isChecked: false,
-                  userID: UUID(),
+                  userID: UUID().uuidString,
                   amount: "\(ingredient.measures.us.amount) \(ingredient.measures.us.unitShort)"
                 )
               }
@@ -176,7 +177,7 @@ class RecipeSearchViewModel: ObservableObject {
     print("📱 Adding recipe \(recipe.title) to event \(eventID)")
     isLoading = true
         
-    databaseRef.child("events").child(eventID).child("recipes").observeSingleEvent(of: .value) { [weak self] snapshot in
+    databaseRef.child("events").child(eventID).child("recipes").observeSingleEvent(of: .value) { [weak self] snapshot, _ in
       guard let self = self else { return }
       
       let recipes = snapshot.value as? [[String: Any]] ?? []
@@ -217,7 +218,7 @@ class RecipeSearchViewModel: ObservableObject {
           return Ingredient(
             name: apiIngredient.name,
             isChecked: false,
-            userID: UUID(),
+            userID: UUID().uuidString,
             amount: "\(apiIngredient.measures.us.amount) \(apiIngredient.measures.us.unitShort)"
           )
         }

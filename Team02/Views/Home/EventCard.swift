@@ -38,7 +38,7 @@ struct EventCard: View {
                     .font(.subheadline)
                     .foregroundColor(.white)
 
-                let filteredIngredients = event.assignedIngredientsList.filter { $0.userID == userID }
+              let filteredIngredients = event.assignedIngredientsList.filter { $0.userID == userID.uuidString }
                 ForEach(0..<filteredIngredients.count, id: \.self) { index in
                     if index % 2 == 0 {
                         HStack(spacing: 16) {

@@ -133,6 +133,11 @@ class EventDetailViewModel: ObservableObject {
       }
   
   func updateIngredientAssignment(eventId: String, ingredientId: String, assignedUserId: String) {
+        print("Updating ingredient assignment in Firebase")
+        print("Event ID: \(eventId)")
+        print("Ingredient ID: \(ingredientId)")
+        print("Assigned User ID: \(assignedUserId)")
+    
       let eventRef = databaseRef.child("events").child(eventId)
       
       eventRef.child("assignedIngredientsList").observeSingleEvent(of: .value) { [weak self] snapshot in
