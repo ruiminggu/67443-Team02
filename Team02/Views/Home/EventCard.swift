@@ -1,4 +1,5 @@
 import SwiftUI
+import FirebaseDatabase
 
 struct CheckboxToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -99,9 +100,61 @@ struct EventCard: View {
         .clipped() // Enforces the frame size
     }
 
-    private func toggleIngredient(at index: Int, newValue: Bool, in ingredients: [Ingredient]) {
-        if let ingredientIndex = event.assignedIngredientsList.firstIndex(of: ingredients[index]) {
-            event.assignedIngredientsList[ingredientIndex].isChecked = newValue
-        }
-    }
+  private func toggleIngredient(at index: Int, newValue: Bool, in ingredients: [Ingredient]) {
+      if let ingredientIndex = event.assignedIngredientsList.firstIndex(of: ingredients[index]) {
+          // Update local state
+          event.assignedIngredientsList[ingredientIndex].isChecked = newValue
+
+          // Update Firebase
+          let ingredient = event.assignedIngredientsList[ingredientIndex]
+          let databaseRef = Database.database().reference()
+          let eventRef = databaseRef.child("events").child(event.id.uuidString)
+          eventRef.child("assignedIngredientsList").observeSingleEvent(of: .value) { snapshot in
+              if var ingredientsList = snapshot.value as? [[String: Any]] {
+                  if let ingredientIndex = ingredientsList.firstIndex(where: { $0["id"] as? String == ingredient.id }) {
+                      ingredientsList[ingredientIndex]["isChecked"] = newValue
+                      eventRef.child("assignedIngredientsList").setValue(ingredientsList) { error, _ in
+                          if let error = error {
+                              print("❌ Error updating ingredient in Firebase: \(error.localizedDescription)")
+                          } else {
+                              print("✅ Ingredient updated successfully in Firebase")
+                              
+                              // Refresh local data after Firebase update
+                              fetchUpdatedIngredients()
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+  private func fetchUpdatedIngredients() {
+      let databaseRef = Database.database().reference()
+      let eventRef = databaseRef.child("events").child(event.id.uuidString)
+      
+      eventRef.child("assignedIngredientsList").observe(.value) { snapshot in
+          if let ingredientsList = snapshot.value as? [[String: Any]] {
+              let updatedIngredients = ingredientsList.compactMap { ingredientDict -> Ingredient? in
+                  guard
+                      let id = ingredientDict["id"] as? String,
+                      let name = ingredientDict["name"] as? String,
+                      let amount = ingredientDict["amount"] as? String,
+                      let isChecked = ingredientDict["isChecked"] as? Bool,
+                      let userID = ingredientDict["userID"] as? String
+                  else {
+                      return nil
+                  }
+                  return Ingredient(id: id, name: name, isChecked: isChecked, userID: userID, amount: amount)
+              }
+              
+              DispatchQueue.main.async {
+                  self.event.assignedIngredientsList = updatedIngredients
+                  print("✅ Assigned ingredients list updated in real-time")
+              }
+          }
+      }
+  }
+  
+
 }
