@@ -11,216 +11,132 @@ import FirebaseAuth
 
 class CostSplitViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
-    @Published var allUsers: [User] = []
-    @Published var allEvents: [Event] = []
-    @Published var loggedInUserID: String?
+    @Published var loggedInUserID: String? // Firebase UID as String
+    @Published var loggedInUserUUID: UUID? // Optional UUID for compatibility if needed
 
     private let db = Firestore.firestore()
 
-    // Initialize and fetch logged-in user ID
+    // MARK: Initialization
     init() {
         fetchLoggedInUserID()
     }
 
-    // Fetch the logged-in user's ID from Firebase Authentication
+    // MARK: Fetch Logged-In User ID
     private func fetchLoggedInUserID() {
         if let currentUser = Auth.auth().currentUser {
-            loggedInUserID = currentUser.uid
+            loggedInUserID = currentUser.uid // Use Firebase UID directly
+            loggedInUserUUID = UUID(uuidString: currentUser.uid) // Try to convert to UUID, fallback if needed
             print("Logged-in user ID: \(loggedInUserID ?? "Unknown")")
+            print("Logged-in user UUID: \(loggedInUserUUID?.uuidString ?? "Generated UUID")")
         } else {
             print("No user is currently logged in.")
         }
     }
 
-    // Calculate total owed to you
+    // MARK: Calculate "You Are Owed"
     var totalOwedToYou: Float {
-        transactions.filter { $0.payee.id.uuidString == loggedInUserID }
-            .reduce(0) { $0 + $1.amount }
+        guard let loggedInUserID = loggedInUserID else {
+            print("⚠️ Logged-in user ID is nil")
+            return 0.0
+        }
+        print("🔍 Calculating total owed to you for logged-in user ID: \(loggedInUserID)")
+
+        let owedTransactions = transactions.filter {
+            $0.payer.id.uuidString == loggedInUserID // Transactions added by the user
+        }
+
+        print("Transactions where logged-in user is the payer: \(owedTransactions)")
+        return owedTransactions.reduce(0) { $0 + $1.amount }
     }
 
-    // Calculate total you owe
+    // MARK: Calculate "You Owe"
     var totalYouOwe: Float {
-        transactions.filter { $0.payer.id.uuidString == loggedInUserID }
+        guard let loggedInUserID = loggedInUserID else {
+            print("⚠️ Logged-in user ID is nil")
+            return 0.0
+        }
+        print("🔍 Calculating total you owe for logged-in user ID: \(loggedInUserID)")
+
+        return transactions
+            .filter { transaction in
+                let isUserInvited = transaction.event.invitedFriends.contains { $0 == loggedInUserID } // Check if the user is part of the event
+                let isOtherPayer = transaction.payer.id.uuidString != loggedInUserID // Someone else added the cost
+
+                print("📝 Transaction ID: \(transaction.id)")
+                print("   Payer ID: \(transaction.payer.id.uuidString)")
+                print("   Logged-in User Invited: \(isUserInvited)")
+                print("   Is Other Payer: \(isOtherPayer)")
+
+                return isUserInvited && isOtherPayer
+            }
             .reduce(0) { $0 + $1.amount }
     }
 
-    // Calculate total balance
+    // MARK: Calculate Total Balance
     var totalBalance: Float {
         totalOwedToYou - totalYouOwe
     }
 
-    // Fetch transactions involving the logged-in user
-  func fetchTransactions() {
-      guard let loggedInUserID = loggedInUserID else {
-          print("Cannot fetch transactions. No logged-in user.")
-          return
-      }
-
-      db.collection("transactions")
-          .whereField("payer.id", isEqualTo: loggedInUserID)
-          .getDocuments { [weak self] snapshot, error in
-              guard let self = self else { return }
-
-              if let error = error {
-                  print("Error fetching transactions as payer: \(error.localizedDescription)")
-                  return
-              }
-
-              let payerTransactions = snapshot?.documents.compactMap { self.mapTransaction($0.data()) } ?? []
-
-              db.collection("transactions")
-                  .whereField("payee.id", isEqualTo: loggedInUserID)
-                  .getDocuments { [weak self] payeeSnapshot, payeeError in
-                      guard let self = self else { return }
-
-                      if let payeeError = payeeError {
-                          print("Error fetching transactions as payee: \(payeeError.localizedDescription)")
-                          return
-                      }
-
-                      let payeeTransactions = payeeSnapshot?.documents.compactMap { self.mapTransaction($0.data()) } ?? []
-
-                      DispatchQueue.main.async {
-                          self.transactions = payerTransactions + payeeTransactions
-                          self.objectWillChange.send()
-                      }
-                  }
-          }
-  }
-
-
-
-    // Fetch users from Firebase
-    func fetchUsers() {
-        db.collection("users").getDocuments { snapshot, error in
-            if let error = error {
-                print("Error fetching users: \(error.localizedDescription)")
-                return
-            }
-
-            guard let documents = snapshot?.documents else {
-                print("No users found")
-                return
-            }
-
-            self.allUsers = documents.compactMap { document -> User? in
-                let data = document.data()
-                guard
-                    let id = UUID(uuidString: data["id"] as? String ?? ""),
-                    let fullName = data["fullName"] as? String,
-                    let image = data["image"] as? String,
-                    let email = data["email"] as? String
-                else {
-                    return nil
-                }
-                return User(id: id, fullName: fullName, image: image, email: email, password: "", events: [])
-            }
-        }
-    }
-
-    // Fetch events involving the logged-in user
-    func fetchEvents() {
+    // MARK: Fetch Transactions
+    func fetchTransactions() {
         guard let loggedInUserID = loggedInUserID else {
-            print("Cannot fetch events. No logged-in user.")
+            print("Cannot fetch transactions. No logged-in user.")
             return
         }
 
-        db.collection("events")
-            .whereField("invitedFriends", arrayContains: loggedInUserID)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching events: \(error.localizedDescription)")
-                    return
-                }
+        print("Fetching transactions for user ID: \(loggedInUserID)")
 
-                guard let documents = snapshot?.documents else {
-                    print("No events found")
-                    return
-                }
-
-                self.allEvents = documents.compactMap { document -> Event? in
-                    let data = document.data()
-                    guard
-                        let id = UUID(uuidString: data["id"] as? String ?? ""),
-                        let eventName = data["eventName"] as? String,
-                        let location = data["location"] as? String,
-                        let totalCost = data["totalCost"] as? Float
-                    else {
-                        return nil
-                    }
-                    return Event(
-                        id: id,
-                        invitedFriends: [],
-                        recipes: [],
-                        date: Date(),
-                        startTime: Date(),
-                        endTime: Date(),
-                        location: location,
-                        eventName: eventName,
-                        qrCode: "",
-                        costs: [],
-                        totalCost: totalCost,
-                        assignedIngredientsList: []
-                    )
-                }
+        db.collection("transactions").getDocuments { [weak self] snapshot, error in
+            if let error = error {
+                print("Error fetching transactions: \(error.localizedDescription)")
+            } else {
+                self?.transactions = snapshot?.documents.compactMap { self?.mapTransaction($0.data()) } ?? []
+                print("Fetched transactions: \(self?.transactions.count ?? 0)")
             }
+        }
     }
 
-  func addTransaction(_ transaction: Transaction) {
-      guard let loggedInUserID = loggedInUserID else {
-          print("Cannot add transaction. No logged-in user.")
-          return
-      }
+    // MARK: Add Transaction
+    func addTransaction(_ transaction: Transaction) {
+        guard let loggedInUserID = loggedInUserID else {
+            print("Cannot add transaction. No logged-in user.")
+            return
+        }
 
-      print("Adding transaction for user ID: \(loggedInUserID)")
+        print("Adding transaction for user ID: \(loggedInUserID)")
 
-      let data: [String: Any] = [
-          "payer": [
-              "id": loggedInUserID,
-              "fullName": "Self",
-              "image": "",
-              "email": ""
-          ],
-          "payee": [
-              "id": transaction.payee.id.uuidString,
-              "fullName": transaction.payee.fullName,
-              "image": transaction.payee.image,
-              "email": transaction.payee.email
-          ],
-          "item": transaction.item,
-          "amount": transaction.amount,
-          "event": [
-              "id": transaction.event.id.uuidString,
-              "eventName": transaction.event.eventName
-          ]
-      ]
+        let data: [String: Any] = [
+            "payer": [
+                "id": loggedInUserID,
+                "fullName": "Self", // Placeholder, replace with actual full name if available
+                "image": "",
+                "email": ""
+            ],
+            "payee": [
+                "id": transaction.payee.id.uuidString,
+                "fullName": transaction.payee.fullName,
+                "image": transaction.payee.image,
+                "email": transaction.payee.email
+            ],
+            "item": transaction.item,
+            "amount": transaction.amount,
+            "event": [
+                "id": transaction.event.id.uuidString,
+                "eventName": transaction.event.eventName
+            ]
+        ]
 
-      // Add transaction to Firestore
-      db.collection("transactions").addDocument(data: data) { [weak self] error in
-          guard let self = self else { return }
+        db.collection("transactions").addDocument(data: data) { error in
+            if let error = error {
+                print("Error adding transaction: \(error.localizedDescription)")
+            } else {
+                print("Transaction added successfully!")
+                self.fetchTransactions()
+            }
+        }
+    }
 
-          if let error = error {
-              print("Error adding transaction: \(error.localizedDescription)")
-          } else {
-              print("Transaction added successfully!")
-              
-              // Immediately add the transaction locally
-              DispatchQueue.main.async {
-                  self.transactions.append(transaction)
-                  self.objectWillChange.send()
-              }
-
-              // Fetch transactions to ensure data consistency
-              self.fetchTransactions()
-          }
-      }
-  }
-
-
-
-
-
-    // Map a transaction document to a Transaction object
+    // MARK: Map Firestore Document to Transaction Object
     private func mapTransaction(_ data: [String: Any]) -> Transaction? {
         guard
             let payerData = data["payer"] as? [String: Any],

@@ -4,33 +4,30 @@ struct CostSplitView: View {
     @StateObject private var viewModel = CostSplitViewModel()
     @State private var selectedTab: String = "Friends" // "Friends" or "Events"
     @State private var showAddCostView = false
-    @State private var refresh = false
-
 
     var body: some View {
         VStack(spacing: 16) {
             headerSection
             summarySection
-          // Debugging: Show transaction count
-                  Text("Transactions count: \(viewModel.transactions.count)")
-                      .font(.caption)
-                      .foregroundColor(.gray)
+
+            // Debugging: Show transaction count
+            Text("Transactions count: \(viewModel.transactions.count)")
+                .font(.caption)
+                .foregroundColor(.gray)
+
             toggleSection
             costsListSection
         }
         .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $showAddCostView) {
-          AddCostView(costSplitViewModel: viewModel,eventViewModel: EventViewModel())
+            AddCostView(costSplitViewModel: viewModel, eventViewModel: EventViewModel())
         }
         .onAppear {
             viewModel.fetchTransactions()
-            viewModel.fetchUsers()
-            viewModel.fetchEvents()
         }
         .onChange(of: viewModel.transactions) { newTransactions in
             print("Transactions updated in view: \(newTransactions)")
         }
-
     }
 
     // MARK: Header Section
@@ -61,9 +58,9 @@ struct CostSplitView: View {
     // MARK: Summary Section
     private var summarySection: some View {
         HStack(spacing: 16) {
-            SummaryCard(title: "You are owed", amount: totalOwedToYou())
-            SummaryCard(title: "You owe", amount: totalYouOwe())
-            SummaryCard(title: "Total Balance", amount: totalBalance())
+            SummaryCard(title: "You are owed", amount: viewModel.totalOwedToYou)
+            SummaryCard(title: "You owe", amount: viewModel.totalYouOwe)
+            SummaryCard(title: "Total Balance", amount: viewModel.totalBalance)
         }
         .padding(.horizontal)
     }
@@ -138,30 +135,12 @@ struct CostSplitView: View {
 
     // MARK: Helper Methods
     private func groupedByFriends() -> [String: [Transaction]] {
-        Dictionary(grouping: viewModel.transactions, by: { $0.payee.fullName })
+        // Group by payer's fullName instead of payee
+        Dictionary(grouping: viewModel.transactions, by: { $0.payer.fullName })
     }
 
     private func groupedByEvents() -> [String: [Transaction]] {
         Dictionary(grouping: viewModel.transactions, by: { $0.event.eventName })
-    }
-
-  private func totalOwedToYou() -> Float {
-      guard let loggedInUserID = viewModel.loggedInUserID else { return 0.0 }
-      return viewModel.transactions
-          .filter { $0.payee.id.uuidString == loggedInUserID }
-          .reduce(0) { $0 + $1.amount }
-  }
-
-  private func totalYouOwe() -> Float {
-      guard let loggedInUserID = viewModel.loggedInUserID else { return 0.0 }
-      return viewModel.transactions
-          .filter { $0.payer.id.uuidString == loggedInUserID }
-          .reduce(0) { $0 + $1.amount }
-  }
-
-
-    private func totalBalance() -> Float {
-        totalOwedToYou() - totalYouOwe()
     }
 
     private func friendHeaderView(for friend: String) -> some View {

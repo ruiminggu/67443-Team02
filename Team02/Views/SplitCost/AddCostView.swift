@@ -1,18 +1,10 @@
-//
-//  AddCostView.swift
-//  Team02
-//
-//  Created by Leila Lei
-//
-
-
 import SwiftUI
 import FirebaseAuth
 
 struct AddCostView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var costSplitViewModel: CostSplitViewModel
-    @ObservedObject var eventViewModel: EventViewModel // Use EventViewModel
+    @ObservedObject var eventViewModel: EventViewModel
 
     @State private var itemName: String = ""
     @State private var costAmount: String = ""
@@ -21,24 +13,19 @@ struct AddCostView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Header
                 Text("Add Costs to Event")
                     .font(.largeTitle)
                     .bold()
                     .padding(.top, 20)
 
-                // Input Fields
                 VStack(alignment: .leading, spacing: 10) {
-                    // Item Name
-                    TextField("Item Name (e.g., Dinner, Groceries)", text: $itemName)
+                    TextField("Item Name", text: $itemName)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    // Cost Amount
-                    TextField("Cost Amount (e.g., 20.99)", text: $costAmount)
+                    TextField("Cost Amount", text: $costAmount)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
 
-                    // Select Event
                     Picker("Event", selection: $selectedEvent) {
                         ForEach(eventViewModel.events, id: \.id) { event in
                             Text(event.eventName).tag(event as Event?)
@@ -46,20 +33,14 @@ struct AddCostView: View {
                     }
                     .pickerStyle(MenuPickerStyle())
                     .onAppear {
-                      // Set a default selected event if it's nil
-                      if selectedEvent == nil, let firstEvent = eventViewModel.events.first {
-                        selectedEvent = firstEvent
-                      }
+                        if selectedEvent == nil, let firstEvent = eventViewModel.events.first {
+                            selectedEvent = firstEvent
+                        }
                     }
-                  
                 }
                 .padding()
 
-                // Finish Button
-                Button(action: {
-                    saveCost()
-                   
-                }) {
+                Button(action: saveCost) {
                     Text("Finish")
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -79,35 +60,43 @@ struct AddCostView: View {
         }
     }
 
-    // MARK: Helper Methods
     private func saveCost() {
-        print("Event: \(selectedEvent?.eventName ?? "nil")")
+        print("Selected Event: \(selectedEvent?.eventName ?? "None")")
         print("Cost Amount: \(costAmount)")
         print("Item Name: \(itemName)")
 
         guard let event = selectedEvent,
               let amount = Float(costAmount),
-              !itemName.isEmpty else {
-            print("Validation failed: Missing event, costAmount, or itemName")
+              !itemName.isEmpty,
+              let loggedInUserID = costSplitViewModel.loggedInUserID else {
+            print("Validation failed. Missing fields or user ID.")
             return
         }
-      
-      guard let loggedInUserID = costSplitViewModel.loggedInUserID else {
-              print("No logged-in user found.")
-              return
-          }
 
+        // Updated payer creation logic
+        let transaction = Transaction(
+            payer: User(
+                id: UUID(uuidString: loggedInUserID) ?? UUID(), // Use consistent logged-in user ID
+                fullName: "Self", // Placeholder, replace with actual user's name if available
+                image: "", // Placeholder for user's image
+                email: "", // Placeholder for user's email
+                password: "", // Default or placeholder value
+                events: [] // Default value for events
+            ),
+            payee: User( // Updated payee to represent the "Shared" placeholder user
+                id: UUID(), // Unique identifier for "Shared" transactions
+                fullName: "Shared", // Placeholder for shared costs
+                image: "",
+                email: "",
+                password: "",
+                events: []
+            ),
+            item: itemName,
+            amount: amount,
+            event: event
+        )
 
-      
-      let transaction = Transaction(
-          payer: User(id: UUID(uuidString: loggedInUserID) ?? UUID(), fullName: "Self", image: "", email: "", password: "", events: []),
-          payee: User(id: UUID(), fullName: "Shared", image: "", email: "", password: "", events: []),
-          item: itemName,
-          amount: amount,
-          event: event
-      )
-
-
+        print("Saving transaction: \(transaction)")
         costSplitViewModel.addTransaction(transaction)
         presentationMode.wrappedValue.dismiss()
     }
