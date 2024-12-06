@@ -14,7 +14,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 }
 
 struct EventCard: View {
-    var event: Event // Change @Binding var to var
+    var event: Event
     var backgroundColor: Color
     let userID: UUID
 
@@ -30,41 +30,50 @@ struct EventCard: View {
                     .font(.subheadline)
                     .foregroundColor(.white)
             }
-            .padding(.bottom, 5)
-            
-            // TO-DO List section
+
             VStack(alignment: .leading) {
                 Text("TO-DO:")
                     .font(.subheadline)
                     .foregroundColor(.white)
 
-              let filteredIngredients = event.assignedIngredientsList.filter { $0.userID == userID.uuidString }
-                ForEach(0..<filteredIngredients.count, id: \.self) { index in
+                let filteredIngredients = event.assignedIngredientsList.filter { $0.userID == userID.uuidString }
+                let displayedIngredients = Array(filteredIngredients.prefix(6)) // Max 6 items for 3 rows
+
+                // Display ingredients in rows
+                ForEach(0..<displayedIngredients.count, id: \.self) { index in
                     if index % 2 == 0 {
                         HStack(spacing: 16) {
-                            Toggle(isOn: .constant(filteredIngredients[index].isChecked)) {
-                                Text(filteredIngredients[index].name)
+                            Toggle(isOn: .constant(displayedIngredients[index].isChecked)) {
+                                Text(displayedIngredients[index].name)
                                     .foregroundColor(.white)
+                                    .lineLimit(1)
                             }
                             .toggleStyle(CheckboxToggleStyle())
-                            
-                            if index + 1 < filteredIngredients.count {
-                                Toggle(isOn: .constant(filteredIngredients[index + 1].isChecked)) {
-                                    Text(filteredIngredients[index + 1].name)
+
+                            if index + 1 < displayedIngredients.count {
+                                Toggle(isOn: .constant(displayedIngredients[index + 1].isChecked)) {
+                                    Text(displayedIngredients[index + 1].name)
                                         .foregroundColor(.white)
+                                        .lineLimit(1)
                                 }
                                 .toggleStyle(CheckboxToggleStyle())
                             }
                         }
                     }
                 }
+
+                if filteredIngredients.count > 6 {
+                    Text("... more")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                }
             }
-            .padding(.top, 5)
         }
         .padding()
         .background(backgroundColor)
         .cornerRadius(15)
         .shadow(radius: 2)
-        .frame(width: 300)
+        .frame(width: 300, height: 150) // Fixed size
+        .clipped() // Enforces the frame size
     }
 }
