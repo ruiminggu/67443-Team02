@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct IngredientsSectionView: View {
+    @StateObject private var viewModel = EventDetailViewModel()
     @State private var showAddIngredients = false
+    @State private var assignmentsMap: [UUID: String] = [:]
     let event: Event
     
     var body: some View {
@@ -20,40 +22,101 @@ struct IngredientsSectionView: View {
             
             // Ingredients List
             if event.assignedIngredientsList.isEmpty {
-//                Text("No ingredients added yet")
-//                    .foregroundColor(.gray)
-//                    .padding(.vertical)
+                // Empty state handling
             } else {
                 ForEach(event.assignedIngredientsList) { ingredient in
-                    IngredientRow(ingredient: ingredient)
+                    IngredientAssignmentRow(
+                        ingredient: ingredient,
+                        attendees: viewModel.attendees,
+                        selectedUserId: Binding(
+                            get: { assignmentsMap[ingredient.id] ?? ingredient.userID.uuidString },
+                            set: { newValue in
+                                assignmentsMap[ingredient.id] = newValue
+                                viewModel.updateIngredientAssignment(
+                                    eventId: event.id.uuidString,
+                                    ingredientId: ingredient.id.uuidString,
+                                    assignedUserId: newValue ?? ingredient.userID.uuidString
+                                )
+                            }
+                        )
+                    )
                 }
             }
         }
-        .padding(.horizontal)
-        .sheet(isPresented: $showAddIngredients) {
-            AddIngredientsView(
-                eventID: event.id.uuidString,
-                userID: UUID() // Replace with actual current user ID if needed
-            )
-        }
-      HStack {
-          Spacer()
-          
-          Button(action: {
-              showAddIngredients = true
-          }) {
-              ZStack {
-                Circle()
-                    .fill(Color.orange.opacity(0.2))
-                    .frame(width: 60, height: 60)
-                
-                Image(systemName: "plus")
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundColor(.orange)
+        .onAppear {
+            print("IngredientsSectionView appeared")
+            print("Invited friends count: \(event.invitedFriends.count)")
+            viewModel.fetchAttendees(invitedFriends: event.invitedFriends)
+            event.assignedIngredientsList.forEach { ingredient in
+                print("Initializing assignment for: \(ingredient.name)")
+                assignmentsMap[ingredient.id] = ingredient.userID.uuidString
             }
-          }
-        Spacer()
-      }
+        }
+    }
+}
+
+struct Checkbox: View {
+    var isChecked: Bool
+    
+    var body: some View {
+        Image(systemName: isChecked ? "checkmark.square.fill" : "square")
+            .foregroundColor(isChecked ? .orange : .gray)
+    }
+}
+
+struct IngredientAssignmentRow: View {
+    let ingredient: Ingredient
+    let attendees: [User]
+    @Binding var selectedUserId: String?
+    
+    var body: some View {
+        HStack {
+            Image(systemName: ingredient.isChecked ? "checkmark.square.fill" : "square")
+                .foregroundColor(ingredient.isChecked ? .orange : .gray)
+            Text(ingredient.name)
+            Spacer()
+            Text(ingredient.amount)
+            
+            Menu {
+                ForEach(attendees) { user in
+                    Button(action: {
+                        print("Selected user: \(user.fullName)")
+                        selectedUserId = user.id.uuidString
+                    }) {
+                        HStack {
+                            Text(user.fullName)
+                            if selectedUserId == user.id.uuidString {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                HStack {
+                    if let assignedUser = attendees.first(where: { $0.id.uuidString == selectedUserId }) {
+                        Text(assignedUser.fullName)
+                            .foregroundColor(.gray)
+                        Image(assignedUser.image)
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .clipShape(Circle())
+                    } else {
+                        Image(systemName: "person.crop.circle.badge.plus")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 24))
+                    }
+                }
+                .padding(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
+            }
+        }
+        .padding()
+        .onAppear {
+            print("IngredientAssignmentRow appeared")
+            print("Attendees count: \(attendees.count)")
+            print("Attendees: \(attendees.map { $0.fullName })")
+        }
     }
 }
 
@@ -86,24 +149,45 @@ struct IngredientRow: View {
 
 // Preview Provider
 struct IngredientsSectionView_Previews: PreviewProvider {
+    static var sampleUsers = [
+        User(
+            id: UUID(),
+            fullName: "John Doe",
+            image: "profile_pic",
+            email: "john@example.com",
+            password: "password",
+            events: [],
+            likedRecipes: []
+        ),
+        User(
+            id: UUID(),
+            fullName: "Jane Smith",
+            image: "profile_pic",
+            email: "jane@example.com",
+            password: "password",
+            events: [],
+            likedRecipes: []
+        )
+    ]
+    
     static var sampleIngredients = [
         Ingredient(
             name: "Tomatoes",
             isChecked: false,
-            userID: UUID(),
+            userID: sampleUsers[0].id,  // Assigned to John
             amount: "5.0"
         ),
         Ingredient(
             name: "Onions",
             isChecked: true,
-            userID: UUID(),
+            userID: sampleUsers[1].id,  // Assigned to Jane
             amount: "2.0"
         )
     ]
     
     static var sampleEvent = Event(
         id: UUID(),
-        invitedFriends: [],
+        invitedFriends: sampleUsers.map { $0.id.uuidString },
         recipes: [],
         date: Date(),
         startTime: Date(),
@@ -118,11 +202,16 @@ struct IngredientsSectionView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            // Preview with ingredients
+            // Preview with ingredients and assignments
             IngredientsSectionView(event: sampleEvent)
-                .previewDisplayName("With Ingredients")
+                .previewDisplayName("With Assignments")
+                .onAppear {
+                    // Simulate fetched attendees in the view model
+                    let viewModel = EventDetailViewModel()
+                    viewModel.attendees = sampleUsers
+                }
             
-            // Preview empty state
+            // Empty state preview
             IngredientsSectionView(
                 event: Event(
                     id: UUID(),
