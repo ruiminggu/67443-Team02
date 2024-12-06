@@ -8,13 +8,14 @@
 import Foundation
 
 struct Ingredient: Identifiable, Hashable, Equatable {
-    let id = UUID()
+    let id: String
     let name: String
     let amount: String
     var isChecked: Bool
-    let userID: UUID
+    let userID: String
   
-    init(name: String, isChecked: Bool, userID: UUID, amount: String) {
+  init(id: String = UUID().uuidString, name: String, isChecked: Bool, userID: String, amount: String) {
+        self.id = id
         self.name = name
         self.isChecked = isChecked
         self.userID = userID
@@ -30,10 +31,10 @@ struct Ingredient: Identifiable, Hashable, Equatable {
   
     func toDictionary() -> [String: Any] {
             return [
-                "id": id.uuidString,
+                "id": id,
                 "name": name,
                 "isChecked": isChecked,
-                "userID": userID.uuidString,
+                "userID": userID,
                 "amount": amount
             ]
         }

@@ -28,18 +28,19 @@ class AddIngredientsViewModel: ObservableObject {
         
         // Create new ingredient
         let ingredient = Ingredient(
+            id: UUID().uuidString,
             name: ingredientName,
             isChecked: false,
-            userID: userID,
+            userID: userID.uuidString,
             amount: amount
         )
         
         // Convert to dictionary for Firebase
         let ingredientDict: [String: Any] = [
-            "id": ingredient.id.uuidString,
+            "id": ingredient.id,
             "name": ingredient.name,
             "isChecked": ingredient.isChecked,
-            "userID": ingredient.userID.uuidString,
+            "userID": ingredient.userID,
             "amount": ingredient.amount
         ]
         
