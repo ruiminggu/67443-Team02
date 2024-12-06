@@ -24,6 +24,7 @@
 		465CF4DE2CFC37B7009E32E8 /* RecipeDetailNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465CF4DD2CFC37AC009E32E8 /* RecipeDetailNavigationView.swift */; };
 		465CF4E02CFD681A009E32E8 /* CustomRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465CF4DF2CFD6814009E32E8 /* CustomRecipe.swift */; };
 		465CF4E22CFD7914009E32E8 /* CustomRecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465CF4E12CFD7906009E32E8 /* CustomRecipeViewModel.swift */; };
+		465CF5232D028142009E32E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 465CF5222D028142009E32E8 /* GoogleService-Info.plist */; };
 		46970CE72CD9954F0057E4D3 /* EventDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE62CD9954F0057E4D3 /* EventDetailView.swift */; };
 		46970CE92CD9956C0057E4D3 /* EventHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */; };
 		46970CEB2CD995830057E4D3 /* MenuSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46970CEA2CD995830057E4D3 /* MenuSectionView.swift */; };
@@ -78,7 +79,6 @@
 		76FAC5432CD7479C00FE1DA7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 76FAC5422CD7479C00FE1DA7 /* FirebaseFirestore */; };
 		76FAC5452CD75AFD00FE1DA7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */; };
 		76FAC5472CD75CA900FE1DA7 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 76FAC5462CD75CA900FE1DA7 /* FirebaseDatabase */; };
-		76FAC54D2CD776BE00FE1DA7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */; };
 		76FD3BA22CDC7D3B002FDF77 /* IngredientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */; };
 		76FD3BA42CDC7E94002FDF77 /* RecipeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD3BA32CDC7E94002FDF77 /* RecipeTests.swift */; };
 /* End PBXBuildFile section */
@@ -112,6 +112,7 @@
 		465CF4DF2CFD6814009E32E8 /* CustomRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRecipe.swift; sourceTree = "<group>"; };
 		465CF4E12CFD7906009E32E8 /* CustomRecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRecipeViewModel.swift; sourceTree = "<group>"; };
 		465CF4E32CFD7AE7009E32E8 /* CreateCustomRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCustomRecipeView.swift; sourceTree = "<group>"; };
+		465CF5222D028142009E32E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		46970CE32CD97C2C0057E4D3 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
 		46970CE62CD9954F0057E4D3 /* EventDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailView.swift; sourceTree = "<group>"; };
 		46970CE82CD9956C0057E4D3 /* EventHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHeaderView.swift; sourceTree = "<group>"; };
@@ -160,7 +161,6 @@
 		76EBA4692CD08DF2002C9836 /* EventRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventRow.swift; sourceTree = "<group>"; };
 		76EBA46C2CD08FA3002C9836 /* profile_pic.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profile_pic.jpeg; sourceTree = "<group>"; };
 		76FAC5442CD75AFD00FE1DA7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		76FD3BA12CDC7D3B002FDF77 /* IngredientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientTests.swift; sourceTree = "<group>"; };
 		76FD3BA32CDC7E94002FDF77 /* RecipeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -297,7 +297,7 @@
 		765C491B2CC203DF003A9D8C /* Team02 */ = {
 			isa = PBXGroup;
 			children = (
-				76FAC54C2CD776BE00FE1DA7 /* GoogleService-Info.plist */,
+				465CF5222D028142009E32E8 /* GoogleService-Info.plist */,
 				76EBA45C2CD08AFB002C9836 /* ViewModel */,
 				76EBA44F2CD07BA2002C9836 /* Views */,
 				76EBA44E2CD07B9B002C9836 /* Models */,
@@ -491,8 +491,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				76EBA46D2CD08FA3002C9836 /* profile_pic.jpeg in Resources */,
+				465CF5232D028142009E32E8 /* GoogleService-Info.plist in Resources */,
 				2E78C8752CDDF48D0099231D /* sausage.png in Resources */,
-				76FAC54D2CD776BE00FE1DA7 /* GoogleService-Info.plist in Resources */,
 				2E78C8732CDDF46A0099231D /* grilledcheese.png in Resources */,
 				765C49242CC203E1003A9D8C /* Preview Assets.xcassets in Resources */,
 				765C49212CC203E1003A9D8C /* Assets.xcassets in Resources */,
@@ -718,10 +718,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = PXC7N5QS4B;
+				DEVELOPMENT_TEAM = R57H6A53SS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -734,8 +735,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = cmuis.Team2;
+				PRODUCT_BUNDLE_IDENTIFIER = cmuis.Team02;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -747,10 +749,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Team02/Preview Content\"";
-				DEVELOPMENT_TEAM = HMZSC3HX6Q;
+				DEVELOPMENT_TEAM = R57H6A53SS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -763,8 +766,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "cmuis.Team02-leila";
+				PRODUCT_BUNDLE_IDENTIFIER = cmuis.Team02;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
