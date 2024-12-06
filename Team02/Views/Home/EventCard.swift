@@ -14,7 +14,7 @@ struct CheckboxToggleStyle: ToggleStyle {
 }
 
 struct EventCard: View {
-    var event: Event
+    @State var event: Event // Make `event` mutable to reflect changes
     var backgroundColor: Color
     let userID: UUID
 
@@ -44,7 +44,12 @@ struct EventCard: View {
                     ForEach(0..<displayedIngredients.count, id: \.self) { index in
                         if index % 2 == 0 {
                             HStack(spacing: 16) {
-                                Toggle(isOn: .constant(displayedIngredients[index].isChecked)) {
+                                Toggle(isOn: Binding(
+                                    get: { displayedIngredients[index].isChecked },
+                                    set: { newValue in
+                                        toggleIngredient(at: index, newValue: newValue, in: filteredIngredients)
+                                    }
+                                )) {
                                     Text(displayedIngredients[index].name)
                                         .foregroundColor(.white)
                                         .lineLimit(1)
@@ -52,7 +57,12 @@ struct EventCard: View {
                                 .toggleStyle(CheckboxToggleStyle())
 
                                 if index + 1 < displayedIngredients.count {
-                                    Toggle(isOn: .constant(displayedIngredients[index + 1].isChecked)) {
+                                    Toggle(isOn: Binding(
+                                        get: { displayedIngredients[index + 1].isChecked },
+                                        set: { newValue in
+                                            toggleIngredient(at: index + 1, newValue: newValue, in: filteredIngredients)
+                                        }
+                                    )) {
                                         Text(displayedIngredients[index + 1].name)
                                             .foregroundColor(.white)
                                             .lineLimit(1)
@@ -87,5 +97,11 @@ struct EventCard: View {
         .shadow(radius: 2)
         .frame(width: 300, height: 150) // Fixed size for consistency
         .clipped() // Enforces the frame size
+    }
+
+    private func toggleIngredient(at index: Int, newValue: Bool, in ingredients: [Ingredient]) {
+        if let ingredientIndex = event.assignedIngredientsList.firstIndex(of: ingredients[index]) {
+            event.assignedIngredientsList[ingredientIndex].isChecked = newValue
+        }
     }
 }
