@@ -37,35 +37,47 @@ struct EventCard: View {
                     .foregroundColor(.white)
 
                 let filteredIngredients = event.assignedIngredientsList.filter { $0.userID == userID.uuidString }
-                let displayedIngredients = Array(filteredIngredients.prefix(6)) // Max 6 items for 3 rows
+                let displayedIngredients = Array(filteredIngredients.prefix(4)) // Max 4 items
 
-                // Display ingredients in rows
-                ForEach(0..<displayedIngredients.count, id: \.self) { index in
-                    if index % 2 == 0 {
-                        HStack(spacing: 16) {
-                            Toggle(isOn: .constant(displayedIngredients[index].isChecked)) {
-                                Text(displayedIngredients[index].name)
-                                    .foregroundColor(.white)
-                                    .lineLimit(1)
-                            }
-                            .toggleStyle(CheckboxToggleStyle())
-
-                            if index + 1 < displayedIngredients.count {
-                                Toggle(isOn: .constant(displayedIngredients[index + 1].isChecked)) {
-                                    Text(displayedIngredients[index + 1].name)
+                if !filteredIngredients.isEmpty {
+                    // Display ingredients in rows
+                    ForEach(0..<displayedIngredients.count, id: \.self) { index in
+                        if index % 2 == 0 {
+                            HStack(spacing: 16) {
+                                Toggle(isOn: .constant(displayedIngredients[index].isChecked)) {
+                                    Text(displayedIngredients[index].name)
                                         .foregroundColor(.white)
                                         .lineLimit(1)
                                 }
                                 .toggleStyle(CheckboxToggleStyle())
+
+                                if index + 1 < displayedIngredients.count {
+                                    Toggle(isOn: .constant(displayedIngredients[index + 1].isChecked)) {
+                                        Text(displayedIngredients[index + 1].name)
+                                            .foregroundColor(.white)
+                                            .lineLimit(1)
+                                    }
+                                    .toggleStyle(CheckboxToggleStyle())
+                                }
                             }
                         }
                     }
-                }
 
-                if filteredIngredients.count > 6 {
-                    Text("... more")
-                        .font(.caption)
+                    if filteredIngredients.count >= 4 {
+                        Text("... more")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                } else {
+                    // Placeholder for no ingredients
+                    Text("No ingredients assigned")
                         .foregroundColor(.white.opacity(0.8))
+                        .font(.caption)
+                        .padding(.top, 5)
+                    Text("")
+                        .foregroundColor(.white.opacity(0.8))
+                        .font(.caption)
+                        .padding(.top, 5)
                 }
             }
         }
@@ -73,7 +85,7 @@ struct EventCard: View {
         .background(backgroundColor)
         .cornerRadius(15)
         .shadow(radius: 2)
-        .frame(width: 300, height: 150) // Fixed size
+        .frame(width: 300, height: 150) // Fixed size for consistency
         .clipped() // Enforces the frame size
     }
 }
