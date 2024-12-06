@@ -184,55 +184,55 @@ struct RecipeDetailNavigationView: View {
     }
 }
 
-struct RecipeDetailNavigationView_Previews: PreviewProvider {
-    static var sampleRecipe = Recipe(
-        apiRecipe: APIRecipe(
-            id: 1,
-            title: "Sausage Fried Rice",
-            image: "https://example.com/image.jpg",
-            imageType: "jpg",
-            readyInMinutes: 30,
-            servings: 4
-        ),
-        ingredients: [
-            Ingredient(
-                name: "Cooked rice",
-                isChecked: false,
-                userID: UUID(),
-                amount: "2 cups"
-            ),
-            Ingredient(
-                name: "Sausage, sliced",
-                isChecked: false,
-                userID: UUID(),
-                amount: "2 pcs"
-            ),
-            Ingredient(
-                name: "Garlic, minced",
-                isChecked: false,
-                userID: UUID(),
-                amount: "2 cloves"
-            )
-        ],
-        instructions: "1. Cook the rice if not using leftover rice.\n2. Slice the sausages, mince the garlic.\n3. Heat oil in a pan and fry the ingredients."
-    )
-    
-    static var sampleEvent = Event(
-        recipes: [],
-        date: Date(),
-        startTime: Date(),
-        endTime: Date(),
-        location: "Home",
-        eventName: "Test Event",
-        qrCode: "",
-        costs: [],
-        totalCost: 0,
-        assignedIngredientsList: []
-    )
-    
-    static var previews: some View {
-        NavigationView {
-            RecipeDetailNavigationView(recipe: sampleRecipe, event: sampleEvent)
-        }
-    }
-}
+//struct RecipeDetailNavigationView_Previews: PreviewProvider {
+//    static var sampleRecipe = Recipe(
+//        apiRecipe: APIRecipe(
+//            id: 1,
+//            title: "Sausage Fried Rice",
+//            image: "https://example.com/image.jpg",
+//            imageType: "jpg",
+//            readyInMinutes: 30,
+//            servings: 4
+//        ),
+//        ingredients: [
+//            Ingredient(
+//                name: "Cooked rice",
+//                isChecked: false,
+//                userID: UUID(),
+//                amount: "2 cups"
+//            ),
+//            Ingredient(
+//                name: "Sausage, sliced",
+//                isChecked: false,
+//                userID: UUID(),
+//                amount: "2 pcs"
+//            ),
+//            Ingredient(
+//                name: "Garlic, minced",
+//                isChecked: false,
+//                userID: UUID(),
+//                amount: "2 cloves"
+//            )
+//        ],
+//        instructions: "1. Cook the rice if not using leftover rice.\n2. Slice the sausages, mince the garlic.\n3. Heat oil in a pan and fry the ingredients."
+//    )
+//    
+//    static var sampleEvent = Event(
+//        recipes: [],
+//        date: Date(),
+//        startTime: Date(),
+//        endTime: Date(),
+//        location: "Home",
+//        eventName: "Test Event",
+//        qrCode: "",
+//        costs: [],
+//        totalCost: 0,
+//        assignedIngredientsList: []
+//    )
+//    
+//    static var previews: some View {
+//        NavigationView {
+//            RecipeDetailNavigationView(recipe: sampleRecipe, event: sampleEvent)
+//        }
+//    }
+//}

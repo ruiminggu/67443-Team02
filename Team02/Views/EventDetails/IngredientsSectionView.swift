@@ -10,7 +10,7 @@ import SwiftUI
 struct IngredientsSectionView: View {
     @StateObject private var viewModel = EventDetailViewModel()
     @State private var showAddIngredients = false
-    @State private var assignmentsMap: [UUID: String] = [:]
+    @State private var assignmentsMap: [String: String] = [:]
     let event: Event
     
     var body: some View {
@@ -25,21 +25,21 @@ struct IngredientsSectionView: View {
                 // Empty state handling
             } else {
                 ForEach(event.assignedIngredientsList) { ingredient in
-                    IngredientAssignmentRow(
-                        ingredient: ingredient,
-                        attendees: viewModel.attendees,
-                        selectedUserId: Binding(
-                            get: { assignmentsMap[ingredient.id] ?? ingredient.userID.uuidString },
-                            set: { newValue in
-                                assignmentsMap[ingredient.id] = newValue
-                                viewModel.updateIngredientAssignment(
-                                    eventId: event.id.uuidString,
-                                    ingredientId: ingredient.id.uuidString,
-                                    assignedUserId: newValue ?? ingredient.userID.uuidString
-                                )
-                            }
-                        )
-                    )
+                  IngredientAssignmentRow(
+                      ingredient: ingredient,
+                      attendees: viewModel.attendees,
+                      selectedUserId: Binding(
+                          get: { assignmentsMap[ingredient.id] ?? ingredient.userID },
+                          set: { newValue in
+                              assignmentsMap[ingredient.id] = newValue
+                              viewModel.updateIngredientAssignment(
+                                  eventId: event.id.uuidString,
+                                  ingredientId: ingredient.id,
+                                  assignedUserId: newValue ?? ingredient.userID
+                              )
+                          }
+                      )
+                  )
                 }
             }
         }
@@ -49,7 +49,7 @@ struct IngredientsSectionView: View {
             viewModel.fetchAttendees(invitedFriends: event.invitedFriends)
             event.assignedIngredientsList.forEach { ingredient in
                 print("Initializing assignment for: \(ingredient.name)")
-                assignmentsMap[ingredient.id] = ingredient.userID.uuidString
+                assignmentsMap[ingredient.id] = ingredient.userID
             }
         }
     }
@@ -110,6 +110,12 @@ struct IngredientAssignmentRow: View {
                 .background(Color(.systemGray6))
                 .cornerRadius(8)
             }
+            .onAppear {
+                print("Ingredient in row:")
+                print("ID: \(ingredient.id)")
+                print("Name: \(ingredient.name)")
+                print("Current userID: \(ingredient.userID)")
+            }
         }
         .padding()
         .onAppear {
@@ -147,93 +153,95 @@ struct IngredientRow: View {
     }
 }
 
-// Preview Provider
-struct IngredientsSectionView_Previews: PreviewProvider {
-    static var sampleUsers = [
-        User(
-            id: UUID(),
-            fullName: "John Doe",
-            image: "profile_pic",
-            email: "john@example.com",
-            password: "password",
-            events: [],
-            likedRecipes: []
-        ),
-        User(
-            id: UUID(),
-            fullName: "Jane Smith",
-            image: "profile_pic",
-            email: "jane@example.com",
-            password: "password",
-            events: [],
-            likedRecipes: []
-        )
-    ]
-    
-    static var sampleIngredients = [
-        Ingredient(
-            name: "Tomatoes",
-            isChecked: false,
-            userID: sampleUsers[0].id,  // Assigned to John
-            amount: "5.0"
-        ),
-        Ingredient(
-            name: "Onions",
-            isChecked: true,
-            userID: sampleUsers[1].id,  // Assigned to Jane
-            amount: "2.0"
-        )
-    ]
-    
-    static var sampleEvent = Event(
-        id: UUID(),
-        invitedFriends: sampleUsers.map { $0.id.uuidString },
-        recipes: [],
-        date: Date(),
-        startTime: Date(),
-        endTime: Date(),
-        location: "Home",
-        eventName: "Sample Event",
-        qrCode: "",
-        costs: [],
-        totalCost: 0.0,
-        assignedIngredientsList: sampleIngredients
-    )
-    
-    static var previews: some View {
-        Group {
-            // Preview with ingredients and assignments
-            IngredientsSectionView(event: sampleEvent)
-                .previewDisplayName("With Assignments")
-                .onAppear {
-                    // Simulate fetched attendees in the view model
-                    let viewModel = EventDetailViewModel()
-                    viewModel.attendees = sampleUsers
-                }
-            
-            // Empty state preview
-            IngredientsSectionView(
-                event: Event(
-                    id: UUID(),
-                    invitedFriends: [],
-                    recipes: [],
-                    date: Date(),
-                    startTime: Date(),
-                    endTime: Date(),
-                    location: "Home",
-                    eventName: "Empty Event",
-                    qrCode: "",
-                    costs: [],
-                    totalCost: 0.0,
-                    assignedIngredientsList: []
-                )
-            )
-            .previewDisplayName("Empty State")
-        }
-        .previewLayout(.sizeThatFits)
-        .padding()
-    }
-}
+//// Preview Provider
+//struct IngredientsSectionView_Previews: PreviewProvider {
+//    static var sampleUsers = [
+//        User(
+//            id: UUID(),
+//            fullName: "John Doe",
+//            image: "profile_pic",
+//            email: "john@example.com",
+//            password: "password",
+//            events: [],
+//            likedRecipes: []
+//        ),
+//        User(
+//            id: UUID(),
+//            fullName: "Jane Smith",
+//            image: "profile_pic",
+//            email: "jane@example.com",
+//            password: "password",
+//            events: [],
+//            likedRecipes: []
+//        )
+//    ]
+//    
+//  static var sampleIngredients = [
+//      Ingredient(
+//          id: UUID().uuidString,
+//          name: "Tomatoes",
+//          amount: "5.0",
+//          isChecked: false,
+//          userID: sampleUsers[0].id.uuidString  // Changed to string
+//      ),
+//      Ingredient(
+//          id: UUID().uuidString,
+//          name: "Onions",
+//          amount: "2.0",
+//          isChecked: true,
+//          userID: sampleUsers[1].id.uuidString  // Changed to string
+//      )
+//  ]
+//    
+//    static var sampleEvent = Event(
+//        id: UUID(),
+//        invitedFriends: sampleUsers.map { $0.id.uuidString },
+//        recipes: [],
+//        date: Date(),
+//        startTime: Date(),
+//        endTime: Date(),
+//        location: "Home",
+//        eventName: "Sample Event",
+//        qrCode: "",
+//        costs: [],
+//        totalCost: 0.0,
+//        assignedIngredientsList: sampleIngredients
+//    )
+//    
+//    static var previews: some View {
+//        Group {
+//            // Preview with ingredients and assignments
+//            IngredientsSectionView(event: sampleEvent)
+//                .previewDisplayName("With Assignments")
+//                .onAppear {
+//                    // Simulate fetched attendees in the view model
+//                    let viewModel = EventDetailViewModel()
+//                    viewModel.attendees = sampleUsers
+//                }
+//            
+//            // Empty state preview
+//            IngredientsSectionView(
+//                event: Event(
+//                    id: UUID(),
+//                    invitedFriends: [],
+//                    recipes: [],
+//                    date: Date(),
+//                    startTime: Date(),
+//                    endTime: Date(),
+//                    location: "Home",
+//                    eventName: "Empty Event",
+//                    qrCode: "",
+//                    costs: [],
+//                    totalCost: 0.0,
+//                    assignedIngredientsList: []
+//                )
+//            )
+//            .previewDisplayName("Empty State")
+//        }
+//        .previewLayout(.sizeThatFits)
+//        .padding()
+//    }
+//}
 
 //struct IngredientsSectionView_Previews: PreviewProvider {
 //    static var previews: some View {

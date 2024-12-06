@@ -104,20 +104,16 @@ struct Event: Identifiable, Equatable, Hashable {
         // Parse assigned ingredients list
         if let ingredientsData = dictionary["assignedIngredientsList"] as? [[String: Any]] {
             self.assignedIngredientsList = ingredientsData.compactMap { ingredientDict in
-                guard let name = ingredientDict["name"] as? String,
-                      let amount = ingredientDict["amount"] as? String,
-                      let isChecked = ingredientDict["isChecked"] as? Bool,
-                      let userIDString = ingredientDict["userID"] as? String,
-                      let userID = UUID(uuidString: userIDString) else {
-                        return Ingredient(
-                            name: "Unknown",
-                            isChecked: false,
-                            userID: UUID(),
-                            amount: "0"
-                        )
-                      }
+              guard let id = ingredientDict["id"] as? String,
+                  let name = ingredientDict["name"] as? String,
+                  let amount = ingredientDict["amount"] as? String,
+                  let isChecked = ingredientDict["isChecked"] as? Bool,
+                  let userID = ingredientDict["userID"] as? String else {
+                return nil
+              }
                 
               return Ingredient(
+                  id: id,
                   name: name,
                   isChecked: isChecked,
                   userID: userID,
@@ -158,7 +154,7 @@ struct Event: Identifiable, Equatable, Hashable {
                     "name": ingredient.name,
                     "amount": ingredient.amount,
                     "isChecked": ingredient.isChecked,
-                    "userID": ingredient.userID.uuidString
+                    "userID": ingredient.userID
                 ]
             }
         ]
