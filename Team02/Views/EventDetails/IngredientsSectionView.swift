@@ -52,6 +52,25 @@ struct IngredientsSectionView: View {
                 assignmentsMap[ingredient.id] = ingredient.userID
             }
         }
+      
+      HStack {
+                Spacer()
+                
+                Button(action: {
+                    showAddIngredients = true
+                }) {
+                    ZStack {
+                      Circle()
+                          .fill(Color.orange.opacity(0.2))
+                          .frame(width: 60, height: 60)
+                      
+                      Image(systemName: "plus")
+                          .font(.system(size: 24, weight: .medium))
+                          .foregroundColor(.orange)
+                  }
+                }
+              Spacer()
+            }
     }
 }
 
