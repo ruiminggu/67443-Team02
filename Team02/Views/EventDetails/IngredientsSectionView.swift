@@ -43,6 +43,7 @@ struct IngredientsSectionView: View {
                 }
             }
         }
+        .padding(.horizontal)
         .onAppear {
             print("IngredientsSectionView appeared")
             print("Invited friends count: \(event.invitedFriends.count)")
