@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseDatabase
+import FirebaseFirestore
 
 class EventDetailViewModel: ObservableObject {
     @Published var event: Event?
@@ -157,6 +158,35 @@ class EventDetailViewModel: ObservableObject {
                       print("❌ Error updating ingredient assignment: \(error.localizedDescription)")
                   } else {
                       print("✅ Successfully updated ingredient assignment")
+                  }
+              }
+          }
+      }
+  }
+  
+  func updateIngredientCheckStatus(eventId: String, ingredient: Ingredient) {
+      let eventRef = databaseRef.child("events").child(eventId)
+      
+      eventRef.child("assignedIngredientsList").observeSingleEvent(of: .value) { [weak self] snapshot in
+          guard var ingredientsList = snapshot.value as? [[String: Any]] else {
+              print("❌ Failed to fetch ingredients list")
+              return
+          }
+          
+          if let index = ingredientsList.firstIndex(where: { ($0["id"] as? String) == ingredient.id }) {
+              var updatedIngredient = ingredientsList[index]
+              updatedIngredient["isChecked"] = ingredient.isChecked
+              ingredientsList[index] = updatedIngredient
+              
+              eventRef.child("assignedIngredientsList").setValue(ingredientsList) { [weak self] error, _ in
+                  if let error = error {
+                      print("❌ Error updating ingredient check status: \(error.localizedDescription)")
+                  } else {
+                      print("✅ Successfully updated ingredient check status")
+                      // Refresh event details to update UI
+                      DispatchQueue.main.async {
+                          self?.fetchEventDetails(eventID: eventId)
+                      }
                   }
               }
           }

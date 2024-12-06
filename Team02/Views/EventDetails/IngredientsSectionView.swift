@@ -28,6 +28,7 @@ struct IngredientsSectionView: View {
                   IngredientAssignmentRow(
                       ingredient: ingredient,
                       attendees: viewModel.attendees,
+                      eventId: event.id.uuidString,
                       selectedUserId: Binding(
                           get: { assignmentsMap[ingredient.id] ?? ingredient.userID },
                           set: { newValue in
@@ -38,7 +39,8 @@ struct IngredientsSectionView: View {
                                   assignedUserId: newValue ?? ingredient.userID
                               )
                           }
-                      )
+                      ),
+                      viewModel: viewModel
                   )
                 }
             }
@@ -55,23 +57,23 @@ struct IngredientsSectionView: View {
         }
       
       HStack {
-                Spacer()
-                
-                Button(action: {
-                    showAddIngredients = true
-                }) {
-                    ZStack {
-                      Circle()
-                          .fill(Color.orange.opacity(0.2))
-                          .frame(width: 60, height: 60)
-                      
-                      Image(systemName: "plus")
-                          .font(.system(size: 24, weight: .medium))
-                          .foregroundColor(.orange)
-                  }
-                }
-              Spacer()
+            Spacer()
+            
+            Button(action: {
+                showAddIngredients = true
+            }) {
+                ZStack {
+                  Circle()
+                      .fill(Color.orange.opacity(0.2))
+                      .frame(width: 60, height: 60)
+                  
+                  Image(systemName: "plus")
+                      .font(.system(size: 24, weight: .medium))
+                      .foregroundColor(.orange)
+              }
             }
+          Spacer()
+        }
     }
 }
 
@@ -87,12 +89,41 @@ struct Checkbox: View {
 struct IngredientAssignmentRow: View {
     let ingredient: Ingredient
     let attendees: [User]
+    let eventId: String
     @Binding var selectedUserId: String?
-    
+    @ObservedObject var viewModel = EventDetailViewModel()
+    @State private var isChecked: Bool
+  
+    init(ingredient: Ingredient, attendees: [User], eventId: String, selectedUserId: Binding<String?>, viewModel: EventDetailViewModel) {
+          self.ingredient = ingredient
+          self.attendees = attendees
+          self.eventId = eventId
+          self._selectedUserId = selectedUserId
+          self.viewModel = viewModel
+          self._isChecked = State(initialValue: ingredient.isChecked)  // Initialize with ingredient's value
+      }
+  
     var body: some View {
         HStack {
-            Image(systemName: ingredient.isChecked ? "checkmark.square.fill" : "square")
-                .foregroundColor(ingredient.isChecked ? .orange : .gray)
+            Button(action: {
+                isChecked.toggle()
+                let updatedIngredient = Ingredient(
+                    id: ingredient.id,
+                    name: ingredient.name,
+                    isChecked: isChecked,
+                    userID: ingredient.userID,
+                    amount: ingredient.amount
+                )
+                viewModel.updateIngredientCheckStatus(eventId: eventId, ingredient: updatedIngredient)
+            }) {
+//                Image(systemName: ingredient.isChecked ? "checkmark.square.fill" : "square")
+//                    .foregroundColor(ingredient.isChecked ? .orange : .gray)
+              Image(systemName: isChecked ? "checkmark.square.fill" : "square")
+                                  .foregroundColor(isChecked ? .orange : .gray)
+            }
+          
+//            Image(systemName: ingredient.isChecked ? "checkmark.square.fill" : "square")
+//                .foregroundColor(ingredient.isChecked ? .orange : .gray)
             Text(ingredient.name)
             Spacer()
             Text(ingredient.amount)
