@@ -71,7 +71,7 @@ struct HomeView: View {
                                         NavigationLink(destination: EventDetailView(eventID: event.id.uuidString)) {
                                             EventCard(
                                                 event: event,
-                                                backgroundColor: viewModel.upcomingEvents.firstIndex(of: event)?.isMultiple(of: 2) ?? false ? Color.orange : Color.orange.opacity(0.3),
+                                                backgroundColor: Color.orange,
                                                 userID: userID
                                             )
                                             .frame(width: 300)
