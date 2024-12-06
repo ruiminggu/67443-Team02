@@ -15,37 +15,65 @@ struct IngredientsSectionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
+            // Header
+            Text("Ingredients")
+                .font(.system(size: 28, weight: .bold))
+                .foregroundColor(.orange)
             
-        Text("Ingredients")
-            .font(.system(size: 28, weight: .bold))
-            .foregroundColor(.orange)
-            
-            // Ingredients List
+            // Ingredients List with Assignments and Checkboxes
             if event.assignedIngredientsList.isEmpty {
                 // Empty state handling
+                Text("No ingredients added yet")
+                    .foregroundColor(.gray)
+                    .padding(.vertical)
             } else {
                 ForEach(event.assignedIngredientsList) { ingredient in
-                  IngredientAssignmentRow(
-                      ingredient: ingredient,
-                      attendees: viewModel.attendees,
-                      eventId: event.id.uuidString,
-                      selectedUserId: Binding(
-                          get: { assignmentsMap[ingredient.id] ?? ingredient.userID },
-                          set: { newValue in
-                              assignmentsMap[ingredient.id] = newValue
-                              viewModel.updateIngredientAssignment(
-                                  eventId: event.id.uuidString,
-                                  ingredientId: ingredient.id,
-                                  assignedUserId: newValue ?? ingredient.userID
-                              )
-                          }
-                      ),
-                      viewModel: viewModel
-                  )
+                    IngredientAssignmentRow(
+                        ingredient: ingredient,
+                        attendees: viewModel.attendees,
+                        eventId: event.id.uuidString,
+                        selectedUserId: Binding(
+                            get: { assignmentsMap[ingredient.id] ?? ingredient.userID },
+                            set: { newValue in
+                                assignmentsMap[ingredient.id] = newValue
+                                viewModel.updateIngredientAssignment(
+                                    eventId: event.id.uuidString,
+                                    ingredientId: ingredient.id,
+                                    assignedUserId: newValue ?? ingredient.userID
+                                )
+                            }
+                        ),
+                        viewModel: viewModel
+                    )
                 }
+            }
+            
+            // Add Ingredient Button
+            HStack {
+                Spacer()
+                Button(action: {
+                    showAddIngredients = true
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.orange.opacity(0.2))
+                            .frame(width: 60, height: 60)
+                        
+                        Image(systemName: "plus")
+                            .font(.system(size: 24, weight: .medium))
+                            .foregroundColor(.orange)
+                    }
+                }
+                Spacer()
             }
         }
         .padding(.horizontal)
+        .sheet(isPresented: $showAddIngredients) {
+            AddIngredientsView(
+                eventID: event.id.uuidString,
+                userID: UUID() // Replace with actual current user ID if needed
+            )
+        }
         .onAppear {
             print("IngredientsSectionView appeared")
             print("Invited friends count: \(event.invitedFriends.count)")
@@ -54,25 +82,6 @@ struct IngredientsSectionView: View {
                 print("Initializing assignment for: \(ingredient.name)")
                 assignmentsMap[ingredient.id] = ingredient.userID
             }
-        }
-      
-      HStack {
-            Spacer()
-            
-            Button(action: {
-                showAddIngredients = true
-            }) {
-                ZStack {
-                  Circle()
-                      .fill(Color.orange.opacity(0.2))
-                      .frame(width: 60, height: 60)
-                  
-                  Image(systemName: "plus")
-                      .font(.system(size: 24, weight: .medium))
-                      .foregroundColor(.orange)
-              }
-            }
-          Spacer()
         }
     }
 }
