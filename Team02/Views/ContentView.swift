@@ -1,13 +1,6 @@
 import SwiftUI
 import FirebaseAuth
 
-struct CostView: View {
-    var body: some View {
-        Text("Costs Screen")
-            .font(.title)
-    }
-}
-
 struct ContentView: View {
     @StateObject private var homePageViewModel = HomePageViewModel(menuDatabase: MenuDatabase(
         recipes: [],
@@ -51,20 +44,23 @@ struct ContentView: View {
         ]
     ))
   
-      @StateObject private var profileViewModel = ProfileViewModel()
-      @StateObject private var costSplitViewModel = CostSplitViewModel()
-      @State private var isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn") // Track login state
+    @StateObject private var profileViewModel = ProfileViewModel()
+    @StateObject private var costSplitViewModel = CostSplitViewModel()
+    @State private var isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn") // Track login state
 
-      var body: some View {
-          if !isLoggedIn {
-              // Show the account creation view
-              CreateAccountView {
-                  isLoggedIn = true
-                  UserDefaults.standard.set(true, forKey: "isLoggedIn")
-              }
-          } else {
+    // Add a @State variable to track the selected tab
+    @State private var selectedTab = 0
+
+    var body: some View {
+        if !isLoggedIn {
+            // Show the account creation view
+            CreateAccountView {
+                isLoggedIn = true
+                UserDefaults.standard.set(true, forKey: "isLoggedIn")
+            }
+        } else {
             // Show the main app interface
-            TabView {
+            TabView(selection: $selectedTab) { // Bind TabView to the selectedTab variable
                 // Home Tab
                 if let user = homePageViewModel.user {
                     HomeView(viewModel: homePageViewModel)
@@ -72,12 +68,14 @@ struct ContentView: View {
                             Image(systemName: "house.fill")
                             Text("Home")
                         }
+                        .tag(0) // Assign a tag for each tab
                 } else {
                     Text("Loading...")
                         .tabItem {
                             Image(systemName: "house.fill")
                             Text("Home")
                         }
+                        .tag(0)
                 }
 
                 // Events Tab
@@ -86,6 +84,7 @@ struct ContentView: View {
                         Image(systemName: "calendar")
                         Text("Events")
                     }
+                    .tag(1)
 
                 // Create Event Tab
                 DateSelectionView(viewModel: EventViewModel())
@@ -98,14 +97,16 @@ struct ContentView: View {
                                 .foregroundColor(.orange)
                         }
                     }
+                    .tag(2)
 
                 // Costs Tab
-              CostSplitView()
-                                 .environmentObject(costSplitViewModel) 
-                                 .tabItem {
-                                     Image(systemName: "creditcard")
-                                     Text("Costs")
-                                 }
+                CostSplitView()
+                    .environmentObject(costSplitViewModel)
+                    .tabItem {
+                        Image(systemName: "creditcard")
+                        Text("Costs")
+                    }
+                    .tag(3)
 
                 // Profile Tab
                 ProfileView(viewModel: profileViewModel)
@@ -113,6 +114,7 @@ struct ContentView: View {
                         Image(systemName: "person.circle")
                         Text("Profile")
                     }
+                    .tag(4)
             }
             .accentColor(.orange)
             .onAppear {
@@ -125,12 +127,10 @@ struct ContentView: View {
                     isLoggedIn = false
                 }
             }
+            // Listen for a notification to switch tabs
+            .onReceive(NotificationCenter.default.publisher(for: Notification.Name("SwitchToMyEventsTab"))) { _ in
+                selectedTab = 1 // Set the tab to Events Tab (MyEventsView)
+            }
         }
     }
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
