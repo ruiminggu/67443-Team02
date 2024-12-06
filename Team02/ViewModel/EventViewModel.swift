@@ -37,9 +37,11 @@ class EventViewModel: ObservableObject {
     }
 
     func saveEvent(completion: @escaping (String) -> Void) {
+        let invitedFriendIDs = invitedFriends.compactMap { $0.key.uuidString }
+      
         // Create a new event instance
         let newEvent = Event(
-            invitedFriends: [],
+            invitedFriends: invitedFriendIDs,
             recipes: [],
             date: selectedDate,
             startTime: selectedStartTime,
