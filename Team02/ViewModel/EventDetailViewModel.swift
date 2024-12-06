@@ -60,7 +60,8 @@ class EventDetailViewModel: ObservableObject {
               }
     }
 
-    private func fetchAttendees(invitedFriends: [String]) {
+    func fetchAttendees(invitedFriends: [String]) {
+        print("Starting fetchAttendees with IDs: \(invitedFriends)")
         guard !invitedFriends.isEmpty else {
             print("ℹ️ No invited friends to fetch")
             return
@@ -73,6 +74,7 @@ class EventDetailViewModel: ObservableObject {
         for friendID in invitedFriends {
             dispatchGroup.enter()
             
+            print("Fetching user with ID: \(friendID)")
             databaseRef.child("users").child(friendID).observeSingleEvent(of: .value) { snapshot, _ in
                 defer { dispatchGroup.leave() }
                 
@@ -129,6 +131,32 @@ class EventDetailViewModel: ObservableObject {
               }
           }
       }
+  
+  func updateIngredientAssignment(eventId: String, ingredientId: String, assignedUserId: String) {
+      let eventRef = databaseRef.child("events").child(eventId)
+      
+      eventRef.child("assignedIngredientsList").observeSingleEvent(of: .value) { [weak self] snapshot in
+          guard let ingredientsList = snapshot.value as? [[String: Any]] else {
+              print("❌ Failed to fetch ingredients list")
+              return
+          }
+          
+          if let index = ingredientsList.firstIndex(where: { ($0["id"] as? String) == ingredientId }) {
+              var updatedIngredient = ingredientsList[index]
+              updatedIngredient["userID"] = assignedUserId
+              var updatedList = ingredientsList
+              updatedList[index] = updatedIngredient
+              
+              eventRef.child("assignedIngredientsList").setValue(updatedList) { error, _ in
+                  if let error = error {
+                      print("❌ Error updating ingredient assignment: \(error.localizedDescription)")
+                  } else {
+                      print("✅ Successfully updated ingredient assignment")
+                  }
+              }
+          }
+      }
+  }
   
     deinit {
 //          NotificationCenter.default.removeObserver(self)
