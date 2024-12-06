@@ -4,23 +4,33 @@ struct CostSplitView: View {
     @StateObject private var viewModel = CostSplitViewModel()
     @State private var selectedTab: String = "Friends" // "Friends" or "Events"
     @State private var showAddCostView = false
+    @State private var refresh = false
+
 
     var body: some View {
         VStack(spacing: 16) {
             headerSection
             summarySection
+          // Debugging: Show transaction count
+                  Text("Transactions count: \(viewModel.transactions.count)")
+                      .font(.caption)
+                      .foregroundColor(.gray)
             toggleSection
             costsListSection
         }
         .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $showAddCostView) {
-          AddCostView(eventViewModel: EventViewModel())
+          AddCostView(costSplitViewModel: viewModel,eventViewModel: EventViewModel())
         }
         .onAppear {
             viewModel.fetchTransactions()
             viewModel.fetchUsers()
             viewModel.fetchEvents()
         }
+        .onChange(of: viewModel.transactions) { newTransactions in
+            print("Transactions updated in view: \(newTransactions)")
+        }
+
     }
 
     // MARK: Header Section
@@ -135,17 +145,20 @@ struct CostSplitView: View {
         Dictionary(grouping: viewModel.transactions, by: { $0.event.eventName })
     }
 
-    private func totalOwedToYou() -> Float {
-        viewModel.transactions
-            .filter { $0.payee.fullName == "Leila" }
-            .reduce(0) { $0 + $1.amount }
-    }
+  private func totalOwedToYou() -> Float {
+      guard let loggedInUserID = viewModel.loggedInUserID else { return 0.0 }
+      return viewModel.transactions
+          .filter { $0.payee.id.uuidString == loggedInUserID }
+          .reduce(0) { $0 + $1.amount }
+  }
 
-    private func totalYouOwe() -> Float {
-        viewModel.transactions
-            .filter { $0.payer.fullName == "Leila" }
-            .reduce(0) { $0 + $1.amount }
-    }
+  private func totalYouOwe() -> Float {
+      guard let loggedInUserID = viewModel.loggedInUserID else { return 0.0 }
+      return viewModel.transactions
+          .filter { $0.payer.id.uuidString == loggedInUserID }
+          .reduce(0) { $0 + $1.amount }
+  }
+
 
     private func totalBalance() -> Float {
         totalOwedToYou() - totalYouOwe()

@@ -11,7 +11,7 @@ import FirebaseAuth
 
 struct AddCostView: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject private var costSplitViewModel = CostSplitViewModel()
+    @ObservedObject var costSplitViewModel: CostSplitViewModel
     @ObservedObject var eventViewModel: EventViewModel // Use EventViewModel
 
     @State private var itemName: String = ""
@@ -45,12 +45,20 @@ struct AddCostView: View {
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
+                    .onAppear {
+                      // Set a default selected event if it's nil
+                      if selectedEvent == nil, let firstEvent = eventViewModel.events.first {
+                        selectedEvent = firstEvent
+                      }
+                    }
+                  
                 }
                 .padding()
 
                 // Finish Button
                 Button(action: {
                     saveCost()
+                   
                 }) {
                     Text("Finish")
                         .frame(maxWidth: .infinity)
@@ -83,10 +91,16 @@ struct AddCostView: View {
             print("Validation failed: Missing event, costAmount, or itemName")
             return
         }
+      
+      guard let loggedInUserID = costSplitViewModel.loggedInUserID else {
+              print("No logged-in user found.")
+              return
+          }
+
 
       
       let transaction = Transaction(
-          payer: User(id: UUID(), fullName: "Self", image: "", email: "", password: "", events: []),
+          payer: User(id: UUID(uuidString: loggedInUserID) ?? UUID(), fullName: "Self", image: "", email: "", password: "", events: []),
           payee: User(id: UUID(), fullName: "Shared", image: "", email: "", password: "", events: []),
           item: itemName,
           amount: amount,
