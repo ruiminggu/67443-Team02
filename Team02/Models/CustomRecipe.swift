@@ -1,6 +1,6 @@
 import Foundation
 
-struct CustomRecipe: Identifiable {
+struct CustomRecipe: Identifiable, Equatable {
     let id: UUID
     let title: String
     let creatorId: String

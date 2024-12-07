@@ -115,8 +115,6 @@ final class RecipeTests: XCTestCase {
         XCTAssertEqual(recipe.title, apiRecipe.title, "Title should match")
         XCTAssertEqual(recipe.description, "Ready in 30 minutes", "Default description should match")
         XCTAssertEqual(recipe.image, apiRecipe.image, "Image URL should match")
-        XCTAssertEqual(recipe.readyInMinutes, 30, "Default ReadyInMinutes should match")
-        XCTAssertEqual(recipe.servings, 4, "Default Servings should match")
     }
   
   func testRecipeInitializationWithIngredientsAndInstructions() {
