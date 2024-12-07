@@ -55,7 +55,7 @@ struct CustomRecipe: Identifiable {
     }
 }
 
-struct CustomIngredient: Identifiable {
+struct CustomIngredient: Identifiable, Equatable {
     let id: UUID
     let name: String
     let amount: String
@@ -68,7 +68,7 @@ struct CustomIngredient: Identifiable {
         ]
     }
 
-    static func ==(lhs: CustomIngredient, rhs: CustomIngredient) -> Bool {
+    static func == (lhs: CustomIngredient, rhs: CustomIngredient) -> Bool {
         return lhs.id == rhs.id &&
                lhs.name == rhs.name &&
                lhs.amount == rhs.amount
