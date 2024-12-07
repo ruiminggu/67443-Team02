@@ -14,6 +14,8 @@ struct RecipeSearchView: View {
     @Environment(\.dismiss) private var dismiss
     let event: Event
   
+    @State private var showingAddRecipe = false
+  
     var body: some View {
       NavigationView {
         VStack(spacing: 0) {
@@ -23,22 +25,49 @@ struct RecipeSearchView: View {
               .fontWeight(.bold)
               .foregroundColor(.orange)
             
+//            HStack {
+//              HStack {
+//                Image(systemName: "magnifyingglass")
+//                  .foregroundColor(.gray)
+//                TextField("Search dishes or by ingredients", text: $viewModel.searchText)
+//                  .onChange(of: viewModel.searchText) { newValue in
+//                    Task {
+//                      await viewModel.searchRecipes()
+//                    }
+//                  }
+//              }
+//              .padding(10)
+//              .background(Color(.systemGray6))
+//              .cornerRadius(10)
+//              
+//            }
             HStack {
-              HStack {
-                Image(systemName: "magnifyingglass")
-                  .foregroundColor(.gray)
-                TextField("Search dishes or by ingredients", text: $viewModel.searchText)
-                  .onChange(of: viewModel.searchText) { newValue in
-                    Task {
-                      await viewModel.searchRecipes()
-                    }
-                  }
-              }
-              .padding(10)
-              .background(Color(.systemGray6))
-              .cornerRadius(10)
-              
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                                TextField("Search dishes or by ingredients", text: $viewModel.searchText)
+                                  .onChange(of: viewModel.searchText) { newValue in
+                          Task {
+                                await viewModel.searchRecipes()
+                            }
+                        }
+                }
+                .padding(10)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                
+                Button(action: { showingAddRecipe = true }) {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundColor(.orange)
+                        .font(.title2)
+                }
             }
+            .sheet(isPresented: $showingAddRecipe) {
+                NavigationView {
+                    CreateCustomRecipeView(event: event)
+                }
+            }
+            
 //            SearchBarWithAddButton(text: $viewModel.searchText, event: event)
           }
           .padding()
