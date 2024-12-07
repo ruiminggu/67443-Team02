@@ -136,7 +136,7 @@ This project was made possible through the collaborative effort of our amazing t
 
 -   **Ruiming Gu** (GitHub Profile: [ruiminggu](https://github.com/ruiminggu))
 -   **Leila Lei**
--   **Erin Chen**
+-   **Xinyi(Erin) Chen**
 
 Thank you for your hard work, creativity, and dedication to making this project a success!
 
