@@ -44,7 +44,9 @@ class HomePageViewModel: ObservableObject {
       for eventID in eventIDs {
           dispatchGroup.enter()
           
-          databaseRef.child("events").child(eventID).observe(.value) { snapshot in
+          databaseRef.child("events").child(eventID).observeSingleEvent(of: .value) { snapshot in
+              defer { dispatchGroup.leave() }
+              
               if let eventData = snapshot.value as? [String: Any],
                  let event = Event(dictionary: eventData) {
                   DispatchQueue.main.async {
@@ -53,12 +55,10 @@ class HomePageViewModel: ObservableObject {
                       }
                   }
               }
-              dispatchGroup.leave()
           }
       }
       
       dispatchGroup.notify(queue: .main) {
-          // Filter and update upcoming events dynamically
           self.upcomingEvents = fetchedEvents.filter { $0.date > Date() }
           print("Updated upcomingEvents: \(self.upcomingEvents.count); Updated pastEvents: \((fetchedEvents.filter { $0.date <= Date() }).count)")
       }

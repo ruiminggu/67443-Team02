@@ -40,7 +40,7 @@ struct EventDetailView: View {
                         EventHeaderView(
                             eventName: event.eventName,
                             date: formatDate(event.date),
-                            attendeeCount: viewModel.attendees.count,
+                            attendeeCount: event.invitedFriends.count,
                             lightGreen: lightGreen
                         )
                         

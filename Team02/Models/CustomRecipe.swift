@@ -1,12 +1,6 @@
-//
-//  CustomRecipe.swift
-//  Team02
-//
-//  Created by Xinyi Chen on 12/1/24.
-//
 import Foundation
 
-struct CustomRecipe: Identifiable, Codable {
+struct CustomRecipe: Identifiable, Codable, Equatable {
     let id: UUID
     let title: String
     let creatorId: String
@@ -46,9 +40,20 @@ struct CustomRecipe: Identifiable, Codable {
             "isPrivate": isPrivate
         ]
     }
+
+    static func ==(lhs: CustomRecipe, rhs: CustomRecipe) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.title == rhs.title &&
+               lhs.creatorId == rhs.creatorId &&
+               lhs.image == rhs.image &&
+               lhs.instructions == rhs.instructions &&
+               lhs.ingredients == rhs.ingredients &&
+               lhs.sharedWithEvents == rhs.sharedWithEvents &&
+               lhs.isPrivate == rhs.isPrivate
+    }
 }
 
-struct CustomIngredient: Identifiable, Codable {
+struct CustomIngredient: Identifiable, Codable, Equatable {
     let id: UUID
     let name: String
     let amount: String
@@ -59,5 +64,11 @@ struct CustomIngredient: Identifiable, Codable {
             "name": name,
             "amount": amount
         ]
+    }
+
+    static func ==(lhs: CustomIngredient, rhs: CustomIngredient) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.amount == rhs.amount
     }
 }
