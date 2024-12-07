@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import Foundation
+
 
 struct RecipeSearchView: View {
     @StateObject private var viewModel = RecipeSearchViewModel()
     @Environment(\.dismiss) private var dismiss
     let event: Event
+  
+    @State private var showingAddRecipe = false
   
     var body: some View {
       NavigationView {
@@ -21,22 +25,50 @@ struct RecipeSearchView: View {
               .fontWeight(.bold)
               .foregroundColor(.orange)
             
+//            HStack {
+//              HStack {
+//                Image(systemName: "magnifyingglass")
+//                  .foregroundColor(.gray)
+//                TextField("Search dishes or by ingredients", text: $viewModel.searchText)
+//                  .onChange(of: viewModel.searchText) { newValue in
+//                    Task {
+//                      await viewModel.searchRecipes()
+//                    }
+//                  }
+//              }
+//              .padding(10)
+//              .background(Color(.systemGray6))
+//              .cornerRadius(10)
+//              
+//            }
             HStack {
-              HStack {
-                Image(systemName: "magnifyingglass")
-                  .foregroundColor(.gray)
-                TextField("Search dishes or by ingredients", text: $viewModel.searchText)
-                  .onChange(of: viewModel.searchText) { newValue in
-                    Task {
-                      await viewModel.searchRecipes()
-                    }
-                  }
-              }
-              .padding(10)
-              .background(Color(.systemGray6))
-              .cornerRadius(10)
-              
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                                TextField("Search dishes or by ingredients", text: $viewModel.searchText)
+                                  .onChange(of: viewModel.searchText) { newValue in
+                          Task {
+                                await viewModel.searchRecipes()
+                            }
+                        }
+                }
+                .padding(10)
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                
+                Button(action: { showingAddRecipe = true }) {
+                    Image(systemName: "plus.circle.fill")
+                        .foregroundColor(.orange)
+                        .font(.title2)
+                }
             }
+            .sheet(isPresented: $showingAddRecipe) {
+                NavigationView {
+                    CreateCustomRecipeView(event: event)
+                }
+            }
+            
+//            SearchBarWithAddButton(text: $viewModel.searchText, event: event)
           }
           .padding()
           .background(Color.white)
@@ -112,6 +144,59 @@ struct RecipeSearchView: View {
     }
 }
 
+struct SearchBarWithAddButton: View {
+    @Binding var text: String
+    @State private var showingAddRecipe = false
+    let event: Event
+    @StateObject var viewModel = RecipeSearchViewModel()
+    
+    var body: some View {
+        HStack {
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search dishes or by ingredients", text: $text)
+                    .onChange(of: text) { newValue in
+                        Task {
+                            await viewModel.searchRecipes()
+                        }
+                    }
+            }
+            .padding(10)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            
+            Button(action: { showingAddRecipe = true }) {
+                Image(systemName: "plus.circle.fill")
+                    .foregroundColor(.orange)
+                    .font(.title2)
+            }
+        }
+        .sheet(isPresented: $showingAddRecipe) {
+            NavigationView {
+                CreateCustomRecipeView(event: event)
+            }
+        }
+    }
+//        var body: some View {
+//          HStack {
+//            HStack {
+//              Image(systemName: "magnifyingglass")
+//                .foregroundColor(.gray)
+//              TextField("Search dishes or by ingredients", text: $text)
+//                .onChange(of: text) { newValue in
+//                  Task {
+//                    await viewModel.searchRecipes()
+//                  }
+//                }
+//            }
+//            .padding(10)
+//            .background(Color(.systemGray6))
+//            .cornerRadius(10)
+//            
+//          }
+//        }
+}
 //struct RecipeSearchView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        RecipeSearchView()

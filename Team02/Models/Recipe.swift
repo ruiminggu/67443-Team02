@@ -22,8 +22,8 @@ struct Recipe: Identifiable, Hashable, Equatable {
         self.image = apiRecipe.image
         self.instruction = ""
         self.ingredients = []
-        self.readyInMinutes = apiRecipe.readyInMinutes ?? 30
-        self.servings = apiRecipe.servings ?? 4
+        self.readyInMinutes = apiRecipe.readyInMinutes ?? 0
+        self.servings = apiRecipe.servings ?? 0
         self.rating = Double.random(in: 4.0...5.0) // Placeholder
         self.isLiked = false
     }
@@ -43,19 +43,19 @@ struct Recipe: Identifiable, Hashable, Equatable {
         self.isLiked = false
     }
 
-  init(title: String, description: String, image: String, instruction: String, ingredients: [Ingredient], readyInMinutes: Int, servings: Int) {
-          self.id = UUID()
-          self.apiId = 0 // Default value since we don't have API ID from dictionary
-          self.title = title
-          self.description = description
-          self.image = image
-          self.instruction = instruction
-          self.ingredients = ingredients
-          self.readyInMinutes = readyInMinutes
-          self.servings = servings
-          self.rating = 4.5 // Default rating
-          self.isLiked = false
-      }
+  init(title: String, description: String, image: String, instruction: String, ingredients: [Ingredient], readyInMinutes: Int, servings: Int, apiId: Int = 0) {
+      self.id = UUID()
+      self.apiId = apiId
+      self.title = title
+      self.description = description
+      self.image = image
+      self.instruction = instruction
+      self.ingredients = ingredients
+      self.readyInMinutes = readyInMinutes
+      self.servings = servings
+      self.rating = 4.5
+      self.isLiked = false
+  }
   
     static func ==(lhs: Recipe, rhs: Recipe) -> Bool {
         return lhs.title == rhs.title &&

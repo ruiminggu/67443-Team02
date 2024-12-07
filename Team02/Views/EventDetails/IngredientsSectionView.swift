@@ -171,17 +171,17 @@ struct IngredientAssignmentRow: View {
                 .cornerRadius(8)
             }
             .onAppear {
-                print("Ingredient in row:")
-                print("ID: \(ingredient.id)")
-                print("Name: \(ingredient.name)")
-                print("Current userID: \(ingredient.userID)")
+//                print("Ingredient in row:")
+//                print("ID: \(ingredient.id)")
+//                print("Name: \(ingredient.name)")
+//                print("Current userID: \(ingredient.userID)")
             }
         }
         .padding()
         .onAppear {
-            print("IngredientAssignmentRow appeared")
-            print("Attendees count: \(attendees.count)")
-            print("Attendees: \(attendees.map { $0.fullName })")
+//            print("IngredientAssignmentRow appeared")
+//            print("Attendees count: \(attendees.count)")
+//            print("Attendees: \(attendees.map { $0.fullName })")
         }
     }
 }

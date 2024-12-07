@@ -12,7 +12,8 @@ struct ContentView: View {
                 instruction: "Cook on medium heat...",
                 ingredients: [],
                 readyInMinutes: 20,
-                servings: 2
+                servings: 2,
+                apiId: 0
             ),
             Recipe(
                 title: "Sausage Fried Rice",
@@ -21,7 +22,8 @@ struct ContentView: View {
                 instruction: "Cook on medium heat...",
                 ingredients: [],
                 readyInMinutes: 20,
-                servings: 3
+                servings: 3,
+                apiId: 0
             ),
             Recipe(
                 title: "French Toast",
@@ -30,7 +32,8 @@ struct ContentView: View {
                 instruction: "Cook on medium heat...",
                 ingredients: [],
                 readyInMinutes: 15,
-                servings: 2
+                servings: 2,
+                apiId: 0
             ),
             Recipe(
                 title: "Mac & Cheese",
@@ -39,7 +42,8 @@ struct ContentView: View {
                 instruction: "Cook on medium heat...",
                 ingredients: [],
                 readyInMinutes: 25,
-                servings: 4
+                servings: 4,
+                apiId: 0
             )
         ]
     ))
