@@ -1,4 +1,4 @@
-Team02 Event Management
+Team02 WeEvent
 =======================
 
 A mobile application designed for seamless event management, recipe sharing, and ingredient assignment. Built with **Swift** and **Firebase**, this app is tailored to enhance group gatherings by organizing recipes, assigning tasks, and managing event-related details efficiently.
@@ -41,11 +41,30 @@ A mobile application designed for seamless event management, recipe sharing, and
 -   **Firebase Realtime Database**: For real-time data synchronization.
 -   **Firebase Authentication**: For secure user login and management.
 
-### Tools & Frameworks
+### Tools & Packages
 
 -   **Xcode**: IDE for development and debugging.
--   **AsyncImage**: For handling recipe images dynamically.
--   **NavigationLink**: For seamless navigation between views.
+-   **Firebase Realtime Database:** Used for persisting event, user, and recipe data.
+    - **FirebaseAuth:** Handles user authentication and security rules.
+    - **FirebaseCore:** Provides the core infrastructure needed for Firebase services.
+    - **FirebaseDatabase:** Integrates with the Firebase Realtime Database for storing and syncing data.
+    - **FirebaseFirestore:** Leverages the Firestore service for flexible, scalable, and real-time document storage.
+
+* * * * *
+## Known Issues & Reminders for TA
+1. **Event Creation and Invitations:**  
+   After creating a new event, **please remember to invite yourself** to the event. This step ensures proper data access within the app for demonstration and testing purposes.
+
+2. **Recipe Search Page Issue in Event Detail:**  
+   A minor UI bug displays an unintended "cancel" text due to API configuration issues. While we couldn’t fully debug this, it does not affect the functionality. You can still search and select recipes without issues.
+
+3. **Ingredient Assignment Refreshing:**  
+   When assigning ingredients to a user, the changes appear in the upcoming event to-do section on the home page. However, **auto-refresh is not working**. To see updated assignments, **quit and re-enter the app**. We acknowledge this inconvenience and were unable to resolve it in time.
+
+4. **Cost Page Calculation Bug:**
+   The cost page cannot displays the "you are owed" and "you owe" values. While adding and viewing costs is fully functional, the display labels may be misleading. We couldn’t fully debug this issue before submission.
+
+**In summary,** while the app’s core functionality is intact and models are thoroughly tested, there are known issues with ViewModel testing, some UI bugs, and refresh limitations. We recommend following the setup instructions carefully and keeping these known issues in mind when demonstrating or reviewing the app.
 
 * * * * *
 
@@ -72,7 +91,8 @@ A mobile application designed for seamless event management, recipe sharing, and
     open Team02.xcodeproj
     
 3.  Add your `GoogleService-Info.plist` file to the project root.
-4.  Run the app on a simulator or a physical device.
+4. If using CocoaPods, run `pod install` in the project directory. Otherwise, ensure Swift Package Manager dependencies are resolved.
+5.  Run the app on a simulator or a physical device.
 
 * * * * *
 
@@ -94,8 +114,13 @@ A mobile application designed for seamless event management, recipe sharing, and
 * * * * *
 
 
-🧪 Running Tests
+🧪 Testing Issues
 ----------------
+- **Model Testing:**  
+  We have achieved at least **90% test coverage for each model**. This ensures that our core data structures and logic are well-validated.
+
+- **ViewModel Testing:**  
+While we aimed to apply a similar level of test coverage to our ViewModels, we encountered significant challenges in mocking the Firebase database references and could not implement these tests as intended. As a result, no ViewModel tests were included in this release, and coverage for this layer remains unmeasured.
 
 To run unit tests:
 
@@ -114,6 +139,8 @@ This project was made possible through the collaborative effort of our amazing t
 -   **Erin Chen**
 
 Thank you for your hard work, creativity, and dedication to making this project a success!
+
+This README was initially drafted and later refined with the assistance of ChatGPT.
 * * * * *
 
 📧 Contact
