@@ -8,26 +8,29 @@
 import SwiftUI
 
 struct CreateAccountContainer: View {
-    @State private var isOnboardingActive = false
-    @State private var isMainAppActive = false
+    @AppStorage("isLoggedIn") private var isLoggedIn = false
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
 
     var body: some View {
         Group {
-            if isMainAppActive {
+            if isLoggedIn && hasSeenOnboarding {
+                // User is logged in and has completed onboarding
+                // Navigate to the main app content
                 ContentView()
-            } else if isOnboardingActive {
+            } else if isLoggedIn && !hasSeenOnboarding {
+                // User is logged in but has not completed onboarding
                 OnboardingView {
                     print("🎉 Onboarding finished! Switching to main app.")
-                    isOnboardingActive = false
-                    isMainAppActive = true
+                    hasSeenOnboarding = true
                 }
             } else {
+                // User is not logged in yet
                 CreateAccountView {
                     print("✅ Account created! Switching to onboarding...")
-                    isOnboardingActive = true
+                    isLoggedIn = true
                 }
             }
         }
-        .animation(.easeInOut, value: isOnboardingActive || isMainAppActive)
+        .animation(.easeInOut, value: isLoggedIn || hasSeenOnboarding)
     }
 }
