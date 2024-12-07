@@ -17,6 +17,11 @@
 		2EDDB9132CFE58090061104B /* SummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB90E2CFE58080061104B /* SummaryCard.swift */; };
 		2EDDB9152CFE5BFD0061104B /* CostSplitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB9142CFE5BFD0061104B /* CostSplitViewModel.swift */; };
 		2EDDB9172CFE600C0061104B /* AddCostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDDB9162CFE600C0061104B /* AddCostView.swift */; };
+		2EE4E5072D03EBD200EE552E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE4E5062D03EBD200EE552E /* OnboardingView.swift */; };
+		2EE4E5092D03EE6B00EE552E /* CreateAccountContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE4E5082D03EE6B00EE552E /* CreateAccountContainer.swift */; };
+		2EE4E50D2D03F46200EE552E /* step3.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE4E50C2D03F46200EE552E /* step3.png */; };
+		2EE4E50E2D03F46200EE552E /* step1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE4E50A2D03F46200EE552E /* step1.png */; };
+		2EE4E50F2D03F46200EE552E /* step2.png in Resources */ = {isa = PBXBuildFile; fileRef = 2EE4E50B2D03F46200EE552E /* step2.png */; };
 		46110AD32CDDB5CA00FBBC50 /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */; };
 		46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */; };
 		46110AD72CDE0E1200FBBC50 /* RecipeMenuCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */; };
@@ -102,6 +107,11 @@
 		2EDDB90F2CFE58080061104B /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
 		2EDDB9142CFE5BFD0061104B /* CostSplitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostSplitViewModel.swift; sourceTree = "<group>"; };
 		2EDDB9162CFE600C0061104B /* AddCostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCostView.swift; sourceTree = "<group>"; };
+		2EE4E5062D03EBD200EE552E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		2EE4E5082D03EE6B00EE552E /* CreateAccountContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountContainer.swift; sourceTree = "<group>"; };
+		2EE4E50A2D03F46200EE552E /* step1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = step1.png; sourceTree = "<group>"; };
+		2EE4E50B2D03F46200EE552E /* step2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = step2.png; sourceTree = "<group>"; };
+		2EE4E50C2D03F46200EE552E /* step3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = step3.png; sourceTree = "<group>"; };
 		46110AD22CDDB5CA00FBBC50 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
 		46110AD42CDDFD2800FBBC50 /* EventDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewModel.swift; sourceTree = "<group>"; };
 		46110AD62CDE0E1200FBBC50 /* RecipeMenuCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeMenuCard.swift; sourceTree = "<group>"; };
@@ -267,6 +277,8 @@
 		762B0D132CF6562600400BB6 /* CreateAccount */ = {
 			isa = PBXGroup;
 			children = (
+				2EE4E5082D03EE6B00EE552E /* CreateAccountContainer.swift */,
+				2EE4E5062D03EBD200EE552E /* OnboardingView.swift */,
 				762B0D142CF6563400400BB6 /* CreateAccountView.swift */,
 			);
 			path = CreateAccount;
@@ -300,6 +312,9 @@
 				76EBA44E2CD07B9B002C9836 /* Models */,
 				765C491C2CC203DF003A9D8C /* Team02App.swift */,
 				765C49202CC203E1003A9D8C /* Assets.xcassets */,
+				2EE4E50A2D03F46200EE552E /* step1.png */,
+				2EE4E50B2D03F46200EE552E /* step2.png */,
+				2EE4E50C2D03F46200EE552E /* step3.png */,
 				76EBA46C2CD08FA3002C9836 /* profile_pic.jpeg */,
 				2E46EB372CDDF74600447382 /* frenchtoast.jpeg */,
 				2E46EB382CDDF74600447382 /* maccheese.png */,
@@ -498,6 +513,9 @@
 				2E78C8732CDDF46A0099231D /* grilledcheese.png in Resources */,
 				765C49242CC203E1003A9D8C /* Preview Assets.xcassets in Resources */,
 				765C49212CC203E1003A9D8C /* Assets.xcassets in Resources */,
+				2EE4E50D2D03F46200EE552E /* step3.png in Resources */,
+				2EE4E50E2D03F46200EE552E /* step1.png in Resources */,
+				2EE4E50F2D03F46200EE552E /* step2.png in Resources */,
 				2E46EB392CDDF74600447382 /* frenchtoast.jpeg in Resources */,
 				2E46EB3A2CDDF74600447382 /* maccheese.png in Resources */,
 			);
@@ -538,6 +556,7 @@
 				46970D042CD9BC830057E4D3 /* RecipeSearchCard.swift in Sources */,
 				764DA18E2CFEED5A00C17D9D /* RecipeListView.swift in Sources */,
 				76A41A032CF5C66300967046 /* ProfileRecipeMenuCard.swift in Sources */,
+				2EE4E5092D03EE6B00EE552E /* CreateAccountContainer.swift in Sources */,
 				76A41A012CF5C04200967046 /* LikedRecipesView.swift in Sources */,
 				76D78B0C2D0164B50049ABE9 /* ProfileRecipeDetail.swift in Sources */,
 				76EBA4642CD08B85002C9836 /* RecipeCard.swift in Sources */,
@@ -556,6 +575,7 @@
 				76EBA45B2CD07D5D002C9836 /* Recipe.swift in Sources */,
 				46110AD52CDDFD2800FBBC50 /* EventDetailViewModel.swift in Sources */,
 				765C491D2CC203DF003A9D8C /* Team02App.swift in Sources */,
+				2EE4E5072D03EBD200EE552E /* OnboardingView.swift in Sources */,
 				76EBA46A2CD08DF2002C9836 /* EventRow.swift in Sources */,
 				46970D012CD9BA7C0057E4D3 /* RecipeSearchViewModel.swift in Sources */,
 				76771CE42CEF1C1900B26169 /* ProfileView.swift in Sources */,

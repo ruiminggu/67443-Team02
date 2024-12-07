@@ -13,7 +13,7 @@ struct Team02App: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CreateAccountContainer()
         }
     }
 }
