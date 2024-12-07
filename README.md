@@ -55,13 +55,16 @@ A mobile application designed for seamless event management, recipe sharing, and
 1. **Event Creation and Invitations:**  
    After creating a new event, **please remember to invite yourself** to the event. This step ensures proper data access within the app for demonstration and testing purposes.
 
-2. **Recipe Search Page Issue in Event Detail:**  
+2. **Onboarding Steps:**
+    After creating a new account, the onboarding page will appear. Please swipe left to navigate through the different onboarding steps.
+
+3. **Recipe Search Page Issue in Event Detail:**  
    A minor UI bug displays an unintended "cancel" text due to API configuration issues. While we couldn’t fully debug this, it does not affect the functionality. You can still search and select recipes without issues.
 
-3. **Ingredient Assignment Refreshing:**  
+4. **Ingredient Assignment Refreshing:**  
    When assigning ingredients to a user, the changes appear in the upcoming event to-do section on the home page. However, **auto-refresh is not working**. To see updated assignments, **quit and re-enter the app**. We acknowledge this inconvenience and were unable to resolve it in time.
 
-4. **Cost Page Calculation Bug:**
+5. **Cost Page Calculation Bug:**
    The cost page cannot displays the "you are owed" and "you owe" values. While adding and viewing costs is fully functional, the display labels may be misleading. We couldn’t fully debug this issue before submission.
 
 **In summary,** while the app’s core functionality is intact and models are thoroughly tested, there are known issues with ViewModel testing, some UI bugs, and refresh limitations. We recommend following the setup instructions carefully and keeping these known issues in mind when demonstrating or reviewing the app.
