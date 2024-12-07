@@ -72,22 +72,37 @@ struct Event: Identifiable, Equatable, Hashable {
         if let recipesData = dictionary["recipes"] as? [[String: Any]] {
             print("📱 Found \(recipesData.count) recipes in event data")
             self.recipes = recipesData.compactMap { recipeDict in
+                // First get all required fields
                 guard let title = recipeDict["title"] as? String,
                       let description = recipeDict["description"] as? String,
                       let image = recipeDict["image"] as? String,
                       let instruction = recipeDict["instruction"] as? String,
                       let readyInMinutes = recipeDict["readyInMinutes"] as? Int,
                       let servings = recipeDict["servings"] as? Int else {
-                    print("❌ Failed to parse recipe: \(recipeDict)")
+                    print("❌ Failed to parse recipe required fields: \(recipeDict)")
                     return nil
                 }
+                
+                let ingredients = (recipeDict["ingredients"] as? [[String: Any]])?.compactMap { ingredientDict -> Ingredient? in
+                    guard let name = ingredientDict["name"] as? String,
+                          let amount = ingredientDict["amount"] as? String else {
+                        return nil
+                    }
+                    return Ingredient(
+                        id: ingredientDict["id"] as? String ?? UUID().uuidString,
+                        name: name,
+                        isChecked: ingredientDict["isChecked"] as? Bool ?? false,
+                        userID: ingredientDict["userID"] as? String ?? UUID().uuidString,
+                        amount: amount
+                    )
+                } ?? []
                 
                 return Recipe(
                     title: title,
                     description: description,
                     image: image,
                     instruction: instruction,
-                    ingredients: [], // You can parse ingredients if needed
+                    ingredients: ingredients,
                     readyInMinutes: readyInMinutes,
                     servings: servings
                 )
