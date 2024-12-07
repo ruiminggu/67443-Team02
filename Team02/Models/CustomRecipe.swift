@@ -1,9 +1,3 @@
-//
-//  CustomRecipe.swift
-//  Team02
-//
-//  Created by Xinyi Chen on 12/1/24.
-//
 import Foundation
 
 struct CustomRecipe: Identifiable {
@@ -48,6 +42,17 @@ struct CustomRecipe: Identifiable {
             "isPrivate": isPrivate
         ]
     }
+
+    static func ==(lhs: CustomRecipe, rhs: CustomRecipe) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.title == rhs.title &&
+               lhs.creatorId == rhs.creatorId &&
+               lhs.image == rhs.image &&
+               lhs.instructions == rhs.instructions &&
+               lhs.ingredients == rhs.ingredients &&
+               lhs.sharedWithEvents == rhs.sharedWithEvents &&
+               lhs.isPrivate == rhs.isPrivate
+    }
 }
 
 struct CustomIngredient: Identifiable {
@@ -61,5 +66,11 @@ struct CustomIngredient: Identifiable {
             "name": name,
             "amount": amount
         ]
+    }
+
+    static func ==(lhs: CustomIngredient, rhs: CustomIngredient) -> Bool {
+        return lhs.id == rhs.id &&
+               lhs.name == rhs.name &&
+               lhs.amount == rhs.amount
     }
 }
