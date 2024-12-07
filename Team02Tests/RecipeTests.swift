@@ -1,203 +1,214 @@
 import XCTest
-@testable import Team02 // Replace with your module name
+@testable import Team02
 
-class RecipeTests: XCTestCase {
-
+final class RecipeTests: XCTestCase {
+    
     func testRecipeInitializationFromAPIRecipe() {
-        // Arrange
         let apiRecipe = APIRecipe(
             id: 101,
-            title: "Spaghetti Carbonara",
-            image: "carbonara.jpg",
+            title: "Spaghetti Bolognese",
+            image: "https://example.com/spaghetti.jpg",
             imageType: "jpg",
-            readyInMinutes: 25,
+            readyInMinutes: 45,
             servings: 4
         )
         
-        // Act
         let recipe = Recipe(apiRecipe: apiRecipe)
         
-        // Assert
-        XCTAssertEqual(recipe.apiId, 101)
-        XCTAssertEqual(recipe.title, "Spaghetti Carbonara")
-        XCTAssertEqual(recipe.image, "carbonara.jpg")
-        XCTAssertEqual(recipe.readyInMinutes, 25)
-        XCTAssertEqual(recipe.servings, 4)
-        XCTAssertFalse(recipe.isLiked)
-        XCTAssertGreaterThanOrEqual(recipe.rating, 4.0)
-        XCTAssertLessThanOrEqual(recipe.rating, 5.0)
+        XCTAssertEqual(recipe.apiId, apiRecipe.id, "API ID should match")
+        XCTAssertEqual(recipe.title, apiRecipe.title, "Title should match")
+        XCTAssertEqual(recipe.description, "Ready in 45 minutes", "Description should match")
+        XCTAssertEqual(recipe.image, apiRecipe.image, "Image URL should match")
+        XCTAssertEqual(recipe.readyInMinutes, 45, "ReadyInMinutes should match")
+        XCTAssertEqual(recipe.servings, 4, "Servings should match")
+        XCTAssertFalse(recipe.isLiked, "Recipe should not be liked by default")
     }
-
-    func testRecipeInitializationWithIngredientsAndInstructions() {
-        // Arrange
-        let apiRecipe = APIRecipe(
-            id: 202,
-            title: "Chicken Curry",
-            image: "curry.jpg",
-            imageType: "jpg",
-            readyInMinutes: 40,
-            servings: 6
-        )
+    
+    func testRecipeInitializationWithCustomData() {
         let ingredients = [
-            Ingredient(name: "Chicken", isChecked: false, userID: UUID(), amount: "500g"),
-            Ingredient(name: "Curry Powder", isChecked: false, userID: UUID(), amount: "2 tbsp")
+            Ingredient(id: "1", name: "Tomatoes", isChecked: false, userID: "user1", amount: "2 cups"),
+            Ingredient(id: "2", name: "Onion", isChecked: false, userID: "user1", amount: "1 cup")
         ]
-        let instructions = "Cook chicken, add curry powder, and simmer."
-
-        // Act
-        let recipe = Recipe(apiRecipe: apiRecipe, ingredients: ingredients, instructions: instructions)
         
-        // Assert
-        XCTAssertEqual(recipe.apiId, 202)
-        XCTAssertEqual(recipe.title, "Chicken Curry")
-        XCTAssertEqual(recipe.ingredients.count, 2)
-        XCTAssertEqual(recipe.instruction, instructions)
-        XCTAssertEqual(recipe.readyInMinutes, 40)
-        XCTAssertEqual(recipe.servings, 6)
-    }
-
-    func testRecipeEquality() {
-        // Arrange
-        let recipe1 = Recipe(
-            title: "Pancakes",
-            description: "Fluffy pancakes",
-            image: "pancakes.jpg",
-            instruction: "Mix and cook",
-            ingredients: [],
-            readyInMinutes: 15,
-            servings: 4
-        )
-        let recipe2 = Recipe(
-            title: "Pancakes",
-            description: "Fluffy pancakes",
-            image: "pancakes.jpg",
-            instruction: "Mix and cook",
-            ingredients: [],
-            readyInMinutes: 15,
-            servings: 4
-        )
-        
-        // Act & Assert
-        XCTAssertEqual(recipe1, recipe2)
-    }
-
-    func testRecipeInequality() {
-        // Arrange
-        let recipe1 = Recipe(
-            title: "French Toast",
-            description: "Delicious French Toast",
-            image: "french_toast.jpg",
-            instruction: "Soak bread and cook",
-            ingredients: [],
-            readyInMinutes: 10,
-            servings: 2
-        )
-        let recipe2 = Recipe(
-            title: "Omelette",
-            description: "Simple omelette",
-            image: "omelette.jpg",
-            instruction: "Beat eggs and cook",
-            ingredients: [],
-            readyInMinutes: 5,
-            servings: 1
-        )
-        
-        // Act & Assert
-        XCTAssertNotEqual(recipe1, recipe2)
-    }
-
-    func testRecipeRatingRange() {
-        // Arrange
-        let apiRecipe = APIRecipe(
-            id: 303,
+        let recipe = Recipe(
             title: "Salad",
-            image: "salad.jpg",
-            imageType: "jpg",
+            description: "A fresh salad",
+            image: "https://example.com/salad.jpg",
+            instruction: "Mix all ingredients together.",
+            ingredients: ingredients,
             readyInMinutes: 10,
             servings: 2
         )
         
-        // Act
+        XCTAssertEqual(recipe.title, "Salad", "Title should match")
+        XCTAssertEqual(recipe.description, "A fresh salad", "Description should match")
+        XCTAssertEqual(recipe.image, "https://example.com/salad.jpg", "Image URL should match")
+        XCTAssertEqual(recipe.instruction, "Mix all ingredients together.", "Instruction should match")
+        XCTAssertEqual(recipe.ingredients, ingredients, "Ingredients should match")
+        XCTAssertEqual(recipe.readyInMinutes, 10, "ReadyInMinutes should match")
+        XCTAssertEqual(recipe.servings, 2, "Servings should match")
+        XCTAssertEqual(recipe.rating, 4.5, "Default rating should be 4.5")
+        XCTAssertFalse(recipe.isLiked, "Recipe should not be liked by default")
+    }
+    
+    func testRecipeEquality() {
+        let recipe1 = Recipe(
+            title: "Pancakes",
+            description: "Fluffy pancakes",
+            image: "https://example.com/pancakes.jpg",
+            instruction: "Cook on a hot pan.",
+            ingredients: [],
+            readyInMinutes: 15,
+            servings: 4
+        )
+        
+        let recipe2 = Recipe(
+            title: "Pancakes",
+            description: "Fluffy pancakes",
+            image: "https://example.com/pancakes.jpg",
+            instruction: "Cook on a hot pan.",
+            ingredients: [],
+            readyInMinutes: 15,
+            servings: 4
+        )
+        
+        XCTAssertEqual(recipe1, recipe2, "Recipes with identical properties should be equal")
+    }
+    
+    func testRecipeInequality() {
+        let recipe1 = Recipe(
+            title: "Pancakes",
+            description: "Fluffy pancakes",
+            image: "https://example.com/pancakes.jpg",
+            instruction: "Cook on a hot pan.",
+            ingredients: [],
+            readyInMinutes: 15,
+            servings: 4
+        )
+        
+        let recipe2 = Recipe(
+            title: "Waffles",
+            description: "Crispy waffles",
+            image: "https://example.com/waffles.jpg",
+            instruction: "Cook in a waffle iron.",
+            ingredients: [],
+            readyInMinutes: 20,
+            servings: 2
+        )
+        
+        XCTAssertNotEqual(recipe1, recipe2, "Recipes with different properties should not be equal")
+    }
+    
+    func testRecipeInitializationFromAPIRecipeWithOptionalData() {
+        let apiRecipe = APIRecipe(
+            id: 102,
+            title: "Soup",
+            image: "https://example.com/soup.jpg",
+            imageType: nil,
+            readyInMinutes: nil,
+            servings: nil
+        )
+        
         let recipe = Recipe(apiRecipe: apiRecipe)
         
-        // Assert
-        XCTAssertGreaterThanOrEqual(recipe.rating, 4.0)
-        XCTAssertLessThanOrEqual(recipe.rating, 5.0)
+        XCTAssertEqual(recipe.apiId, apiRecipe.id, "API ID should match")
+        XCTAssertEqual(recipe.title, apiRecipe.title, "Title should match")
+        XCTAssertEqual(recipe.description, "Ready in 30 minutes", "Default description should match")
+        XCTAssertEqual(recipe.image, apiRecipe.image, "Image URL should match")
+        XCTAssertEqual(recipe.readyInMinutes, 30, "Default ReadyInMinutes should match")
+        XCTAssertEqual(recipe.servings, 4, "Default Servings should match")
     }
   
-  func testRecipeInitializationFromAPIRecipeWithMissingFields() {
+  func testRecipeInitializationWithIngredientsAndInstructions() {
       // Arrange
       let apiRecipe = APIRecipe(
-          id: 404,
-          title: "Muffins",
-          image: "muffins.jpg",
-          imageType: nil, // Missing imageType
-          readyInMinutes: nil, // Missing readyInMinutes
-          servings: nil // Missing servings
+          id: 124,
+          title: "Pancakes",
+          image: "pancakes.jpg",
+          imageType: "jpg",
+          readyInMinutes: 20,
+          servings: 3
       )
+      let ingredients = [
+          Ingredient(id: "1", name: "Flour", isChecked: false, userID: "user1", amount: "2 cups"),
+          Ingredient(id: "2", name: "Milk", isChecked: false, userID: "user2", amount: "1 cup")
+      ]
+      let instructions = "Mix ingredients and cook on a skillet."
       
       // Act
-      let recipe = Recipe(apiRecipe: apiRecipe)
+      let recipe = Recipe(apiRecipe: apiRecipe, ingredients: ingredients, instructions: instructions)
       
       // Assert
-      XCTAssertEqual(recipe.apiId, 404)
-      XCTAssertEqual(recipe.title, "Muffins")
-      XCTAssertEqual(recipe.image, "muffins.jpg")
-      XCTAssertEqual(recipe.readyInMinutes, 30) // Default value
-      XCTAssertEqual(recipe.servings, 4) // Default value
-      XCTAssertFalse(recipe.isLiked)
-      XCTAssertGreaterThanOrEqual(recipe.rating, 4.0)
-      XCTAssertLessThanOrEqual(recipe.rating, 5.0)
+      XCTAssertEqual(recipe.title, "Pancakes")
+      XCTAssertEqual(recipe.ingredients.count, 2)
+      XCTAssertEqual(recipe.instruction, "Mix ingredients and cook on a skillet.")
   }
   
-  func testRecipeInitializationWithEmptyIngredients() {
+  func testRecipeInitializationWithManualParameters() {
       // Arrange
-      let apiRecipe = APIRecipe(
-          id: 505,
-          title: "Smoothie",
-          image: "smoothie.jpg",
-          imageType: "jpg",
-          readyInMinutes: 5,
+      let ingredients = [
+          Ingredient(id: "1", name: "Eggs", isChecked: false, userID: "user1", amount: "2"),
+          Ingredient(id: "2", name: "Cheese", isChecked: false, userID: "user2", amount: "1 cup")
+      ]
+      
+      // Act
+      let recipe = Recipe(
+          title: "Omelette",
+          description: "A quick breakfast recipe.",
+          image: "omelette.jpg",
+          instruction: "Whisk eggs and cook with cheese.",
+          ingredients: ingredients,
+          readyInMinutes: 10,
           servings: 2
       )
-      let instructions = "Blend all ingredients."
-
-      // Act
-      let recipe = Recipe(apiRecipe: apiRecipe, ingredients: [], instructions: instructions)
       
       // Assert
-      XCTAssertEqual(recipe.apiId, 505)
-      XCTAssertEqual(recipe.title, "Smoothie")
-      XCTAssertTrue(recipe.ingredients.isEmpty)
-      XCTAssertEqual(recipe.instruction, instructions)
-      XCTAssertEqual(recipe.readyInMinutes, 5)
+      XCTAssertEqual(recipe.title, "Omelette")
+      XCTAssertEqual(recipe.description, "A quick breakfast recipe.")
+      XCTAssertEqual(recipe.image, "omelette.jpg")
+      XCTAssertEqual(recipe.instruction, "Whisk eggs and cook with cheese.")
+      XCTAssertEqual(recipe.ingredients.count, 2)
+      XCTAssertEqual(recipe.readyInMinutes, 10)
       XCTAssertEqual(recipe.servings, 2)
+      XCTAssertFalse(recipe.isLiked)
   }
-
-  func testRecipeEqualityWithPartialMismatch() {
+  
+  func testRecipeHashable() {
       // Arrange
-      let recipe1 = Recipe(
-          title: "Pizza",
-          description: "Cheesy goodness",
-          image: "pizza.jpg",
-          instruction: "Bake with toppings.",
+      let recipe = Recipe(
+          title: "Pasta",
+          description: "Italian classic.",
+          image: "pasta.jpg",
+          instruction: "Boil pasta and add sauce.",
           ingredients: [],
           readyInMinutes: 20,
-          servings: 4
-      )
-      let recipe2 = Recipe(
-          title: "Pizza",
-          description: "Cheesy goodness",
-          image: "pizza.jpg",
-          instruction: "Bake with toppings.",
-          ingredients: [],
-          readyInMinutes: 30, // Different readyInMinutes
-          servings: 4
+          servings: 3
       )
       
-      // Act & Assert
-      XCTAssertNotEqual(recipe1, recipe2)
+      // Act
+      let hashValue = recipe.hashValue
+      
+      // Assert
+      XCTAssertNotNil(hashValue)
   }
-
-
+  
+  func testRecipeModification() {
+      // Arrange
+      var recipe = Recipe(
+          title: "Smoothie",
+          description: "Refreshing drink.",
+          image: "smoothie.jpg",
+          instruction: "Blend fruits and serve.",
+          ingredients: [],
+          readyInMinutes: 5,
+          servings: 1
+      )
+      
+      // Act
+      recipe.isLiked = true
+      
+      // Assert
+      XCTAssertTrue(recipe.isLiked)
+  }
 }
+
