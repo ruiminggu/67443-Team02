@@ -9,17 +9,24 @@ struct CostSplitView: View {
         VStack(spacing: 16) {
             headerSection
             summarySection
+
+            // Debugging: Show transaction count
+            Text("Transactions count: \(viewModel.transactions.count)")
+                .font(.caption)
+                .foregroundColor(.gray)
+
             toggleSection
             costsListSection
         }
         .background(Color(UIColor.systemGroupedBackground).edgesIgnoringSafeArea(.all))
         .sheet(isPresented: $showAddCostView) {
-          AddCostView(eventViewModel: EventViewModel())
+            AddCostView(costSplitViewModel: viewModel, eventViewModel: EventViewModel())
         }
         .onAppear {
             viewModel.fetchTransactions()
-            viewModel.fetchUsers()
-            viewModel.fetchEvents()
+        }
+        .onChange(of: viewModel.transactions) { newTransactions in
+            print("Transactions updated in view: \(newTransactions)")
         }
     }
 
@@ -51,9 +58,9 @@ struct CostSplitView: View {
     // MARK: Summary Section
     private var summarySection: some View {
         HStack(spacing: 16) {
-            SummaryCard(title: "You are owed", amount: totalOwedToYou())
-            SummaryCard(title: "You owe", amount: totalYouOwe())
-            SummaryCard(title: "Total Balance", amount: totalBalance())
+            SummaryCard(title: "You are owed", amount: viewModel.totalOwedToYou)
+            SummaryCard(title: "You owe", amount: viewModel.totalYouOwe)
+            SummaryCard(title: "Total Balance", amount: viewModel.totalBalance)
         }
         .padding(.horizontal)
     }
@@ -128,27 +135,12 @@ struct CostSplitView: View {
 
     // MARK: Helper Methods
     private func groupedByFriends() -> [String: [Transaction]] {
-        Dictionary(grouping: viewModel.transactions, by: { $0.payee.fullName })
+        // Group by payer's fullName instead of payee
+        Dictionary(grouping: viewModel.transactions, by: { $0.payer.fullName })
     }
 
     private func groupedByEvents() -> [String: [Transaction]] {
         Dictionary(grouping: viewModel.transactions, by: { $0.event.eventName })
-    }
-
-    private func totalOwedToYou() -> Float {
-        viewModel.transactions
-            .filter { $0.payee.fullName == "Leila" }
-            .reduce(0) { $0 + $1.amount }
-    }
-
-    private func totalYouOwe() -> Float {
-        viewModel.transactions
-            .filter { $0.payer.fullName == "Leila" }
-            .reduce(0) { $0 + $1.amount }
-    }
-
-    private func totalBalance() -> Float {
-        totalOwedToYou() - totalYouOwe()
     }
 
     private func friendHeaderView(for friend: String) -> some View {
