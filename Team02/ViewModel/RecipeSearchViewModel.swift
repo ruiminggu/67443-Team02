@@ -25,6 +25,8 @@ class RecipeSearchViewModel: ObservableObject {
   struct RecipeDetailResponse: Codable {
     let instructions: String?
     let extendedIngredients: [APIIngredient]
+    let readyInMinutes: Int
+    let servings: Int
   }
   
   struct APIIngredient: Codable {
@@ -68,6 +70,12 @@ class RecipeSearchViewModel: ObservableObject {
         let (data, _) = try await URLSession.shared.data(from: url)
         let searchResponse = try JSONDecoder().decode(RecipeSearchResponse.self, from: data)
         
+        for apiRecipe in searchResponse.results {
+            print("📝 Initial search result: \(apiRecipe.title)")
+            print("⏲️ Ready in: \(String(describing: apiRecipe.readyInMinutes)) minutes")
+            print("👥 Servings: \(String(describing: apiRecipe.servings))")
+        }
+        
         let recipes = try await withThrowingTaskGroup(of: Recipe.self) { group in
           var results: [Recipe] = []
           
@@ -78,6 +86,10 @@ class RecipeSearchViewModel: ObservableObject {
               
               let (detailData, _) = try await URLSession.shared.data(from: url)
               let recipeDetail = try JSONDecoder().decode(RecipeDetailResponse.self, from: detailData)
+              
+              print("🔎 Detail for \(apiRecipe.title):")
+              print("⏲️ Ready in: \(recipeDetail.readyInMinutes) minutes")
+              print("👥 Servings: \(recipeDetail.servings)")
               
               let ingredients = recipeDetail.extendedIngredients.map { ingredient in
                 Ingredient(
@@ -90,9 +102,14 @@ class RecipeSearchViewModel: ObservableObject {
               }
               
               return Recipe(
-                apiRecipe: apiRecipe,
-                ingredients: ingredients,
-                instructions: recipeDetail.instructions ?? ""
+                  title: apiRecipe.title,
+                  description: "Ready in \(recipeDetail.readyInMinutes) minutes",
+                  image: apiRecipe.image,
+                  instruction: recipeDetail.instructions ?? "",
+                  ingredients: ingredients,
+                  readyInMinutes: recipeDetail.readyInMinutes,
+                  servings: recipeDetail.servings,
+                  apiId: apiRecipe.id
               )
             }
           }
@@ -232,8 +249,8 @@ class RecipeSearchViewModel: ObservableObject {
               "description": recipe.description,
               "image": recipe.image,
               "instruction": recipeDetails.instructions ?? "",
-              "readyInMinutes": recipe.readyInMinutes,
-              "servings": recipe.servings,
+              "readyInMinutes": recipeDetails.readyInMinutes,
+              "servings": recipeDetails.servings,
               "ingredients": ingredients.map { $0.toDictionary() }
             ]
             

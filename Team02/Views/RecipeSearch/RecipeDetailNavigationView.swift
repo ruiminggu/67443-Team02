@@ -10,7 +10,16 @@ import SwiftUI
 struct RecipeDetailNavigationView: View {
     let recipe: Recipe
     let event: Event
+    @StateObject private var viewModel = RecipeSearchViewModel()
     @State private var currentImageIndex = 0
+    @State private var showAllIngredients = false
+    @State private var showAllInstructions = false
+    private let maxInitialIngredients = 5
+    private let maxInstructionLength = 150
+  
+    private var isRecipeInEvent: Bool {
+        event.recipes.contains(where: { $0.title == recipe.title })
+    }
     
     var body: some View {
         ScrollView {
@@ -20,11 +29,11 @@ struct RecipeDetailNavigationView: View {
                     AsyncImage(url: URL(string: recipe.image)) { phase in
                         switch phase {
                         case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 250)
-                                .clipped()
+                          image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(height: 250)
+                            .clipped()
                         case .failure:
                             Color.gray
                         case .empty:
@@ -33,16 +42,6 @@ struct RecipeDetailNavigationView: View {
                             Color.gray
                         }
                     }
-                    
-                    // Pagination Dots
-//                    HStack {
-//                        ForEach(0..<3) { index in
-//                            Circle()
-//                                .fill(index == currentImageIndex ? Color.orange : Color.white)
-//                                .frame(width: 8, height: 8)
-//                        }
-//                    }
-//                    .padding()
                 }
                 
                 VStack(alignment: .leading, spacing: 20) {
@@ -93,32 +92,46 @@ struct RecipeDetailNavigationView: View {
                           .padding(.horizontal)
                       
                       VStack(spacing: 0) {
-                          ForEach(recipe.ingredients.prefix(5)) { ingredient in
-                              HStack {
-                                  Text(ingredient.name)
-                                      .foregroundColor(.primary)
-                                  Spacer()
-                                  Text(ingredient.amount)
-                                      .foregroundColor(.black)
-                                      .fontWeight(.medium)
-                              }
-                              .padding(.vertical, 16)
-                              .padding(.horizontal)
-                              .background(Color.white)
-                              
-                              Divider()
-                                  .padding(.horizontal)
-                          }
+                        let displayedIngredients = showAllIngredients
+                                    ? recipe.ingredients
+                                    : Array(recipe.ingredients.prefix(maxInitialIngredients))
+                        
+                        VStack(spacing: 0) {  // Added a VStack to manage the ingredients list
+                            ForEach(displayedIngredients) { ingredient in
+                                HStack {
+                                    Text(ingredient.name)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    Text(ingredient.amount)
+                                        .foregroundColor(.black)
+                                        .fontWeight(.medium)
+                                }
+                                .padding(.vertical, 16)
+                                .padding(.horizontal)
+                                .background(Color.white)
+                                
+                                if ingredient.id != displayedIngredients.last?.id {  // Only show divider if not last item
+                                    Divider()
+                                        .padding(.horizontal)
+                                }
+                            }
+                        }
+                        .animation(.default, value: displayedIngredients)
                           
-                          if recipe.ingredients.count > 5 {
-                              Button(action: {
-                                  // Action to show more ingredients
-                              }) {
-                                  Text("See More")
-                                      .foregroundColor(.orange)
-                              }
-                              .padding()
-                          }
+                        if recipe.ingredients.count > maxInitialIngredients {
+                            Button(action: {
+                                withAnimation {
+                                    showAllIngredients.toggle()
+//                                    print("Show all ingredients: \(showAllIngredients)")
+//                                    print("Total ingredients: \(recipe.ingredients.count)")
+//                                    print("Currently showing: \(displayedIngredients.count) ingredients")
+                                }
+                            }) {
+                                Text(showAllIngredients ? "Show Less" : "See More")
+                                    .foregroundColor(.orange)
+                            }
+                            .padding()
+                        }
                       }
                       .background(Color(.systemBackground))
                       .cornerRadius(15)
@@ -132,10 +145,18 @@ struct RecipeDetailNavigationView: View {
                       
                       VStack(spacing: 0) {
                           VStack(alignment: .leading, spacing: 16) {
-                              Text("1. Preparation (5 Minutes)")
-                                  .fontWeight(.medium)
-                              Text(recipe.instruction)
-                                  .foregroundColor(.primary)
+                              if !recipe.instruction.isEmpty {
+                                  if showAllInstructions || recipe.instruction.count <= maxInstructionLength {
+                                      Text(recipe.instruction)
+                                          .foregroundColor(.primary)
+                                  } else {
+                                      Text(recipe.instruction.prefix(maxInstructionLength) + "...")
+                                          .foregroundColor(.primary)
+                                  }
+                              } else {
+                                  Text("No instructions available")
+                                      .foregroundColor(.gray)
+                              }
                           }
                           .padding(.vertical, 16)
                           .padding(.horizontal)
@@ -144,13 +165,17 @@ struct RecipeDetailNavigationView: View {
                           Divider()
                               .padding(.horizontal)
                           
-                          Button(action: {
-                              // Action to show more steps
-                          }) {
-                              Text("See More")
-                                  .foregroundColor(.orange)
-                          }
-                          .padding()
+                          if recipe.instruction.count > maxInstructionLength {
+                            Button(action: {
+                                withAnimation {
+                                    showAllInstructions.toggle()
+                                }
+                            }) {
+                                Text(showAllInstructions ? "Show Less" : "See More")
+                                    .foregroundColor(.orange)
+                            }
+                            .padding()
+                        }
                       }
                       .background(Color(.systemBackground))
                       .cornerRadius(15)
@@ -163,14 +188,16 @@ struct RecipeDetailNavigationView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .overlay(
-            VStack {
-                Spacer()
-                Button(action: {
-                    // Add recipe to menu action
-                }) {
+          Group {
+              if !isRecipeInEvent {
+                VStack {
+                  Spacer()
+                  Button(action: {
+                    viewModel.addRecipeToEvent(recipe: recipe, eventID: event.id.uuidString)
+                  }) {
                     HStack {
-                        Image(systemName: "plus")
-                        Text("Add to Menu")
+                      Image(systemName: "plus")
+                      Text("Add to Menu")
                     }
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -178,9 +205,37 @@ struct RecipeDetailNavigationView: View {
                     .foregroundColor(.white)
                     .cornerRadius(25)
                     .padding()
+                  }
                 }
+              }
             }
         )
+        .alert("Success", isPresented: $viewModel.showSuccessAlert) {
+              Button("OK") { }
+          } message: {
+              Text("Recipe has been added to your menu!")
+          }
+          .alert("Error", isPresented: .init(
+              get: { viewModel.error != nil },
+              set: { if !$0 { viewModel.error = nil } }
+          )) {
+              Button("OK") { }
+          } message: {
+              if let error = viewModel.error {
+                  Text(error)
+              }
+          }
+          // Show loading indicator
+          .overlay(
+              Group {
+                  if viewModel.isLoading {
+                      ProgressView()
+                          .scaleEffect(1.5)
+                          .frame(maxWidth: .infinity, maxHeight: .infinity)
+                          .background(Color.black.opacity(0.2))
+                  }
+              }
+          )
     }
 }
 
