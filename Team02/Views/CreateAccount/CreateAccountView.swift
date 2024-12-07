@@ -115,6 +115,7 @@ struct CreateAccountView: View {
                     self.errorMessage = "Failed to save user data: \(error.localizedDescription)"
                 } else {
                     UserDefaults.standard.set(userUUID, forKey: "currentUserUUID")
+                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     print("✅ Account created with UUID: \(userUUID)")
                     self.onAccountCreated() // Trigger onboarding flow
                     self.presentationMode.wrappedValue.dismiss()
