@@ -128,7 +128,7 @@ struct ContentView: View {
                     homePageViewModel.fetchUser() // Fetch user data using UUID
                 } else {
                     print("⚠️ No UUID found in UserDefaults")
-                    isLoggedIn = false
+                    
                 }
             }
             // Listen for a notification to switch tabs
