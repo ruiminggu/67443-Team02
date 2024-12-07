@@ -5,243 +5,139 @@
 //  Created by Xinyi Chen on 12/2/24.
 //
 
-//import SwiftUI
-//import PhotosUI
-//
-//struct CreateCustomRecipeView: View {
-//    @StateObject private var viewModel = CustomRecipeViewModel()
-//    @Environment(\.dismiss) private var dismiss
-//    @State private var currentStep = 1
-//    @State private var title = ""
-//    @State private var description = ""
-//    @State private var image: UIImage?
-//    @State private var ingredients: [CustomIngredient] = []
-//    @State private var currentIngredient = (name: "", quantity: "")
-//    @State private var instructions: [String] = [""]
-//    @State private var categories: Set<String> = []
-//    @State private var estimatedTime = ""
-//    
-//    let steps = ["Basic Info", "Ingredients", "Review"]
-//    let event: Event
-//    init(event: Event) {
-//        self.event = event
-//    }
-//    
-//    var body: some View {
-//        VStack(spacing: 0) {
-//            // Progress bar
-//            HStack(spacing: 20) {
-//                ForEach(0..<3) { index in
-//                    HStack {
-//                        Circle()
-//                            .fill(currentStep > index ? Color.orange : Color.gray)
-//                            .frame(width: 24, height: 24)
-//                            .overlay(
-//                                Text("\(index + 1)")
-//                                    .foregroundColor(.white)
-//                                    .font(.caption)
-//                            )
-//                        if index < 2 {
-//                            Rectangle()
-//                                .fill(currentStep > index + 1 ? Color.orange : Color.gray)
-//                                .frame(height: 2)
-//                        }
-//                    }
-//                }
-//            }
-//            .padding()
-//            
-//            ScrollView {
-//                switch currentStep {
-//                case 1:
-//                    BasicInfoView(
-//                        title: $title,
-//                        description: $description,
-//                        image: $image
-//                    )
-//                case 2:
-//                    IngredientsInstructionsView(
-//                        ingredients: $ingredients,
-//                        currentIngredient: $currentIngredient,
-//                        instructions: $instructions
-//                    )
-//                case 3:
-//                    ReviewView(
-//                        title: title,
-//                        image: image,
-//                        ingredients: ingredients,
-//                        instructions: instructions,
-//                        estimatedTime: estimatedTime,
-//                        categories: $categories
-//                    )
-//                default:
-//                    EmptyView()
-//                }
-//            }
-//            
-//            Button(action: handleContinue) {
-//                Text(currentStep == 3 ? "Finish" : "Continue")
-//                    .frame(maxWidth: .infinity)
-//                    .padding()
-//                    .background(Color.orange)
-//                    .foregroundColor(.white)
-//                    .cornerRadius(25)
-//                    .padding()
-//            }
-//        }
-//        .navigationTitle(currentStep == 1 ? "Add New Recipe" : "Create New Recipe")
-//        .navigationBarTitleDisplayMode(.inline)
-//    }
-//    
-//    private func handleContinue() {
-//        if currentStep < 3 {
-//            currentStep += 1
-//        } else {
-//            saveRecipe()
-//        }
-//    }
-//    
-//    private func saveRecipe() {
-//        // Save recipe implementation
-//        dismiss()
-//    }
-//}
-//
-//struct BasicInfoView: View {
-//    @Binding var title: String
-//    @Binding var description: String
-//    @Binding var image: UIImage?
-//    @State private var showingImagePicker = false
-//    
-//    var body: some View {
-//        VStack(spacing: 20) {
-//            Button(action: { showingImagePicker = true }) {
-//                ZStack {
-//                    if let image = image {
-//                        Image(uiImage: image)
-//                            .resizable()
-//                            .scaledToFill()
-//                            .frame(height: 200)
-//                            .clipped()
-//                    } else {
-//                        Rectangle()
-//                            .fill(Color(.systemGray6))
-//                            .frame(height: 200)
-//                            .overlay(
-//                                VStack {
-//                                    Image(systemName: "arrow.up.square")
-//                                        .font(.title)
-//                                    Text("Upload Image")
-//                                        .font(.headline)
-//                                    Text("(You can upload up to 5 images)")
-//                                        .font(.caption)
-//                                        .foregroundColor(.gray)
-//                                }
-//                            )
-//                    }
-//                }
-//            }
-//            .sheet(isPresented: $showingImagePicker) {
-//                ImagePicker(image: $image)
-//            }
-//            
-//            VStack(alignment: .leading, spacing: 8) {
-//                Text("Recipe Name")
-//                    .font(.headline)
-//                TextField("Chicken Ramen", text: $title)
-//                    .textFieldStyle(RoundedBorderTextFieldStyle())
-//                
-//                Text("Description (Optional)")
-//                    .font(.headline)
-//                TextEditor(text: $description)
-//                    .frame(height: 100)
-//                    .padding(4)
-//                    .background(Color(.systemGray6))
-//                    .cornerRadius(8)
-//            }
-//            .padding()
-//        }
-//    }
-//}
-//
-//struct ImagePicker: UIViewControllerRepresentable {
-//    @Binding var image: UIImage?
-//    @Environment(\.dismiss) private var dismiss
-//
-//    func makeUIViewController(context: Context) -> UIImagePickerController {
-//        let picker = UIImagePickerController()
-//        picker.delegate = context.coordinator
-//        return picker
-//    }
-//
-//    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-//
-//    func makeCoordinator() -> Coordinator {
-//        Coordinator(self)
-//    }
-//
-//    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-//        let parent: ImagePicker
-//
-//        init(_ parent: ImagePicker) {
-//            self.parent = parent
-//        }
-//
-//        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//            if let image = info[.originalImage] as? UIImage {
-//                parent.image = image
-//            }
-//            parent.dismiss()
-//        }
-//    }
-//}
-//
-//struct IngredientsInstructionsView: View {
-//    @Binding var ingredients: [CustomIngredient]
-//    @Binding var currentIngredient: (name: String, quantity: String)
-//    @Binding var instructions: [String]
-//    
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 20) {
-//            // Similar to your current implementation but styled like the screenshots
-//        }
-//    }
-//}
-//
-//struct ReviewView: View {
-//    let title: String
-//    let image: UIImage?
-//    let ingredients: [CustomIngredient]
-//    let instructions: [String]
-//    let estimatedTime: String
-//    @Binding var categories: Set<String>
-//    
-//    var body: some View {
-//        VStack(alignment: .leading, spacing: 20) {
-//            // Final review layout matching screenshot
-//        }
-//    }
-//}
-//
-//
-//struct CreateCustomRecipeView_Previews: PreviewProvider {
-//    static let sampleEvent = Event(
-//        recipes: [],
-//        date: Date(),
-//        startTime: Date(),
-//        endTime: Date(),
-//        location: "Sample Location",
-//        eventName: "Sample Event",
-//        qrCode: "",
-//        costs: [],
-//        totalCost: 0,
-//        assignedIngredientsList: []
-//    )
-//    
-//    static var previews: some View {
-//        NavigationView {
-//            CreateCustomRecipeView(event: sampleEvent)
-//        }
-//        .previewDisplayName("Empty Form")
-//    }
-//}
+import SwiftUI
+import PhotosUI
+import FirebaseDatabase
+
+struct CreateCustomRecipeView: View {
+    let event: Event
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var viewModel = CustomRecipeViewModel()
+    
+    @State private var title = ""
+    @State private var instructions = ""
+    @State private var ingredients: [(name: String, amount: String)] = [(name: "", amount: "")]
+    
+    var body: some View {
+        Form {
+            Section(header: Text("Recipe Details")) {
+                TextField("Recipe Name", text: $title)
+                
+                TextEditor(text: $instructions)
+                    .frame(height: 100)
+                    .placeholder(when: instructions.isEmpty) {
+                        Text("Instructions").foregroundColor(.gray)
+                    }
+            }
+            
+            Section(header: Text("Ingredients")) {
+                ForEach(0..<ingredients.count, id: \.self) { index in
+                    HStack {
+                        TextField("Ingredient", text: $ingredients[index].name)
+                        TextField("Amount", text: $ingredients[index].amount)
+                    }
+                }
+                
+                Button("Add Ingredient") {
+                    ingredients.append((name: "", amount: ""))
+                }
+            }
+            
+            Section {
+                Button("Save Recipe") {
+                    saveRecipe()
+                }
+                .disabled(title.isEmpty)
+            }
+        }
+        .navigationTitle("Create Recipe")
+        .navigationBarItems(trailing: Button("Cancel") { dismiss() })
+    }
+    
+  private func saveRecipe() {
+      let customIngredients = ingredients
+          .filter { !$0.name.isEmpty }
+          .map { CustomIngredient(id: UUID(), name: $0.name, amount: $0.amount) }
+    
+      let defaultCustomRecipeImage = "https://firebasestorage.googleapis.com/v0/b/YOUR_PROJECT_ID.appspot.com/o/customimg.jpg?alt=media"
+    
+    let defaultImageUrl = "https://i.ibb.co/kc3P2nT/food.jpg"
+
+      let recipe = CustomRecipe(
+          title: title,
+          creatorId: UUID().uuidString,
+          image: defaultImageUrl,
+          instructions: instructions,
+          ingredients: customIngredients,
+          sharedWithEvents: [event.id.uuidString],
+          isPrivate: false
+      )
+      
+      viewModel.createCustomRecipe(recipe)
+      
+      let databaseRef = Database.database().reference()
+      databaseRef.child("events").child(event.id.uuidString).observeSingleEvent(of: .value) { snapshot in
+          if var eventData = snapshot.value as? [String: Any] {
+              
+              let recipeDict: [String: Any] = [
+                  "id": recipe.id.uuidString,
+                  "title": recipe.title,
+                  "description": "Custom Recipe",
+                  "image": defaultImageUrl,
+                  "instruction": recipe.instructions,
+                  "readyInMinutes": 30,
+                  "servings": 4,
+                  "ingredients": customIngredients.map { ingredient in
+                      [
+                          "id": ingredient.id.uuidString,
+                          "name": ingredient.name,
+                          "amount": ingredient.amount,
+                          "isChecked": false,
+                          "userID": UUID().uuidString
+                      ]
+                  }
+              ]
+              
+              
+              // Update ingredients list
+              var existingIngredients = eventData["assignedIngredientsList"] as? [[String: Any]] ?? []
+              let formattedIngredients = customIngredients.map { ingredient in
+                  [
+                      "id": ingredient.id.uuidString,
+                      "name": ingredient.name,
+                      "amount": ingredient.amount,
+                      "isChecked": false,
+                      "userID": UUID().uuidString
+                  ]
+              }
+              existingIngredients.append(contentsOf: formattedIngredients)
+              eventData["assignedIngredientsList"] = existingIngredients
+              
+              // Update Firebase
+              databaseRef.child("events").child(event.id.uuidString).updateChildValues(eventData) { error, _ in
+                  if let error = error {
+                      print("❌ Error saving custom recipe: \(error.localizedDescription)")
+                  } else {
+                      print("✅ Custom recipe saved successfully")
+                      NotificationCenter.default.post(name: NSNotification.Name("RefreshEventDetail"), object: nil)
+                  }
+              }
+          }
+      }
+      
+      dismiss()
+  }
+}
+
+// Helper extension for placeholder text
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content) -> some View {
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
+    }
+}
