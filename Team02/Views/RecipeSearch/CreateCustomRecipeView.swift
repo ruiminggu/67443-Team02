@@ -59,7 +59,7 @@ struct CreateCustomRecipeView: View {
       .filter { !$0.name.isEmpty }
       .map { CustomIngredient(id: UUID(), name: $0.name, amount: $0.amount) }
     
-    let defaultImageUrl = "https://i.ibb.co/kc3P2nT/food.jpg"
+    let defaultImageUrl = "https://i.ibb.co/NYwd9bN/customimg.jpg"
     
     let recipe = CustomRecipe(
       title: title,
