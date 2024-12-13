@@ -61,7 +61,7 @@ struct RecipeDetailNavigationView: View {
                     
                     // Date and Time
                     HStack {
-                        Text("21 May 2024")
+                        Text("13 December 2024")
                             .foregroundColor(.gray)
                         Spacer()
                         Image(systemName: "clock")
