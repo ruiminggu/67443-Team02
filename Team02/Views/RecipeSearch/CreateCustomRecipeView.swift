@@ -17,6 +17,8 @@ struct CreateCustomRecipeView: View {
   @State private var title = ""
   @State private var instructions = ""
   @State private var ingredients: [(name: String, amount: String)] = [(name: "", amount: "")]
+  @State private var servings: String = ""
+  @State private var cookingTime: String = ""
   
   var body: some View {
     Form {
@@ -28,6 +30,24 @@ struct CreateCustomRecipeView: View {
           .placeholder(when: instructions.isEmpty) {
             Text("Instructions").foregroundColor(.gray)
           }
+        
+        HStack {
+            Text("Servings")
+            Spacer()
+            TextField("4", text: $servings)
+                .keyboardType(.numberPad)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 100)
+        }
+        
+        HStack {
+            Text("Cooking Time (minutes)")
+            Spacer()
+            TextField("30", text: $cookingTime)
+                .keyboardType(.numberPad)
+                .multilineTextAlignment(.trailing)
+                .frame(width: 100)
+        }
       }
       
       Section(header: Text("Ingredients")) {
@@ -85,8 +105,8 @@ struct CreateCustomRecipeView: View {
           "description": "Custom Recipe",
           "image": defaultImageUrl,
           "instruction": recipe.instructions,
-          "readyInMinutes": 30,
-          "servings": 4,
+          "readyInMinutes": Int(cookingTime) ?? 30,
+          "servings": Int(servings) ?? 4,
           "ingredients": customIngredients.map { ingredient in
             [
               "id": ingredient.id.uuidString,
