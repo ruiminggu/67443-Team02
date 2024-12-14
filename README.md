@@ -1,4 +1,4 @@
-Team02 WeEvent
+Team02 Gatherly
 =======================
 
 A mobile application designed for seamless event management, recipe sharing, and ingredient assignment. Built with **Swift** and **Firebase**, this app is tailored to enhance group gatherings by organizing recipes, assigning tasks, and managing event-related details efficiently.
